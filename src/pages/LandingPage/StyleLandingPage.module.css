@@ -1,0 +1,124 @@
+.LandingContainer {
+  width: 80%;
+}
+
+.listContainer + .formControl {
+  margin-top: 20px;
+}
+
+.listContainer {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 50vh;
+  overflow-y: auto;
+}
+
+.listContainer::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.listContainer::-webkit-scrollbar-track {
+  background: rgb(50, 53, 70);
+  border-radius: 1rem;
+}
+
+/* Handle */
+.listContainer::-webkit-scrollbar-thumb {
+  background: #252525;
+  border-radius: 1rem;
+}
+
+.listElContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+  height: 60px;
+  margin-bottom: 20px;
+
+  padding: 10px 20px;
+  box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.1);
+  background-color: rgba(115, 143, 167, 0.219);
+  backdrop-filter: blur(5px);
+  border-radius: 0.5rem;
+}
+
+.listElContainer h5 {
+  flex-grow: 1;
+  margin: 0;
+  overflow-x: hidden;
+  white-space: nowrap;
+  font-size: 1.5rem;
+  text-overflow: ellipsis;
+}
+
+.button {
+  composes: button from "./CommonStyles.css";
+  line-height: 0px;
+  color: white;
+  outline-color: rgba(46, 139, 192, 0.5);
+}
+
+.input {
+  outline: none;
+  border-radius: 0.25rem;
+  border: none;
+  padding: 5px;
+  background-color: rgba(115, 143, 167, 0.219);
+  color: white;
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.formControl {
+  min-width: 500px;
+  display: grid;
+  grid-template-columns: 50% 25% 25%;
+}
+
+.inputButton {
+  composes: buttonScale from "./CommonStyles.css";
+  height: 40px;
+  color: white;
+  font-weight: 600;
+  font-size: 1.15rem;
+  transition: background-color 0.1s ease-in-out, scale 0.025s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.inputButton + .inputButton {
+  margin-left: 10px;
+}
+
+.inputButtonGreen {
+  composes: inputButton;
+  background-color: rgb(71, 108, 250);
+  outline-color: rgba(71, 108, 250, 0.3);
+}
+
+.inputButtonRed {
+  composes: inputButton;
+  background-color: rgb(234, 57, 67);
+  outline-color: rgba(234, 57, 67, 0.3);
+}
+
+.inputButtonInactive {
+  composes: inputButton;
+  background-color: rgb(50, 53, 70);
+  outline-color: rgba(50, 53, 70, 0.3);
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.inputLabel {
+  position: absolute;
+  translate: 0% 230%;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: rgb(207, 214, 228);
+}

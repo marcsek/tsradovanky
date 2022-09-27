@@ -1,0 +1,30 @@
+.button {
+  box-sizing: border-box;
+
+  background: none;
+  padding: 4px;
+  border: none;
+  outline: inherit;
+  background-color: rgb(97, 136, 255);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  outline: 0px solid;
+
+  transition: outline 25ms linear;
+}
+
+.button:hover {
+  filter: brightness(1.05);
+}
+
+.button:focus {
+  outline-width: 3px;
+}
+
+.buttonScale {
+  composes: button;
+}
+
+.buttonScale:active {
+  /* scale: 0.97; */
+}
