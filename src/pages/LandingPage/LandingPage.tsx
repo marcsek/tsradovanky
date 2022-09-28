@@ -1,34 +1,32 @@
-import { useState, useReducer } from "react";
+import { useReducer } from "react";
 import ButtonClickReducer from "./reducers/ButtonClickReducer";
 import styles from "./StyleLandingPage.module.css";
 
 import InputList from "./components/InputList";
 import ListControls from "./components/ListControls";
+import ListFilters from "./components/ListFilters";
+
+import useListFilters from "./customHooks/useListFilters";
 
 const LandingPage: React.FC = () => {
-  const [textValue, setTextValue] = useState<string>("");
   const [listValues, dispatch] = useReducer(ButtonClickReducer, []);
+  const { applyFilters, setFilters } = useListFilters();
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (50 - event.target.value.length >= 0) {
-      setTextValue(event.target.value);
-    }
+  const areAllSelected = () => {
+    if (listValues.length === 0) return false;
+
+    return !listValues.some((el) => el.checked === false);
   };
 
-  const handleInputReset = () => {
-    setTextValue("");
+  const isOneSelected = () => {
+    return listValues.some((el) => el.checked === true);
   };
 
   return (
     <div className={styles.LandingContainer}>
-      <InputList listValues={listValues} dispatch={dispatch} />
-      <ListControls
-        listValuesLength={listValues.length}
-        textValue={textValue}
-        handleInputChange={handleInputChange}
-        handleInputReset={handleInputReset}
-        dispatch={dispatch}
-      />
+      <ListFilters setFilters={setFilters} shouldBeChecked={areAllSelected()} dispatch={dispatch} />
+      <InputList listValues={applyFilters(listValues)} dispatch={dispatch} />
+      <ListControls isOneSelected={isOneSelected()} dispatch={dispatch} />
     </div>
   );
 };

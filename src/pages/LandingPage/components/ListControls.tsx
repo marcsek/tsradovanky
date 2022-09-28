@@ -1,20 +1,37 @@
+import { useRef, useState } from "react";
 import { bClickActions } from "../types";
 import styles from "../StyleLandingPage.module.css";
 import { IoMdRemoveCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
 
 interface ListControlProps {
-  textValue: string;
-  handleInputChange: React.ChangeEventHandler<HTMLInputElement>;
   dispatch: React.Dispatch<bClickActions>;
-  listValuesLength: number;
-  handleInputReset: () => void;
+  isOneSelected: boolean;
 }
 
-const ListControls: React.FC<ListControlProps> = ({ textValue, handleInputChange, dispatch, listValuesLength, handleInputReset }) => {
+let maxCharacterSize = 50;
+
+const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected }) => {
+  const [textValue, setTextValue] = useState<string>("");
+  const selectAllRef = useRef<HTMLInputElement>(null);
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (maxCharacterSize - event.target.value.length >= 0) {
+      setTextValue(event.target.value);
+    }
+  };
+
+  const handleInputReset = () => {
+    setTextValue("");
+  };
+
+  const handleRemoveReset = () => {
+    if (selectAllRef.current !== null) selectAllRef.current.checked = false;
+  };
+
   return (
     <form className={styles.formControl}>
       <label htmlFor="input" className={styles.inputLabel}>
-        {`${textValue.length} / 50`}
+        {`${textValue.length} / ${maxCharacterSize}`}
       </label>
       <input id="input" className={styles.input} typeof="text" value={textValue} onChange={handleInputChange}></input>
       <button
@@ -29,14 +46,15 @@ const ListControls: React.FC<ListControlProps> = ({ textValue, handleInputChange
         Add
       </button>
       <button
-        className={listValuesLength !== 0 ? styles.inputButtonRed : styles.inputButtonInactive}
+        className={isOneSelected ? styles.inputButtonRed : styles.inputButtonInactive}
         onClick={(e) => {
           e.preventDefault();
-          dispatch({ type: "remove" });
+          handleRemoveReset();
+          dispatch({ type: "removeSelected" });
         }}
       >
         <IoMdRemoveCircleOutline size={25} />
-        Remove All
+        Remove Selected
       </button>
     </form>
   );

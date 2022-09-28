@@ -115,9 +115,23 @@
   cursor: pointer;
 }
 
+.listNewElement {
+  composes: listElContainer;
+  animation: addToList 0.2s ease-in-out;
+}
+
+@keyframes addToList {
+  0% {
+    translate: 0% 60%;
+  }
+  100% {
+    translate: 0% 0%;
+  }
+}
+
 .inputLabel {
   position: absolute;
-  translate: 0% 230%;
+  translate: 0% 250%;
   font-weight: 600;
   font-size: 0.85rem;
   color: rgb(207, 214, 228);

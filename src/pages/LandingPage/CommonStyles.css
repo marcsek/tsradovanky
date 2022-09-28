@@ -26,5 +26,5 @@
 }
 
 .buttonScale:active {
-  /* scale: 0.97; */
+  scale: 1;
 }

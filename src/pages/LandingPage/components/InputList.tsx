@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 
 import { ListValues, bClickActions } from "../types";
 import styles from "../StyleLandingPage.module.css";
-import { FaTimes } from "react-icons/fa";
 
 interface ListControlProps {
   listValues: ListValues;
@@ -15,27 +14,34 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
   const scollToRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
-    if (scollToRef.current !== null && lastLength < listValues.length) {
+    if (lastLength < listValues.length) {
       scollToRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     lastLength = listValues.length;
   }, [listValues]);
 
+  const isLastElement = (index: number): boolean => {
+    return index === listValues.length - 1;
+  };
+
+  const shouldAnimate = (index: number): boolean => {
+    return isLastElement(index) && lastLength <= listValues.length;
+  };
+
   return (
     <ul className={styles.listContainer}>
       {listValues.map((listValue, index) => {
         return (
-          <li ref={index === listValues.length - 1 ? scollToRef : undefined} key={listValue.id}>
-            <div className={styles.listElContainer}>
+          <li ref={isLastElement(index) ? scollToRef : undefined} key={listValue.id}>
+            <div className={shouldAnimate(index) ? styles.listNewElement : styles.listElContainer}>
               <h5>{listValue.value}</h5>
-              <button
-                className={styles.button}
-                onClick={(e) => {
-                  dispatch({ type: "remove", idx: index });
+              <input
+                type="checkbox"
+                checked={listValue.checked}
+                onChange={() => {
+                  dispatch({ type: "check", id: listValue.id, value: !listValue.checked });
                 }}
-              >
-                <FaTimes size={20} />
-              </button>
+              ></input>
             </div>
           </li>
         );
