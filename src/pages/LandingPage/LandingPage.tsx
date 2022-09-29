@@ -10,23 +10,29 @@ import useListFilters from "./customHooks/useListFilters";
 
 const LandingPage: React.FC = () => {
   const [listValues, dispatch] = useReducer(ButtonClickReducer, []);
-  const { applyFilters, setFilters } = useListFilters();
+  const [applyFilters, setFilters] = useListFilters(listValues);
+
+  let filtersOutcome = applyFilters();
 
   const areAllSelected = () => {
-    if (listValues.length === 0) return false;
+    if (filtersOutcome.filteredList.length === 0) return false;
 
-    return !listValues.some((el) => el.checked === false);
+    return !filtersOutcome.filteredList.some((el) => el.checked === false);
   };
 
   const isOneSelected = () => {
-    return listValues.some((el) => el.checked === true);
+    return filtersOutcome.filteredList.some((el) => el.checked === true);
   };
 
   return (
     <div className={styles.LandingContainer}>
-      <ListFilters setFilters={setFilters} shouldBeChecked={areAllSelected()} dispatch={dispatch} />
-      <InputList listValues={applyFilters(listValues)} dispatch={dispatch} />
-      <ListControls isOneSelected={isOneSelected()} dispatch={dispatch} />
+      <ListFilters
+        setFilters={setFilters}
+        shouldBeChecked={areAllSelected()}
+        dispatch={{ call: dispatch, params: { ids: filtersOutcome.filteredIds } }}
+      />
+      <InputList listValues={filtersOutcome.filteredList} dispatch={dispatch} />
+      <ListControls isOneSelected={isOneSelected()} dispatch={{ call: dispatch, params: { ids: filtersOutcome.filteredIds } }} />
     </div>
   );
 };

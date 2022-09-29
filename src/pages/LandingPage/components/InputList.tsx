@@ -3,6 +3,11 @@ import { useEffect, useRef } from "react";
 import { ListValues, bClickActions } from "../types";
 import styles from "../StyleLandingPage.module.css";
 
+import Checkbox from "@mui/material/Checkbox";
+import { blue, grey } from "@mui/material/colors";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
+
 interface ListControlProps {
   listValues: ListValues;
   dispatch: React.Dispatch<bClickActions>;
@@ -30,22 +35,38 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
 
   return (
     <ul className={styles.listContainer}>
-      {listValues.map((listValue, index) => {
-        return (
-          <li ref={isLastElement(index) ? scollToRef : undefined} key={listValue.id}>
-            <div className={shouldAnimate(index) ? styles.listNewElement : styles.listElContainer}>
-              <h5>{listValue.value}</h5>
-              <input
-                type="checkbox"
-                checked={listValue.checked}
-                onChange={() => {
+      {listValues.length === 0 ? (
+        <div className={styles.noReminders}>No reminders 🦉</div>
+      ) : (
+        listValues.map((listValue, index) => {
+          return (
+            <li ref={isLastElement(index) ? scollToRef : undefined} key={listValue.id}>
+              <div
+                className={shouldAnimate(index) ? styles.listNewElement : styles.listElContainer}
+                onClick={() => {
                   dispatch({ type: "check", id: listValue.id, value: !listValue.checked });
                 }}
-              ></input>
-            </div>
-          </li>
-        );
-      })}
+              >
+                <Checkbox
+                  checked={listValue.checked}
+                  onChange={() => {
+                    dispatch({ type: "check", id: listValue.id, value: !listValue.checked });
+                  }}
+                  checkedIcon={<CheckCircleRoundedIcon />}
+                  icon={<RadioButtonUncheckedRoundedIcon />}
+                  sx={{
+                    color: grey[600],
+                    "&.Mui-checked": {
+                      color: blue[400],
+                    },
+                  }}
+                />
+                <h5>{listValue.value}</h5>
+              </div>
+            </li>
+          );
+        })
+      )}
     </ul>
   );
 };

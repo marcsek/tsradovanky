@@ -13,5 +13,5 @@ export interface ListReducerState {
 
 export type bClickActions =
   | { type: "add"; value: string }
-  | { type: "removeSelected"; idx?: number }
+  | { type: "removeSelected"; ids?: number[] }
   | { type: "check"; id?: number; ids?: number[]; value: boolean };

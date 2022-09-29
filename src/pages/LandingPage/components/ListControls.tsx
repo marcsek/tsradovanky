@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
 import { bClickActions } from "../types";
 import styles from "../StyleLandingPage.module.css";
+import FilterTextField from "../../../custom-material-styles/FilterTextField";
 import { IoMdRemoveCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 interface ListControlProps {
-  dispatch: React.Dispatch<bClickActions>;
+  dispatch: { call: React.Dispatch<bClickActions>; params: { ids: number[] } };
   isOneSelected: boolean;
 }
 
@@ -30,16 +32,44 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected }) =
 
   return (
     <form className={styles.formControl}>
-      <label htmlFor="input" className={styles.inputLabel}>
-        {`${textValue.length} / ${maxCharacterSize}`}
-      </label>
-      <input id="input" className={styles.input} typeof="text" value={textValue} onChange={handleInputChange}></input>
+      <FormControlLabel
+        sx={{
+          display: "flex",
+          marginRight: "10px",
+          marginLeft: 0,
+          alignItems: "flex-start",
+          gap: "5px",
+          "&	.MuiFormControlLabel-label": {
+            color: "gray",
+            fontSize: "0.9rem",
+          },
+        }}
+        control={
+          <FilterTextField
+            onChange={handleInputChange}
+            value={textValue}
+            className={styles.input}
+            label="Reminder Text"
+            variant="outlined"
+            autoComplete="off"
+            margin="none"
+            InputLabelProps={{ shrink: true }}
+            sx={{
+              marginRight: "10px",
+              height: "42px",
+              width: "100%",
+            }}
+          />
+        }
+        label={`${textValue.length} / ${maxCharacterSize}`}
+        labelPlacement="bottom"
+      />
       <button
         className={textValue !== "" ? styles.inputButtonGreen : styles.inputButtonInactive}
         onClick={(e) => {
           e.preventDefault();
           handleInputReset();
-          dispatch({ type: "add", value: textValue });
+          dispatch.call({ type: "add", value: textValue });
         }}
       >
         <IoMdAddCircleOutline size={25} />
@@ -50,7 +80,7 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected }) =
         onClick={(e) => {
           e.preventDefault();
           handleRemoveReset();
-          dispatch({ type: "removeSelected" });
+          dispatch.call({ type: "removeSelected", ids: dispatch.params.ids });
         }}
       >
         <IoMdRemoveCircleOutline size={25} />

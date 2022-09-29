@@ -1,17 +1,22 @@
 .LandingContainer {
   width: 80%;
-}
-
-.listContainer + .formControl {
-  margin-top: 20px;
+  max-width: 1400px;
 }
 
 .listContainer {
   margin: 0;
-  padding: 0;
+  padding: 20px 20px;
   list-style: none;
   height: 50vh;
   overflow-y: auto;
+  box-sizing: border-box;
+  margin: 30px 0px;
+  display: flex;
+  flex-direction: column;
+
+  background-color: #24232a;
+  /* box-shadow: rgba(255, 255, 255, 0.1) 0px 4px 12px; */
+  border-radius: 1rem;
 }
 
 .listContainer::-webkit-scrollbar {
@@ -33,58 +38,71 @@
 .listElContainer {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 40px;
   flex-grow: 1;
-  height: 60px;
-  margin-bottom: 20px;
+  height: 50px;
 
-  padding: 10px 20px;
-  box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.1);
-  background-color: rgba(115, 143, 167, 0.219);
+  padding: 15px 20px;
   backdrop-filter: blur(5px);
   border-radius: 0.5rem;
+  /* border-bottom: 2px solid #5e5e5e25; */
+}
+
+.listElContainer h5:hover {
+  scale: 1.01 1.08;
+  filter: brightness(1.05);
 }
 
 .listElContainer h5 {
+  transition: all 0.1s ease-in-out;
   flex-grow: 1;
   margin: 0;
   overflow-x: hidden;
   white-space: nowrap;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   text-overflow: ellipsis;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5e5e5e25;
+  border-radius: 0.5rem;
 }
 
 .button {
-  composes: button from "./CommonStyles.css";
+  composes: button from "../../CommonStyles.css";
   line-height: 0px;
-  color: white;
+  color: #eaebf1;
   outline-color: rgba(46, 139, 192, 0.5);
 }
 
 .input {
-  outline: none;
+  /* outline: none;
   border-radius: 0.25rem;
-  border: none;
-  padding: 5px;
-  background-color: rgba(115, 143, 167, 0.219);
-  color: white;
-  margin-right: 10px;
-  font-size: 1.2rem;
+  border: none; */
+  /* padding: 5px; */
+  /* background-color: rgba(115, 143, 167, 0.219); */
+  /* color: white; */
+  box-sizing: border-box !important;
+  /* margin-right: 10px !important; */
+  /* font-size: 1.2rem; */
 }
 
 .formControl {
   min-width: 500px;
+  height: 42px;
   display: grid;
   grid-template-columns: 50% 25% 25%;
+  align-items: flex-start;
 }
 
 .inputButton {
-  composes: buttonScale from "./CommonStyles.css";
-  height: 40px;
-  color: white;
+  composes: buttonScale from "../../CommonStyles.css";
+  height: inherit;
+  color: #eaebf1;
   font-weight: 600;
   font-size: 1.15rem;
-  transition: background-color 0.1s ease-in-out, scale 0.025s ease-in-out;
+  transition: background 0.1s ease-in-out, scale 0.025s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,19 +115,22 @@
 
 .inputButtonGreen {
   composes: inputButton;
-  background-color: rgb(71, 108, 250);
+
+  background-color: rgba(54, 95, 255, 1);
+  /* background: linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%); */
   outline-color: rgba(71, 108, 250, 0.3);
 }
 
 .inputButtonRed {
   composes: inputButton;
   background-color: rgb(234, 57, 67);
+  /* background: linear-gradient(90deg, rgba(234, 57, 67, 1) 0%, rgba(255, 49, 61, 1) 100%); */
   outline-color: rgba(234, 57, 67, 0.3);
 }
 
 .inputButtonInactive {
   composes: inputButton;
-  background-color: rgb(50, 53, 70);
+  background-color: #282932;
   outline-color: rgba(50, 53, 70, 0.3);
   pointer-events: none;
   cursor: pointer;
@@ -135,4 +156,20 @@
   font-weight: 600;
   font-size: 0.85rem;
   color: rgb(207, 214, 228);
+}
+
+.filtersBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.noReminders {
+  color: #eaebf1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
 }
