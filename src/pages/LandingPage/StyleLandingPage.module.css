@@ -11,12 +11,10 @@
   overflow-y: auto;
   box-sizing: border-box;
   margin: 30px 0px;
-  display: flex;
-  flex-direction: column;
 
   background-color: #24232a;
-  /* box-shadow: rgba(255, 255, 255, 0.1) 0px 4px 12px; */
   border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 50px -10px;
 }
 
 .listContainer::-webkit-scrollbar {
@@ -45,12 +43,10 @@
   padding: 15px 20px;
   backdrop-filter: blur(5px);
   border-radius: 0.5rem;
-  /* border-bottom: 2px solid #5e5e5e25; */
 }
 
 .listElContainer h5:hover {
   scale: 1.01 1.08;
-  filter: brightness(1.05);
 }
 
 .listElContainer h5 {
@@ -65,75 +61,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #5e5e5e25;
   border-radius: 0.5rem;
 }
 
 .button {
   composes: button from "../../CommonStyles.css";
   line-height: 0px;
-  color: #eaebf1;
   outline-color: rgba(46, 139, 192, 0.5);
 }
 
-.input {
-  /* outline: none;
-  border-radius: 0.25rem;
-  border: none; */
-  /* padding: 5px; */
-  /* background-color: rgba(115, 143, 167, 0.219); */
-  /* color: white; */
-  box-sizing: border-box !important;
-  /* margin-right: 10px !important; */
-  /* font-size: 1.2rem; */
+.formControl {
+  height: 42px;
+  gap: 10px;
 }
 
-.formControl {
-  min-width: 500px;
-  height: 42px;
-  display: grid;
-  grid-template-columns: 50% 25% 25%;
+.textInputCont {
+  margin-left: 0;
   align-items: flex-start;
+  gap: 3px;
+  flex: 0 0 45%;
 }
 
 .inputButton {
   composes: buttonScale from "../../CommonStyles.css";
-  height: inherit;
   color: #eaebf1;
   font-weight: 600;
   font-size: 1.15rem;
-  transition: background 0.1s ease-in-out, scale 0.025s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-}
-
-.inputButton + .inputButton {
-  margin-left: 10px;
-}
-
-.inputButtonGreen {
-  composes: inputButton;
-
-  background-color: rgba(54, 95, 255, 1);
-  /* background: linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%); */
-  outline-color: rgba(71, 108, 250, 0.3);
-}
-
-.inputButtonRed {
-  composes: inputButton;
-  background-color: rgb(234, 57, 67);
-  /* background: linear-gradient(90deg, rgba(234, 57, 67, 1) 0%, rgba(255, 49, 61, 1) 100%); */
-  outline-color: rgba(234, 57, 67, 0.3);
-}
-
-.inputButtonInactive {
-  composes: inputButton;
-  background-color: #282932;
-  outline-color: rgba(50, 53, 70, 0.3);
-  pointer-events: none;
-  cursor: pointer;
+  flex: 0 0 calc(27.5% - 10px);
 }
 
 .listNewElement {
@@ -163,6 +121,8 @@
   align-items: center;
   justify-content: center;
   gap: 30px;
+  width: 600px;
+  margin: 0 auto;
 }
 
 .noReminders {

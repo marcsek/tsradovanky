@@ -2,17 +2,20 @@ import { useRef, useState } from "react";
 import { bClickActions } from "../types";
 import styles from "../StyleLandingPage.module.css";
 import FilterTextField from "../../../custom-material-styles/FilterTextField";
+import ControlButton from "../../../custom-material-styles/ControlButton";
 import { IoMdRemoveCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import { Stack, Typography } from "@mui/material";
+import { toast } from "react-toastify";
 
 interface ListControlProps {
   dispatch: { call: React.Dispatch<bClickActions>; params: { ids: number[] } };
   isOneSelected: boolean;
+  checkIfCanAdd: (newValue: string) => boolean;
 }
 
 let maxCharacterSize = 50;
 
-const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected }) => {
+const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected, checkIfCanAdd }) => {
   const [textValue, setTextValue] = useState<string>("");
   const selectAllRef = useRef<HTMLInputElement>(null);
 
@@ -30,21 +33,21 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected }) =
     if (selectAllRef.current !== null) selectAllRef.current.checked = false;
   };
 
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!checkIfCanAdd(textValue)) {
+      toast.warn("Uwaga, toto uz existuje!");
+      return;
+    }
+    handleInputReset();
+    dispatch.call({ type: "add", value: textValue });
+  };
+
   return (
-    <form className={styles.formControl}>
-      <FormControlLabel
-        sx={{
-          display: "flex",
-          marginRight: "10px",
-          marginLeft: 0,
-          alignItems: "flex-start",
-          gap: "5px",
-          "&	.MuiFormControlLabel-label": {
-            color: "gray",
-            fontSize: "0.9rem",
-          },
-        }}
-        control={
+    // Musi byt wrapnute vo forme aby fungoval enter submit
+    <form onSubmit={handleFormSubmit}>
+      <Stack flexDirection="row" className={styles.formControl}>
+        <Stack className={styles.textInputCont}>
           <FilterTextField
             onChange={handleInputChange}
             value={textValue}
@@ -52,40 +55,38 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected }) =
             label="Reminder Text"
             variant="outlined"
             autoComplete="off"
-            margin="none"
+            height="42px"
             InputLabelProps={{ shrink: true }}
-            sx={{
-              marginRight: "10px",
-              height: "42px",
-              width: "100%",
-            }}
           />
-        }
-        label={`${textValue.length} / ${maxCharacterSize}`}
-        labelPlacement="bottom"
-      />
-      <button
-        className={textValue !== "" ? styles.inputButtonGreen : styles.inputButtonInactive}
-        onClick={(e) => {
-          e.preventDefault();
-          handleInputReset();
-          dispatch.call({ type: "add", value: textValue });
-        }}
-      >
-        <IoMdAddCircleOutline size={25} />
-        Add
-      </button>
-      <button
-        className={isOneSelected ? styles.inputButtonRed : styles.inputButtonInactive}
-        onClick={(e) => {
-          e.preventDefault();
-          handleRemoveReset();
-          dispatch.call({ type: "removeSelected", ids: dispatch.params.ids });
-        }}
-      >
-        <IoMdRemoveCircleOutline size={25} />
-        Remove Selected
-      </button>
+          <Typography
+            sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.9rem" }}
+          >{`${textValue.length} / ${maxCharacterSize}`}</Typography>
+        </Stack>
+        <ControlButton
+          className={styles.inputButton}
+          shouldDisable={textValue === ""}
+          sx={{ outlineColor: (theme) => theme.palette.divider }}
+          backgroundcolor="linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%)"
+          type="submit"
+        >
+          <IoMdAddCircleOutline size={25} />
+          Add
+        </ControlButton>
+        <ControlButton
+          className={styles.inputButton}
+          shouldDisable={!isOneSelected}
+          backgroundcolor="linear-gradient(90deg, rgba(234, 57, 67, 1) 0%, rgba(255, 49, 61, 1) 100%)"
+          sx={{ outlineColor: (theme) => theme.palette.divider }}
+          onClick={(e) => {
+            e.preventDefault();
+            handleRemoveReset();
+            dispatch.call({ type: "removeSelected", ids: dispatch.params.ids });
+          }}
+        >
+          <IoMdRemoveCircleOutline size={25} />
+          Remove Selected
+        </ControlButton>
+      </Stack>
     </form>
   );
 };

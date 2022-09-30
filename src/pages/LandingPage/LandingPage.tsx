@@ -24,6 +24,10 @@ const LandingPage: React.FC = () => {
     return filtersOutcome.filteredList.some((el) => el.checked === true);
   };
 
+  const checkIfCanAdd = (newValue: string): boolean => {
+    return listValues.find((listValue) => listValue.value === newValue) === undefined;
+  };
+
   return (
     <div className={styles.LandingContainer}>
       <ListFilters
@@ -32,7 +36,11 @@ const LandingPage: React.FC = () => {
         dispatch={{ call: dispatch, params: { ids: filtersOutcome.filteredIds } }}
       />
       <InputList listValues={filtersOutcome.filteredList} dispatch={dispatch} />
-      <ListControls isOneSelected={isOneSelected()} dispatch={{ call: dispatch, params: { ids: filtersOutcome.filteredIds } }} />
+      <ListControls
+        isOneSelected={isOneSelected()}
+        checkIfCanAdd={checkIfCanAdd}
+        dispatch={{ call: dispatch, params: { ids: filtersOutcome.filteredIds } }}
+      />
     </div>
   );
 };

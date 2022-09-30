@@ -5,7 +5,6 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
 
   switch (action.type) {
     case "add":
-      if (state.find((listValue) => listValue.value === action.value) !== undefined) return state;
       return [...state, { value: action.value, id: Math.random() * 100, checked: false }];
 
     case "removeSelected":
