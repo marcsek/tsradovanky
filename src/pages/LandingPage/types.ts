@@ -1,6 +1,6 @@
 export interface ListValue {
   value: string;
-  id: number;
+  id: string;
   checked: boolean;
 }
 
@@ -13,5 +13,6 @@ export interface ListReducerState {
 
 export type bClickActions =
   | { type: "add"; value: string }
-  | { type: "removeSelected"; ids?: number[] }
-  | { type: "check"; id?: number; ids?: number[]; value: boolean };
+  | { type: "removeSelected"; ids?: string[] }
+  | { type: "check"; id?: string; ids?: string[]; value: boolean }
+  | { type: "reorder"; reorderedState: ListValues };

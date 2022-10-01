@@ -8,7 +8,7 @@ import { Box } from "@mui/system";
 import FilterTextField from "../../../custom-material-styles/FilterTextField";
 
 interface ListControlProps {
-  dispatch: { call: React.Dispatch<bClickActions>; params: { ids: number[] } };
+  dispatch: { call: React.Dispatch<bClickActions>; params: { ids: string[] } };
   shouldBeChecked: boolean;
   setFilters: React.Dispatch<React.SetStateAction<string>>;
 }

@@ -1,11 +1,12 @@
 import { ListValues, bClickActions } from "../types";
+import { v4 as uuidv4 } from "uuid";
 
 const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValues => {
   let stateCopy = [...state];
 
   switch (action.type) {
     case "add":
-      return [...state, { value: action.value, id: Math.random() * 100, checked: false }];
+      return [...state, { value: action.value, id: uuidv4(), checked: false }];
 
     case "removeSelected":
       let newArray: ListValues = [];
@@ -49,6 +50,9 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
         return listElement;
       });
       return stateCopy;
+
+    case "reorder":
+      return action.reorderedState;
 
     default:
       return state;

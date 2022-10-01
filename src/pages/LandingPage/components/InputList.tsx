@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 
-import { ListValues, bClickActions } from "../types";
+import { ListValues, bClickActions, ListValue } from "../types";
 import styles from "../StyleLandingPage.module.css";
 
-import Checkbox from "@mui/material/Checkbox";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
-import { Box } from "@mui/system";
 import { Stack, Typography } from "@mui/material";
+import ListElement from "./ListElement";
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { Reorder } from "framer-motion";
 
 interface ListControlProps {
   listValues: ListValues;
@@ -21,6 +21,7 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
 
   useEffect(() => {
     if (lastLength < listValues.length) {
+      // console.log(scollToRef.current);
       scollToRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     lastLength = listValues.length;
@@ -34,50 +35,55 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
     return isLastElement(index) && lastLength <= listValues.length;
   };
 
+  const handleElementClick = (values: ListValue) => {
+    dispatch({ type: "check", id: values.id, value: !values.checked });
+  };
+
+  const animtion = {
+    initial: "init",
+    animate: "show",
+    exit: "ex",
+
+    variants: {
+      init: {
+        scale: 0.4,
+        transition: { type: "spring", stiffness: 300, damping: 10 },
+      },
+      show: {
+        scale: 1,
+        transition: { type: "spring", stiffness: 300, damping: 10 },
+      },
+      ex: {
+        scale: 0,
+        opacity: 0,
+        transition: {
+          default: { type: "spring", velocity: 10, damping: 8 },
+        },
+      },
+    },
+  };
+
   return (
     <Stack className={styles.listContainer} sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
-      {listValues.length === 0 ? (
-        <Typography variant="h4" className={styles.noReminders} sx={{ color: (theme) => theme.palette.text.primary }}>
-          No reminders 🦉
-        </Typography>
-      ) : (
-        listValues.map((listValue, index) => {
-          return (
-            <li ref={isLastElement(index) ? scollToRef : undefined} key={listValue.id}>
-              <Box
-                className={shouldAnimate(index) ? styles.listNewElement : styles.listElContainer}
-                onClick={() => {
-                  dispatch({ type: "check", id: listValue.id, value: !listValue.checked });
-                }}
-                sx={{
-                  color: (theme) => theme.palette.text.primary,
-                  "& h5:hover": {
-                    filter: (theme) => (theme.palette.mode === "dark" ? "brightness(1.5)" : "brightness(0.95)"),
-                  },
-                }}
-              >
-                <Checkbox
-                  checked={listValue.checked}
-                  onChange={() => {
-                    dispatch({ type: "check", id: listValue.id, value: !listValue.checked });
-                  }}
-                  checkedIcon={<CheckCircleRoundedIcon />}
-                  icon={<RadioButtonUncheckedRoundedIcon />}
-                  sx={{
-                    color: "#757575",
-                    "&.Mui-checked": {
-                      color: "#42a5f5",
-                    },
-                  }}
-                />
-                <Typography sx={{ backgroundColor: (theme) => theme.palette.common.white }} variant="h5">
-                  {listValue.value}
-                </Typography>
-              </Box>
-            </li>
-          );
-        })
-      )}
+      <AnimatePresence>
+        {listValues.length === 0 ? (
+          <Typography
+            component={motion.div}
+            {...animtion}
+            variant="h4"
+            className={styles.noReminders}
+            sx={{ color: (theme) => theme.palette.text.primary }}
+          >
+            No reminders 🦉
+          </Typography>
+        ) : (
+          listValues.map((listValue, index) => {
+            return (
+              <ListElement ref={scollToRef} isLast={isLastElement(index)} key={listValue.id} handleClick={handleElementClick} values={listValue} />
+            );
+          })
+        )}
+      </AnimatePresence>
     </Stack>
   );
 };

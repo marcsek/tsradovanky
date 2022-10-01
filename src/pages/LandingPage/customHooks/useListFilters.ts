@@ -3,7 +3,7 @@ import { ListValues } from "../types";
 
 interface ApplyReturn {
   filteredList: ListValues;
-  filteredIds: number[];
+  filteredIds: string[];
 }
 type FiltersHookType = [applyFilters: () => ApplyReturn, setFilters: React.Dispatch<React.SetStateAction<string>>];
 
@@ -12,7 +12,7 @@ const useListFilters = (baseList: ListValues): FiltersHookType => {
 
   const applyFilters = useCallback((): ApplyReturn => {
     let filteredList = baseList.filter((el) => el.value.includes(filters));
-    let filteredIds: number[] = [];
+    let filteredIds: string[] = [];
 
     filteredList.forEach((el) => {
       filteredIds.push(el.id);

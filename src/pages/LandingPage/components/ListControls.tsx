@@ -8,7 +8,7 @@ import { Stack, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 
 interface ListControlProps {
-  dispatch: { call: React.Dispatch<bClickActions>; params: { ids: number[] } };
+  dispatch: { call: React.Dispatch<bClickActions>; params: { ids: string[] } };
   isOneSelected: boolean;
   checkIfCanAdd: (newValue: string) => boolean;
 }
