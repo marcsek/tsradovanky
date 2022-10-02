@@ -8,14 +8,15 @@ import { Stack, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 
 interface ListControlProps {
-  dispatch: { call: React.Dispatch<bClickActions>; params: { ids: string[] } };
+  dispatch: React.Dispatch<bClickActions>;
   isOneSelected: boolean;
   checkIfCanAdd: (newValue: string) => boolean;
+  filteredSelectedIds: string[];
 }
 
 let maxCharacterSize = 50;
 
-const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected, checkIfCanAdd }) => {
+const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected, checkIfCanAdd, filteredSelectedIds }) => {
   const [textValue, setTextValue] = useState<string>("");
   const selectAllRef = useRef<HTMLInputElement>(null);
 
@@ -40,7 +41,7 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected, che
       return;
     }
     handleInputReset();
-    dispatch.call({ type: "add", value: textValue });
+    dispatch({ type: "add", value: textValue });
   };
 
   return (
@@ -80,7 +81,8 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected, che
           onClick={(e) => {
             e.preventDefault();
             handleRemoveReset();
-            dispatch.call({ type: "removeSelected", ids: dispatch.params.ids });
+            toast.success(`${filteredSelectedIds.length} reminders have been deleted!`);
+            dispatch({ type: "removeSelected", ids: filteredSelectedIds });
           }}
         >
           <IoMdRemoveCircleOutline size={25} />

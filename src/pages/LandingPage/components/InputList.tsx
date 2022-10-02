@@ -7,7 +7,6 @@ import { Stack, Typography } from "@mui/material";
 import ListElement from "./ListElement";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
-import { Reorder } from "framer-motion";
 
 interface ListControlProps {
   listValues: ListValues;
@@ -21,7 +20,6 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
 
   useEffect(() => {
     if (lastLength < listValues.length) {
-      // console.log(scollToRef.current);
       scollToRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     lastLength = listValues.length;
@@ -29,10 +27,6 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
 
   const isLastElement = (index: number): boolean => {
     return index === listValues.length - 1;
-  };
-
-  const shouldAnimate = (index: number): boolean => {
-    return isLastElement(index) && lastLength <= listValues.length;
   };
 
   const handleElementClick = (values: ListValue) => {
@@ -64,7 +58,7 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
   };
 
   return (
-    <Stack className={styles.listContainer} sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
+    <Stack component={motion.div} layoutScroll className={styles.listContainer} sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
       <AnimatePresence>
         {listValues.length === 0 ? (
           <Typography

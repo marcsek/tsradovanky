@@ -10,16 +10,15 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
 
     case "removeSelected":
       let newArray: ListValues = [];
-
       if (action.ids !== undefined) {
         state.forEach((listElement) => {
-          if (!action.ids?.includes(listElement.id) || !listElement.checked) {
+          if (!action.ids?.includes(listElement.id)) {
             newArray.push(listElement);
           }
         });
         return newArray;
       }
-
+      // ak undefined deletnu sa vsetky
       state.forEach((listElement) => {
         if (!listElement.checked) {
           newArray.push(listElement);

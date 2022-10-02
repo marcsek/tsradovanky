@@ -10,36 +10,49 @@ import useListFilters from "./customHooks/useListFilters";
 
 const LandingPage: React.FC = () => {
   const [listValues, dispatch] = useReducer(ButtonClickReducer, []);
-  const [applyFilters, setFilters] = useListFilters(listValues);
-
-  let filtersOutcome = applyFilters();
+  const [filtered, setFilters, filters] = useListFilters(listValues);
 
   const areAllSelected = () => {
-    if (filtersOutcome.filteredList.length === 0) return false;
+    if (filtered.filteredList.length === 0) return false;
 
-    return !filtersOutcome.filteredList.some((el) => el.checked === false);
+    return !filtered.filteredList.some((el) => el.checked === false);
   };
 
   const isOneSelected = () => {
-    return filtersOutcome.filteredList.some((el) => el.checked === true);
+    return filtered.filteredList.some((el) => el.checked === true);
   };
 
   const checkIfCanAdd = (newValue: string): boolean => {
     return listValues.find((listValue) => listValue.value === newValue) === undefined;
   };
 
+  const getFilteredSelectedIds = () => {
+    const filteredIds: string[] = [];
+
+    filtered.filteredList.forEach((el) => {
+      if (el.checked) {
+        filteredIds.push(el.id);
+      }
+    });
+
+    return filteredIds;
+  };
+
   return (
     <div className={styles.LandingContainer}>
       <ListFilters
+        filters={filters}
         setFilters={setFilters}
         shouldBeChecked={areAllSelected()}
-        dispatch={{ call: dispatch, params: { ids: filtersOutcome.filteredIds } }}
+        dispatch={dispatch}
+        filteredIds={filtered.filteredIds}
       />
-      <InputList listValues={filtersOutcome.filteredList} dispatch={dispatch} />
+      <InputList listValues={filtered.filteredList} dispatch={dispatch} />
       <ListControls
         isOneSelected={isOneSelected()}
         checkIfCanAdd={checkIfCanAdd}
-        dispatch={{ call: dispatch, params: { ids: filtersOutcome.filteredIds } }}
+        dispatch={dispatch}
+        filteredSelectedIds={getFilteredSelectedIds()}
       />
     </div>
   );

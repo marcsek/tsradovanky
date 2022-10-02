@@ -11,6 +11,19 @@ export interface ListReducerState {
   baseList: ListValues;
 }
 
+export interface FiltersTypes {
+  sort: "AtoZ" | "date" | string;
+  reverse?: boolean;
+  keyword: string;
+}
+
+export type SetFiltersType = (callback: (prev: FiltersTypes) => FiltersTypes) => void;
+
+export interface ApplyReturn {
+  filteredList: ListValues;
+  filteredIds: string[];
+}
+
 export type bClickActions =
   | { type: "add"; value: string }
   | { type: "removeSelected"; ids?: string[] }

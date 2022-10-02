@@ -1,26 +1,48 @@
-import { useState, useCallback } from "react";
-import { ListValues } from "../types";
+import { useState, useCallback, useRef } from "react";
+import { ListValues, ListValue, FiltersTypes, ApplyReturn, SetFiltersType } from "../types";
 
-interface ApplyReturn {
-  filteredList: ListValues;
-  filteredIds: string[];
-}
-type FiltersHookType = [applyFilters: () => ApplyReturn, setFilters: React.Dispatch<React.SetStateAction<string>>];
+type FiltersHookType = [filtered: ApplyReturn, setFilters: SetFiltersType, filters: FiltersTypes];
+
+const sortAtoZ = (a: ListValue, b: ListValue) => {
+  if (a.value.toLowerCase() > b.value.toLowerCase()) {
+    return 1;
+  }
+  return -1;
+};
+
+const filterValue = (el: ListValue, filters: string) => {
+  return el.value.includes(filters);
+};
 
 const useListFilters = (baseList: ListValues): FiltersHookType => {
-  const [filters, setFilters] = useState("");
+  const filters = useRef<FiltersTypes>({ sort: "date", keyword: "" });
+  const [filtered, setFiltered] = useState<ApplyReturn>({ filteredIds: [], filteredList: [] });
 
-  const applyFilters = useCallback((): ApplyReturn => {
-    let filteredList = baseList.filter((el) => el.value.includes(filters));
+  const updateFilters = useCallback(() => {
+    let filteredList: ListValues = baseList.filter((el) => filterValue(el, filters.current.keyword));
+    if (filters.current.sort === "AtoZ") {
+      filteredList = filteredList.sort(sortAtoZ);
+    }
+    if (filters.current.reverse) {
+      filteredList = filteredList.reverse();
+    }
     let filteredIds: string[] = [];
 
     filteredList.forEach((el) => {
       filteredIds.push(el.id);
     });
-    return { filteredList, filteredIds };
-  }, [baseList, filters]);
+    setFiltered({ filteredList, filteredIds });
+  }, [baseList]);
 
-  return [applyFilters, setFilters];
+  const setFilters = useCallback(
+    (prev: (prev: FiltersTypes) => FiltersTypes) => {
+      filters.current = prev(filters.current);
+      updateFilters();
+    },
+    [updateFilters]
+  );
+
+  return [filtered, setFilters, filters.current];
 };
 
 export default useListFilters;

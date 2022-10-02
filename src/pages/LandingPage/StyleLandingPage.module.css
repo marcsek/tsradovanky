@@ -22,13 +22,11 @@
   width: 5px;
 }
 
-/* Track */
 .listContainer::-webkit-scrollbar-track {
   background: rgb(50, 53, 70);
   border-radius: 1rem;
 }
 
-/* Handle */
 .listContainer::-webkit-scrollbar-thumb {
   background: #252525;
   border-radius: 1rem;
@@ -96,20 +94,6 @@
   flex: 0 0 calc(27.5% - 10px);
 }
 
-.listNewElement {
-  composes: listElContainer;
-  animation: addToList 0.2s ease-in-out;
-}
-
-@keyframes addToList {
-  0% {
-    translate: 0% 60%;
-  }
-  100% {
-    translate: 0% 0%;
-  }
-}
-
 .inputLabel {
   position: absolute;
   translate: 0% 250%;
@@ -121,9 +105,10 @@
 .filtersBox {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 30px;
-  width: 600px;
+  /* width: 600px; */
+  height: 42px;
   margin: 0 auto;
 }
 
@@ -139,4 +124,11 @@
   left: 50%;
   top: 50%;
   translate: -50% -50%;
+}
+
+.filterSelector {
+  flex-direction: row !important;
+  border-radius: 4px;
+  height: 100%;
+  box-sizing: border-box;
 }
