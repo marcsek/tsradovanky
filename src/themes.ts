@@ -20,6 +20,33 @@ const darkTheme = createTheme({
     },
     divider: "#39393D",
   },
+  typography: {
+    h4: {
+      fontWeight: 600,
+    },
+    h5: {
+      fontWeight: 600,
+    },
+    body1: {
+      fontWeight: 600,
+    },
+    button: {
+      fontWeight: 600,
+    },
+
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+  },
 });
 
 const lightTheme = createTheme({
@@ -42,6 +69,7 @@ const lightTheme = createTheme({
     },
     divider: "rgba(50, 53, 70, 0.3)",
   },
+  typography: {},
 });
 
 export { lightTheme, darkTheme };
