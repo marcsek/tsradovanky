@@ -1,6 +1,7 @@
 export interface ListValue {
   value: string;
   id: string;
+  date: Date;
   checked: boolean;
 }
 
@@ -12,10 +13,12 @@ export interface ListReducerState {
 }
 
 export interface FiltersTypes {
-  sort: "AtoZ" | "date" | string;
+  sort: SortType;
   reverse?: boolean;
   keyword: string;
 }
+
+export type SortType = "AtoZ" | "date" | string;
 
 export type SetFiltersType = (callback: (prev: FiltersTypes) => FiltersTypes) => void;
 

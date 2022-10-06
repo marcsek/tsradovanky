@@ -1,17 +1,26 @@
 import { useState, useCallback, useRef } from "react";
 import { ListValues, ListValue, FiltersTypes, ApplyReturn, SetFiltersType } from "../types";
+import { sortByDate, sortAtoZ } from "../../../utils/SortingFunctions";
 
 type FiltersHookType = [filtered: ApplyReturn, setFilters: SetFiltersType, filters: FiltersTypes];
 
-const sortAtoZ = (a: ListValue, b: ListValue) => {
-  if (a.value.toLowerCase() > b.value.toLowerCase()) {
-    return 1;
-  }
-  return -1;
-};
-
 const filterValue = (el: ListValue, filters: string) => {
   return el.value.includes(filters);
+};
+
+const handleListFiltering = (filters: FiltersTypes, listToFilter: ListValues): ListValues => {
+  let filteredList = listToFilter.filter((el) => filterValue(el, filters.keyword));
+
+  if (filters.sort === "AtoZ") {
+    filteredList = listToFilter.sort(sortAtoZ);
+  } else if (filters.sort === "date") {
+    filteredList = listToFilter.sort(sortByDate);
+  }
+  if (filters.reverse) {
+    filteredList = listToFilter.reverse();
+  }
+
+  return filteredList;
 };
 
 const useListFilters = (baseList: ListValues): FiltersHookType => {
@@ -19,13 +28,8 @@ const useListFilters = (baseList: ListValues): FiltersHookType => {
   const [filtered, setFiltered] = useState<ApplyReturn>({ filteredIds: [], filteredList: [] });
 
   const updateFilters = useCallback(() => {
-    let filteredList: ListValues = baseList.filter((el) => filterValue(el, filters.current.keyword));
-    if (filters.current.sort === "AtoZ") {
-      filteredList = filteredList.sort(sortAtoZ);
-    }
-    if (filters.current.reverse) {
-      filteredList = filteredList.reverse();
-    }
+    const filteredList: ListValues = handleListFiltering(filters.current, baseList);
+
     let filteredIds: string[] = [];
 
     filteredList.forEach((el) => {

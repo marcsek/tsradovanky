@@ -58,9 +58,14 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
             },
           }}
         />
-        <Typography sx={{ backgroundColor: (theme) => theme.palette.common.white }} variant="h5">
-          {values.value}
-        </Typography>
+        <Box className={styles.listElementBox} sx={{ backgroundColor: (theme) => theme.palette.common.white }}>
+          <Typography className={styles.elementDate} sx={{ color: (theme) => theme.palette.text.secondary }} variant="h6">
+            {values.date.toUTCString()}
+          </Typography>
+          <Typography className={styles.elementText} variant="h5">
+            {values.value}
+          </Typography>
+        </Box>
       </Box>
     </motion.li>
   );
