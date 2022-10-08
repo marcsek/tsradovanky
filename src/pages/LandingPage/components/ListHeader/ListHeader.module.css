@@ -1,0 +1,4 @@
+.headerCont {
+  flex-direction: row !important;
+  justify-content: space-between;
+}

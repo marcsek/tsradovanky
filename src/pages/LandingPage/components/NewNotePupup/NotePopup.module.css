@@ -1,0 +1,69 @@
+.pupupCont {
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+
+  width: 60%;
+  height: 60%;
+  min-height: 550px;
+  max-height: 550px;
+  box-sizing: border-box;
+  padding: 50px;
+  gap: 15%;
+  border-radius: 1rem;
+}
+
+.popupBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 9;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.titleCont {
+  flex-direction: row !important;
+  justify-content: space-between;
+}
+
+.titleCont h4 {
+  font-size: 1.7rem;
+}
+
+.titleCont h6 {
+  cursor: pointer;
+}
+
+.textInputCont {
+  margin-left: 0;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.textInputTitle {
+  composes: textInputCont;
+  width: 70%;
+}
+
+.inputButton {
+  composes: buttonScale from "../../../../CommonStyles.css";
+  color: #eaebf1;
+  font-weight: 600;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 60%;
+  padding: 10px !important;
+  top: 5%;
+}
+
+.inputCont {
+  height: 100%;
+  gap: 10%;
+}

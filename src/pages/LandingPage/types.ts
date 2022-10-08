@@ -1,4 +1,5 @@
 export interface ListValue {
+  title: string;
   value: string;
   id: string;
   date: Date;
@@ -18,7 +19,10 @@ export interface FiltersTypes {
   keyword: string;
 }
 
-export type SortType = "AtoZ" | "date" | string;
+export enum SortType {
+  AtoZ = "ATOZ",
+  Date = "DATE",
+}
 
 export type SetFiltersType = (callback: (prev: FiltersTypes) => FiltersTypes) => void;
 
@@ -28,7 +32,7 @@ export interface ApplyReturn {
 }
 
 export type bClickActions =
-  | { type: "add"; value: string }
+  | { type: "add"; props: { title: string; value: string } }
   | { type: "removeSelected"; ids?: string[] }
   | { type: "check"; id?: string; ids?: string[]; value: boolean }
   | { type: "reorder"; reorderedState: ListValues };

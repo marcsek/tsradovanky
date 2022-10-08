@@ -7,6 +7,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color-scheme: dark;
 }
+#root {
+  background-color: #171719;
+  min-height: 100vh;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;

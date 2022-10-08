@@ -4,7 +4,7 @@ import styles from "./StyleLandingPage.module.css";
 
 import InputList from "./components/InputList";
 import ListControls from "./components/ListControls";
-import ListFilters from "./components/ListFilters";
+import ListHeader from "./components/ListHeader/ListHeader";
 
 import useListFilters from "./customHooks/useListFilters";
 
@@ -40,17 +40,12 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className={styles.LandingContainer}>
-      <ListFilters
-        filters={filters}
-        setFilters={setFilters}
-        shouldBeChecked={areAllSelected()}
-        dispatch={dispatch}
-        filteredIds={filtered.filteredIds}
-      />
+      <ListHeader filters={filters} setFilters={setFilters} dispatch={dispatch} checkIfCanAdd={checkIfCanAdd} />
       <InputList listValues={filtered.filteredList} dispatch={dispatch} />
       <ListControls
+        shouldBeChecked={areAllSelected()}
+        filteredIds={filtered.filteredIds}
         isOneSelected={isOneSelected()}
-        checkIfCanAdd={checkIfCanAdd}
         dispatch={dispatch}
         filteredSelectedIds={getFilteredSelectedIds()}
       />

@@ -22,6 +22,10 @@ const FilterTextField = styled(TextField, {
     height,
     zIndex: 1,
   },
+  textarea: {
+    color: theme.palette.text.disabled,
+    zIndex: 1,
+  },
   label: {
     color: theme.palette.text.secondary,
   },

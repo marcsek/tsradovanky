@@ -1,52 +1,36 @@
 import { useState, useEffect } from "react";
 
 import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Divider from "@mui/material/Divider";
-import { FiltersTypes, SetFiltersType } from "../types";
-import { styled } from "@mui/material/styles";
+import { FiltersTypes, SetFiltersType, SortType } from "../types";
 import { Stack } from "@mui/material";
 import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import FlipCameraAndroidIcon from "@mui/icons-material/FlipCameraAndroid";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import styles from "../StyleLandingPage.module.css";
+import StyledToggleButtonGroup from "../../../custom-material-styles/StyledToggleButtonGroup";
 
 interface SortSlectorControlProps {
   setFilters: SetFiltersType;
   filters: FiltersTypes;
 }
 
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-  "& .MuiToggleButtonGroup-grouped": {
-    margin: theme.spacing(0.5),
-    border: 0,
-    color: theme.palette.text.secondary,
-    "&.Mui-selected": {
-      color: theme.palette.text.primary,
-    },
-    "&.Mui-disabled": {
-      border: 0,
-    },
-    "&:not(:first-of-type)": {
-      borderRadius: theme.shape.borderRadius,
-    },
-    "&:first-of-type": {
-      borderRadius: theme.shape.borderRadius,
-    },
-  },
-}));
-
 const FilterSortSelector: React.FC<SortSlectorControlProps> = ({ setFilters, filters }) => {
-  const [sortSelect, setSortSelect] = useState<string>(filters.sort);
+  const [sortSelect, setSortSelect] = useState<SortType>(filters.sort);
   const [reverseToggle, setReverseToggle] = useState<string[]>([]);
 
-  const handleSortSelect = (event: React.MouseEvent<HTMLElement>, newFormats: string) => {
-    if (newFormats?.length) {
-      setSortSelect(newFormats);
+  const handleSortSelect = (_: any, newFormats: string) => {
+    if (Object.values(SortType).includes(newFormats as unknown as SortType)) {
+      const asSortType: SortType = newFormats as SortType;
+      if (asSortType?.length) {
+        setSortSelect(asSortType);
+      }
+      return;
     }
+    console.error("Wrong sort enum type");
   };
 
-  const handleReverseToggle = (event: React.MouseEvent<HTMLElement>, newFormats: string[]) => {
+  const handleReverseToggle = (_: any, newFormats: string[]) => {
     setReverseToggle(newFormats);
   };
 
@@ -65,16 +49,16 @@ const FilterSortSelector: React.FC<SortSlectorControlProps> = ({ setFilters, fil
       }}
     >
       <StyledToggleButtonGroup size="small" value={sortSelect} exclusive onChange={handleSortSelect}>
-        <ToggleButton defaultChecked value="AtoZ" aria-label="left aligned">
+        <ToggleButton defaultChecked value={SortType.AtoZ} aria-label="left aligned">
           <SortByAlphaIcon />
         </ToggleButton>
-        <ToggleButton value="date" aria-label="centered">
+        <ToggleButton value={SortType.Date} aria-label="centered">
           <DateRangeIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
       <StyledToggleButtonGroup size="small" value={reverseToggle} onChange={handleReverseToggle}>
-        <ToggleButton value="AtoZ" aria-label="left aligned">
+        <ToggleButton value="reverse" aria-label="left aligned">
           <FlipCameraAndroidIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>

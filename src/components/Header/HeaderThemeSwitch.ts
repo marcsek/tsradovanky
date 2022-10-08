@@ -8,6 +8,7 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase": {
     margin: 1,
     padding: 0,
+    left: 0,
     "&.Mui-checked": {
       "& .MuiSwitch-thumb:before": {
         backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
@@ -27,6 +28,7 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
     "&:before": {
       content: "''",
       position: "absolute",
+      left: 0,
       width: "100%",
       height: "100%",
       backgroundRepeat: "no-repeat",

@@ -1,95 +1,83 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { bClickActions } from "../types";
 import styles from "../StyleLandingPage.module.css";
-import FilterTextField from "../../../custom-material-styles/FilterTextField";
 import ControlButton from "../../../custom-material-styles/ControlButton";
-import { IoMdRemoveCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
-import { Stack, Typography } from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import { Stack } from "@mui/material";
 import { toast } from "react-toastify";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 interface ListControlProps {
   dispatch: React.Dispatch<bClickActions>;
   isOneSelected: boolean;
-  checkIfCanAdd: (newValue: string) => boolean;
   filteredSelectedIds: string[];
+  filteredIds: string[];
+  shouldBeChecked: boolean;
 }
 
-let maxCharacterSize = 50;
-
-const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected, checkIfCanAdd, filteredSelectedIds }) => {
-  const [textValue, setTextValue] = useState<string>("");
+const ListControls: React.FC<ListControlProps> = ({ dispatch, isOneSelected, filteredSelectedIds, filteredIds, shouldBeChecked }) => {
   const selectAllRef = useRef<HTMLInputElement>(null);
-
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (maxCharacterSize - event.target.value.length >= 0) {
-      setTextValue(event.target.value);
-    }
-  };
-
-  const handleInputReset = () => {
-    setTextValue("");
-  };
 
   const handleRemoveReset = () => {
     if (selectAllRef.current !== null) selectAllRef.current.checked = false;
   };
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!checkIfCanAdd(textValue)) {
-      toast.warn("Uwaga, toto uz existuje!");
-      return;
-    }
-    handleInputReset();
-    dispatch({ type: "add", value: textValue });
-  };
-
   return (
-    // Musi byt wrapnute vo forme aby fungoval enter submit
-    <form onSubmit={handleFormSubmit}>
-      <Stack flexDirection="row" className={styles.formControl}>
-        <Stack className={styles.textInputCont}>
-          <FilterTextField
-            onChange={handleInputChange}
-            value={textValue}
-            className={styles.input}
-            label="Reminder Text"
-            variant="outlined"
-            autoComplete="off"
-            height="42px"
-            InputLabelProps={{ shrink: true }}
+    <Stack flexDirection="row" className={styles.formControl}>
+      <FormControlLabel
+        sx={{
+          "&	.MuiFormControlLabel-label": {
+            color: (theme) => theme.palette.text.primary,
+            whiteSpace: "nowrap",
+          },
+          flex: "0 0 40%",
+          m: 0,
+        }}
+        control={
+          <Checkbox
+            checked={shouldBeChecked}
+            onChange={(e) => {
+              dispatch({ type: "check", value: e.target.checked, ids: filteredIds });
+            }}
+            sx={{
+              color: "#FE7349",
+              "&.Mui-checked": {
+                color: "#FE7349",
+              },
+            }}
           />
-          <Typography
-            sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.9rem" }}
-          >{`${textValue.length} / ${maxCharacterSize}`}</Typography>
-        </Stack>
-        <ControlButton
-          className={styles.inputButton}
-          shouldDisable={textValue === ""}
-          sx={{ outlineColor: (theme) => theme.palette.divider }}
-          backgroundcolor="linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%)"
-          type="submit"
-        >
-          <IoMdAddCircleOutline size={25} />
-          Add
-        </ControlButton>
-        <ControlButton
-          className={styles.inputButton}
-          shouldDisable={!isOneSelected}
-          backgroundcolor="linear-gradient(90deg, rgba(234, 57, 67, 1) 0%, rgba(255, 49, 61, 1) 100%)"
-          sx={{ outlineColor: (theme) => theme.palette.divider }}
-          onClick={(e) => {
-            e.preventDefault();
-            handleRemoveReset();
-            toast.success(`${filteredSelectedIds.length} reminders have been deleted!`);
-            dispatch({ type: "removeSelected", ids: filteredSelectedIds });
-          }}
-        >
-          <IoMdRemoveCircleOutline size={25} />
-          Remove Selected
-        </ControlButton>
-      </Stack>
-    </form>
+        }
+        labelPlacement="end"
+        label="Select All"
+      />
+      <ControlButton
+        className={styles.inputButton}
+        shouldDisable={!isOneSelected}
+        sx={{ outlineColor: (theme) => theme.palette.divider }}
+        backgroundcolor="linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%)"
+        type="submit"
+      >
+        <DoneAllIcon />
+        Finish Selected
+      </ControlButton>
+      <ControlButton
+        className={styles.inputButton}
+        shouldDisable={!isOneSelected}
+        backgroundcolor="linear-gradient(90deg, rgba(234, 57, 67, 1) 0%, rgba(255, 49, 61, 1) 100%)"
+        sx={{ outlineColor: (theme) => theme.palette.divider }}
+        onClick={(e) => {
+          e.preventDefault();
+          handleRemoveReset();
+          toast.success(`${filteredSelectedIds.length} reminders were deleted!`);
+          dispatch({ type: "removeSelected", ids: filteredSelectedIds });
+        }}
+      >
+        <DeleteOutlineIcon />
+        Remove Selected
+      </ControlButton>
+    </Stack>
   );
 };
 

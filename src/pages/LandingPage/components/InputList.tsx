@@ -4,7 +4,7 @@ import { ListValues, bClickActions, ListValue } from "../types";
 import styles from "../StyleLandingPage.module.css";
 
 import { Stack, Typography } from "@mui/material";
-import ListElement from "./ListElement";
+import ListElement from "./ListElement/ListElement";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 

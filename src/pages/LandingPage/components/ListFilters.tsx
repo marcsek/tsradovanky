@@ -1,48 +1,18 @@
-import { bClickActions, FiltersTypes, SetFiltersType } from "../types";
+import { FiltersTypes, SetFiltersType } from "../types";
 import styles from "../StyleLandingPage.module.css";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { Box, Stack } from "@mui/system";
 import FilterTextField from "../../../custom-material-styles/FilterTextField";
 import FilterSortSelector from "./FilterSortSelector";
 
 interface ListControlProps {
-  dispatch: React.Dispatch<bClickActions>;
-  shouldBeChecked: boolean;
   setFilters: SetFiltersType;
-  filteredIds: string[];
   filters: FiltersTypes;
 }
 
-const ListFilters: React.FC<ListControlProps> = ({ dispatch, shouldBeChecked, setFilters, filteredIds, filters }) => {
+const ListFilters: React.FC<ListControlProps> = ({ setFilters, filters }) => {
   return (
     <Box className={styles.filtersBox}>
-      <FormControlLabel
-        sx={{
-          "&	.MuiFormControlLabel-label": {
-            color: (theme) => theme.palette.text.primary,
-            whiteSpace: "nowrap",
-          },
-          ml: "40px",
-        }}
-        control={
-          <Checkbox
-            checked={shouldBeChecked}
-            onChange={(e) => {
-              dispatch({ type: "check", value: e.target.checked, ids: filteredIds });
-            }}
-            sx={{
-              color: "#FE7349",
-              "&.Mui-checked": {
-                color: "#FE7349",
-              },
-            }}
-          />
-        }
-        labelPlacement="end"
-        label="Select All"
-      />
-      <Stack sx={{ flexDirection: "row", height: "100%", gap: 1, flexGrow: 2, maxWidth: 500 }}>
+      <Stack sx={{ flexDirection: "row", height: "100%", gap: 1, flexGrow: 2 }}>
         <FilterTextField
           onChange={(e) => {
             setFilters((prev) => {
