@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 
-import { ListValues, bClickActions, ListValue } from "../types";
-import styles from "../StyleLandingPage.module.css";
+import { ListValues, bClickActions, ListValue } from "../../types";
+import styles from "../../StyleLandingPage.module.css";
 
 import { Stack, Typography } from "@mui/material";
-import ListElement from "./ListElement/ListElement";
+import ListElement from "../ListElement/ListElement";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
+import { inputListAnimation } from "./InputListAnimation";
 
 interface ListControlProps {
   listValues: ListValues;
@@ -33,48 +34,22 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
     dispatch({ type: "check", id: values.id, value: !values.checked });
   };
 
-  const animtion = {
-    initial: "init",
-    animate: "show",
-    exit: "ex",
-
-    variants: {
-      init: {
-        scale: 0.4,
-        transition: { type: "spring", stiffness: 300, damping: 10 },
-      },
-      show: {
-        scale: 1,
-        transition: { type: "spring", stiffness: 300, damping: 10 },
-      },
-      ex: {
-        scale: 0,
-        opacity: 0,
-        transition: {
-          default: { type: "spring", velocity: 10, damping: 8 },
-        },
-      },
-    },
-  };
-
   return (
     <Stack component={motion.div} layoutScroll className={styles.listContainer} sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
-      <AnimatePresence>
+      <AnimatePresence mode="popLayout">
         {listValues.length === 0 ? (
           <Typography
             component={motion.div}
-            {...animtion}
+            {...inputListAnimation}
             variant="h4"
             className={styles.noReminders}
             sx={{ color: (theme) => theme.palette.text.primary }}
           >
-            No reminders 🦉
+            No&nbsp;<strong>Nxtes</strong>, add some...
           </Typography>
         ) : (
           listValues.map((listValue, index) => {
-            return (
-              <ListElement ref={scollToRef} isLast={isLastElement(index)} key={listValue.id} handleClick={handleElementClick} values={listValue} />
-            );
+            return <ListElement isLast={isLastElement(index)} key={listValue.id} handleClick={handleElementClick} values={listValue} />;
           })
         )}
       </AnimatePresence>

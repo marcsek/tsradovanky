@@ -20,11 +20,12 @@ const FilterSortSelector: React.FC<SortSlectorControlProps> = ({ setFilters, fil
   const [reverseToggle, setReverseToggle] = useState<string[]>([]);
 
   const handleSortSelect = (_: any, newFormats: string) => {
+    if (newFormats === null || !newFormats?.length) {
+      return;
+    }
     if (Object.values(SortType).includes(newFormats as unknown as SortType)) {
       const asSortType: SortType = newFormats as SortType;
-      if (asSortType?.length) {
-        setSortSelect(asSortType);
-      }
+      setSortSelect(asSortType);
       return;
     }
     console.error("Wrong sort enum type");

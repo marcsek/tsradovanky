@@ -20,7 +20,15 @@ function App() {
         <Header setTheme={setTheme} />
         <LandingPage></LandingPage>
       </Box>
-      <ToastContainer theme={theme ? "light" : "dark"} pauseOnHover={true} closeOnClick={true} autoClose={5000} position="bottom-right" limit={3} />
+      <ToastContainer
+        theme={theme ? "light" : "dark"}
+        pauseOnHover={true}
+        closeOnClick={true}
+        autoClose={5000}
+        pauseOnFocusLoss={false}
+        position="bottom-right"
+        limit={3}
+      />
     </ThemeProvider>
   );
 }

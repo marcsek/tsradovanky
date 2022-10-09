@@ -2,11 +2,15 @@ import { useReducer } from "react";
 import ButtonClickReducer from "./reducers/ButtonClickReducer";
 import styles from "./StyleLandingPage.module.css";
 
-import InputList from "./components/InputList";
+import InputList from "./components/inputList/InputList";
 import ListControls from "./components/ListControls";
 import ListHeader from "./components/ListHeader/ListHeader";
 
 import useListFilters from "./customHooks/useListFilters";
+
+/* iba pre test */
+import FakerListGenerator from "./FakerListGenerator";
+/*---------------*/
 
 const LandingPage: React.FC = () => {
   const [listValues, dispatch] = useReducer(ButtonClickReducer, []);
@@ -49,6 +53,7 @@ const LandingPage: React.FC = () => {
         dispatch={dispatch}
         filteredSelectedIds={getFilteredSelectedIds()}
       />
+      <FakerListGenerator dispatch={dispatch} />
     </div>
   );
 };

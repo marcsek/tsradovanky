@@ -7,6 +7,8 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { bClickActions } from "../../types";
 import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
+import { motion } from "framer-motion";
+import { windowAnimation, backgroundAnimation } from "./NotePopupAnimations";
 
 interface NewNotePopupProps {
   checkIfCanAdd: (newValue: string) => boolean;
@@ -49,11 +51,16 @@ const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, cl
 
   return (
     <>
-      <Box className={styles.popupBackground} onClick={closeNewNote} />
-      <Stack className={styles.pupupCont} sx={{ backgroundColor: (theme) => theme.palette.background.default }}>
+      <Box className={styles.popupBackground} onClick={closeNewNote} component={motion.div} {...backgroundAnimation} />
+      <Stack
+        className={styles.pupupCont}
+        sx={{ backgroundColor: (theme) => theme.palette.background.default }}
+        component={motion.div}
+        {...windowAnimation}
+      >
         <Stack className={styles.titleCont}>
           <Typography variant="h4" sx={{ color: (theme) => theme.palette.text.primary }}>
-            New Nxte
+            New&nbsp;<strong>Nxte</strong>
           </Typography>
           <ControlButton
             onClick={closeNewNote}
@@ -61,9 +68,6 @@ const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, cl
           >
             <CloseIcon></CloseIcon>
           </ControlButton>
-          {/* <Typography variant="h6" onClick={closeNewNote} sx={{ color: (theme) => theme.palette.text.primary }}>
-            <CloseIcon></CloseIcon>
-          </Typography> */}
         </Stack>
         <form onSubmit={handleFormSubmit}>
           <Stack className={styles.inputCont}>

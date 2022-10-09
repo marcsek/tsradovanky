@@ -5,8 +5,8 @@
   left: 50%;
   translate: -50% -50%;
 
-  width: 60%;
-  height: 60%;
+  width: clamp(60%, 700px, 90%);
+  height: min(60%, 300px);
   min-height: 550px;
   max-height: 550px;
   box-sizing: border-box;
@@ -32,6 +32,13 @@
 
 .titleCont h4 {
   font-size: 1.7rem;
+}
+
+.titleCont h4 strong {
+  background: #ca5010;
+  background: linear-gradient(to bottom right, red 0%, orange 100%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .titleCont h6 {

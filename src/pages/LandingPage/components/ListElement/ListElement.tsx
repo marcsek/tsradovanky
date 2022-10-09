@@ -10,7 +10,7 @@ import { elementAnimation } from "./ElementAnimation";
 import styles from "./ListElement.module.css";
 import { dateFormatSettings } from "../../../../utils/DateFormatSettings";
 
-import { motion, usePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface ListElementProps {
   isLast: boolean;
@@ -19,12 +19,8 @@ interface ListElementProps {
 }
 
 const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProps> = ({ isLast, handleClick, values }, ref) => {
-  const [isPresent, safeToRemove] = usePresence();
-
-  const animation = elementAnimation(isPresent, safeToRemove);
-
   return (
-    <motion.li className={styles.listElLi} {...animation} layout ref={isLast ? ref : undefined}>
+    <motion.li className={styles.listElLi} {...elementAnimation} layout layoutScroll={true} ref={ref}>
       <Box
         className={styles.listElContainer}
         onClick={() => handleClick(values)}
