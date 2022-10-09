@@ -22,8 +22,15 @@ const LandingPage: React.FC = () => {
     return !filtered.filteredList.some((el) => el.checked === false);
   };
 
-  const isOneSelected = () => {
-    return filtered.filteredList.some((el) => el.checked === true);
+  const selectedCount = () => {
+    // return filtered.filteredList.some((el) => el.checked === true);
+    let count = 0;
+    filtered.filteredList.forEach((el) => {
+      if (el.checked) {
+        count++;
+      }
+    });
+    return count;
   };
 
   const checkIfCanAdd = (newValue: string): boolean => {
@@ -49,7 +56,7 @@ const LandingPage: React.FC = () => {
       <ListControls
         shouldBeChecked={areAllSelected()}
         filteredIds={filtered.filteredIds}
-        isOneSelected={isOneSelected()}
+        selectedCount={selectedCount()}
         dispatch={dispatch}
         filteredSelectedIds={getFilteredSelectedIds()}
       />
