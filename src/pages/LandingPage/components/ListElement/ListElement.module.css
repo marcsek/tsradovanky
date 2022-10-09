@@ -12,7 +12,7 @@
   flex-grow: 1;
   height: 330px;
   width: 100%;
-  backdrop-filter: blur(5px);
+  /* backdrop-filter: blur(5px); */
   transition: all 0.1s ease-in-out;
   overflow: hidden;
   border-radius: 0.5rem;
@@ -28,15 +28,16 @@
 }
 .elementTitle {
   font-size: 1.45rem !important;
-  display: flex;
-  align-items: center;
+  display: -webkit-box;
   text-align: left;
   word-break: break-all;
-  hyphens: auto;
+  /* hyphens: auto; */
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .listElContainer:hover {
-  /* transform: scale(1.1); */
 }
 
 .elementDate {
@@ -45,10 +46,15 @@
 }
 
 .elementText {
+  display: -webkit-box;
   text-align: left;
   font-size: 1.15rem !important;
   font-weight: 400 !important;
   word-break: break-all;
+  /* text-overflow: ellipsis; */
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .listElementBox {

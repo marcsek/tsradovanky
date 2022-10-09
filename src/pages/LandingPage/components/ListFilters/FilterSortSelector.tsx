@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 
 import ToggleButton from "@mui/material/ToggleButton";
 import Divider from "@mui/material/Divider";
-import { FiltersTypes, SetFiltersType, SortType } from "../types";
+import { SetFiltersType, SortType } from "../../types";
 import { Stack } from "@mui/material";
 import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import FlipCameraAndroidIcon from "@mui/icons-material/FlipCameraAndroid";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-import styles from "../StyleLandingPage.module.css";
-import StyledToggleButtonGroup from "../../../custom-material-styles/StyledToggleButtonGroup";
+import styles from "../../StyleLandingPage.module.css";
+import StyledToggleButtonGroup from "../../../../custom-material-styles/StyledToggleButtonGroup";
+import { defaultFilters } from "../../components/ListFilters/DefaultFilters";
 
 interface SortSlectorControlProps {
   setFilters: SetFiltersType;
-  filters: FiltersTypes;
 }
 
-const FilterSortSelector: React.FC<SortSlectorControlProps> = ({ setFilters, filters }) => {
-  const [sortSelect, setSortSelect] = useState<SortType>(filters.sort);
+const FilterSortSelector: React.FC<SortSlectorControlProps> = ({ setFilters }) => {
+  const [sortSelect, setSortSelect] = useState<SortType>(defaultFilters.sort);
   const [reverseToggle, setReverseToggle] = useState<string[]>([]);
 
   const handleSortSelect = (_: any, newFormats: string) => {

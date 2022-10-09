@@ -84,6 +84,7 @@
 }
 
 .noReminders {
+  box-sizing: border-box;
   color: #eaebf1;
   height: 50%;
   display: flex;
@@ -95,6 +96,7 @@
   left: 50%;
   top: 50%;
   translate: -50% -50%;
+  white-space: normal;
 }
 
 .noReminders strong {
@@ -102,6 +104,7 @@
   background: linear-gradient(to bottom right, red 0%, orange 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
 
 .filterSelector {

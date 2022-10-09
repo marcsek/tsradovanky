@@ -14,7 +14,7 @@ import FakerListGenerator from "./FakerListGenerator";
 
 const LandingPage: React.FC = () => {
   const [listValues, dispatch] = useReducer(ButtonClickReducer, []);
-  const [filtered, setFilters, filters] = useListFilters(listValues);
+  const [filtered, setFilters] = useListFilters(listValues);
 
   const areAllSelected = () => {
     if (filtered.filteredList.length === 0) return false;
@@ -44,7 +44,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className={styles.LandingContainer}>
-      <ListHeader filters={filters} setFilters={setFilters} dispatch={dispatch} checkIfCanAdd={checkIfCanAdd} />
+      <ListHeader setFilters={setFilters} dispatch={dispatch} checkIfCanAdd={checkIfCanAdd} />
       <InputList listValues={filtered.filteredList} dispatch={dispatch} />
       <ListControls
         shouldBeChecked={areAllSelected()}

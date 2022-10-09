@@ -1,8 +1,9 @@
 import { useState, useCallback, useRef } from "react";
 import { ListValues, ListValue, FiltersTypes, ApplyReturn, SetFiltersType, SortType } from "../types";
 import { sortByDate, sortAtoZ } from "../../../utils/SortingFunctions";
+import { defaultFilters } from "../components/ListFilters/DefaultFilters";
 
-type FiltersHookType = [filtered: ApplyReturn, setFilters: SetFiltersType, filters: FiltersTypes];
+type FiltersHookType = [filtered: ApplyReturn, setFilters: SetFiltersType];
 
 const filterValue = (el: ListValue, filters: string) => {
   return el.value.includes(filters) || el.title.includes(filters);
@@ -22,7 +23,7 @@ const handleListFiltering = (filters: FiltersTypes, listToFilter: ListValues): L
 };
 
 const useListFilters = (baseList: ListValues): FiltersHookType => {
-  const filters = useRef<FiltersTypes>({ sort: SortType.Date, keyword: "" });
+  const filters = useRef<FiltersTypes>(defaultFilters);
   const [filtered, setFiltered] = useState<ApplyReturn>({ filteredIds: [], filteredList: [] });
 
   const updateFilters = useCallback(() => {
@@ -44,7 +45,7 @@ const useListFilters = (baseList: ListValues): FiltersHookType => {
     [updateFilters]
   );
 
-  return [filtered, setFilters, filters.current];
+  return [filtered, setFilters];
 };
 
 export default useListFilters;

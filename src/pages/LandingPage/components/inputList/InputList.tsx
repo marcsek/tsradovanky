@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 
 import { ListValues, bClickActions, ListValue } from "../../types";
 import styles from "../../StyleLandingPage.module.css";
@@ -45,7 +45,9 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
             className={styles.noReminders}
             sx={{ color: (theme) => theme.palette.text.primary }}
           >
-            No&nbsp;<strong>Nxtes</strong>, add some...
+            <p>
+              No <strong>Nxtes</strong>, add some...
+            </p>
           </Typography>
         ) : (
           listValues.map((listValue, index) => {
@@ -57,4 +59,4 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
   );
 };
 
-export default InputList;
+export default memo(InputList);
