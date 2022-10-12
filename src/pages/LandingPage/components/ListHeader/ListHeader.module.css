@@ -9,3 +9,11 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+@media only screen and (max-width: 800px) {
+  .headerCont {
+    height: fit-content !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+}

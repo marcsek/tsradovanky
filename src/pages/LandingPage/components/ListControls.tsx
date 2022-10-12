@@ -28,7 +28,7 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, selectedCount, fil
   };
 
   return (
-    <Stack flexDirection="row" className={styles.formControl}>
+    <Stack className={styles.formControl}>
       <Stack
         sx={{
           backgroundColor: (theme) => (selectedCount !== 0 ? "#FE734911" : theme.palette.action.active),
@@ -67,7 +67,7 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, selectedCount, fil
             />
           }
           labelPlacement="end"
-          label={"Select All"}
+          label="Select All"
         />
         <Typography sx={{ color: "#FE7349" }}>{selectedCount !== 0 ? `${selectedCount} selected` : ""}</Typography>
       </Stack>

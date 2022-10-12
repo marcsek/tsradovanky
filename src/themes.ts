@@ -14,7 +14,7 @@ const darkTheme = createTheme({
     },
     action: {
       disabledBackground: "gray",
-      active: "#24232855",
+      active: "rgb(27,27,30)",
     },
     common: {
       white: "#5e5e5e25",
@@ -64,7 +64,7 @@ const lightTheme = createTheme({
     },
     action: {
       disabledBackground: "gray",
-      active: "#F7F8F977",
+      active: "rgb(251,252,252)",
     },
     common: {
       white: "#F4F6F8",
