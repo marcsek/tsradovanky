@@ -45,25 +45,6 @@
   outline-color: rgba(46, 139, 192, 0.5);
 }
 
-.formControl {
-  height: 42px;
-  justify-content: space-between;
-  flex-direction: row !important;
-  gap: 20px;
-}
-
-.inputButton {
-  composes: buttonScale from "../../CommonStyles.css";
-  color: #eaebf1;
-  font-weight: 600;
-  font-size: 1.15rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  flex: 0 0 calc(30% - 20px);
-}
-
 .inputLabel {
   position: absolute;
   translate: 0% 250%;
@@ -101,8 +82,9 @@
 
 .noReminders strong {
   background: #ca5010;
-  background: linear-gradient(to bottom right, red 0%, orange 100%);
+  background: linear-gradient(to bottom right, #fe0100 0%, #ffa002 90%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
 }
@@ -115,10 +97,6 @@
 }
 
 @media only screen and (max-width: 800px) {
-  .formControl {
-    height: fit-content;
-    flex-direction: column !important;
-  }
   .listContainer {
     padding: 25px;
     grid-template-columns: 1fr;

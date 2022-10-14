@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Stack } from "@mui/system";
-import { bClickActions, FiltersTypes, SetFiltersType } from "../../types";
+import { Stack } from "@mui/material";
+import { bClickActions, SetFiltersType } from "../../types";
 import ListFilters from "../ListFilters/ListFilters";
 import NewNotePopup from "../NewNotePupup/NewNotePopup";
 import styles from "./ListHeader.module.css";

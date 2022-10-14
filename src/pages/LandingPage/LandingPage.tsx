@@ -3,7 +3,7 @@ import ButtonClickReducer from "./reducers/ButtonClickReducer";
 import styles from "./StyleLandingPage.module.css";
 
 import InputList from "./components/inputList/InputList";
-import ListControls from "./components/ListControls";
+import ListControls from "./components/ListControls/ListControls";
 import ListHeader from "./components/ListHeader/ListHeader";
 
 import useListFilters from "./customHooks/useListFilters";

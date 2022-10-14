@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import { Box } from "@mui/system";
+import { Box } from "@mui/material";
 import { lightTheme, darkTheme } from "./themes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

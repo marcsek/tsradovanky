@@ -4,6 +4,7 @@ export interface ListValue {
   id: string;
   date: Date;
   checked: boolean;
+  color: string;
 }
 
 export type ListValues = ListValue[];
@@ -32,7 +33,7 @@ export interface ApplyReturn {
 }
 
 export type bClickActions =
-  | { type: "add"; props: { title: string; value: string } }
+  | { type: "add"; props: { title: string; value: string; color?: string } }
   | { type: "removeSelected"; ids?: string[] }
   | { type: "check"; id?: string; ids?: string[]; value: boolean }
   | { type: "reorder"; reorderedState: ListValues };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./NotePopup.module.css";
 import { Typography, Stack, Box } from "@mui/material";
+import Button from "@mui/material/Button";
 import FilterTextField from "../../../../custom-material-styles/FilterTextField";
 import ControlButton from "../../../../custom-material-styles/ControlButton";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -9,6 +10,7 @@ import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion } from "framer-motion";
 import { windowAnimation, backgroundAnimation } from "./NotePopupAnimations";
+import ColorPicker from "./ColorPicker";
 
 interface NewNotePopupProps {
   checkIfCanAdd: (newValue: string) => boolean;
@@ -25,6 +27,7 @@ const defaultFormValues = { text: { value: "", maxSize: 230 }, title: { value: "
 
 const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, closeNewNote }) => {
   const [textValue, setTextValue] = useState<NewNoteFormType>(defaultFormValues);
+  const [color, setColor] = useState("#00AB55");
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (textValue[event.target.name as keyof NewNoteFormType].maxSize - event.target.value.length >= 0) {
@@ -45,7 +48,7 @@ const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, cl
     }
     if (textValue.text.value && textValue.title.value) {
       handleInputReset();
-      dispatch({ type: "add", props: { value: textValue.text.value, title: textValue.title.value } });
+      dispatch({ type: "add", props: { value: textValue.text.value, title: textValue.title.value, color } });
     }
   };
 
@@ -105,11 +108,17 @@ const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, cl
                 sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.9rem" }}
               >{`${textValue.text.value.length} / ${textValue.text.maxSize}`}</Typography>
             </Stack>
+            <Stack>
+              <Typography sx={{ color: (theme) => theme.palette.text.secondary, width: "fit-content", mb: "5px", fontSize: "0.8rem" }}>
+                Color
+              </Typography>
+              <ColorPicker selectedColor={color} setSelectedColor={setColor} />
+            </Stack>
             <ControlButton
               className={styles.inputButton}
               shouldDisable={textValue.title.value === "" || textValue.text.value === ""}
               sx={{ outlineColor: (theme) => theme.palette.divider }}
-              backgroundcolor="linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%)"
+              backgroundcolor="rgba(54, 95, 255, 1)"
               type="submit"
             >
               <AddCircleOutlineIcon />

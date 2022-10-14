@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-import { Box } from "@mui/system";
+import { Box, Stack } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
@@ -51,9 +51,12 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
           <Typography className={styles.elementText} variant="h5" sx={{ color: (theme) => theme.palette.text.disabled }}>
             {values.value}
           </Typography>
-          <Typography className={styles.elementDate} sx={{ color: (theme) => theme.palette.text.secondary }} variant="h6">
-            {values.date.toLocaleDateString("en-US", dateFormatSettings)}
-          </Typography>
+          <Stack flexDirection="row" alignItems="center" justifyContent="space-between" width="100%">
+            <Box sx={{ backgroundColor: values.color, width: "15%", height: "14.4px", borderRadius: "1rem" }}></Box>
+            <Typography className={styles.elementDate} sx={{ color: (theme) => theme.palette.text.secondary }} variant="h6">
+              {values.date.toLocaleDateString("en-US", dateFormatSettings)}
+            </Typography>
+          </Stack>
         </Box>
       </Box>
     </motion.li>

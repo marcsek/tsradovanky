@@ -5,7 +5,8 @@
 
 .newButton strong {
   background: #ca5010;
-  background: linear-gradient(to bottom right, red 0%, orange 100%);
+  background: linear-gradient(to bottom right, #fe0100 0%, #ffa002 90%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

@@ -1,0 +1,39 @@
+.formControl {
+  height: 42px;
+  justify-content: space-between;
+  flex-direction: row !important;
+  gap: 20px;
+}
+
+.inputButton {
+  composes: buttonScale from "../../../../CommonStyles.css";
+  color: #eaebf1;
+  font-weight: 600;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 0 0 calc(30% - 20px);
+}
+
+.controlSelectCont {
+  border-radius: 1rem;
+  flex: 0 0 40%;
+  margin: 0;
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 15px;
+  box-sizing: border-box;
+  width: 0px;
+  overflow-y: hidden;
+  width: 100%;
+}
+
+@media only screen and (max-width: 800px) {
+  .formControl {
+    height: fit-content;
+    flex-direction: column !important;
+  }
+}

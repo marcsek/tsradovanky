@@ -5,8 +5,7 @@ import styles from "../../StyleLandingPage.module.css";
 
 import { Stack, Typography } from "@mui/material";
 import ListElement from "../ListElement/ListElement";
-import { AnimatePresence } from "framer-motion";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { inputListAnimation } from "./InputListAnimation";
 
 interface ListControlProps {

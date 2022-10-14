@@ -1,4 +1,4 @@
-import { Box } from "@mui/system";
+import { Box } from "@mui/material";
 import style from "./Header.module.css";
 import ThemeSwitch from "./HeaderThemeSwitch";
 

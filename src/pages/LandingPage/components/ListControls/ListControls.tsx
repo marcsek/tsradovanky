@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import { bClickActions } from "../types";
-import styles from "../StyleLandingPage.module.css";
-import ControlButton from "../../../custom-material-styles/ControlButton";
+import { bClickActions } from "../../types";
+import styles from "./ListConstrols.module.css";
+import ControlButton from "../../../../custom-material-styles/ControlButton";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { Stack, Typography } from "@mui/material";
@@ -9,8 +9,8 @@ import { toast } from "react-toastify";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import { motion } from "framer-motion";
 
 interface ListControlProps {
   dispatch: React.Dispatch<bClickActions>;
@@ -30,16 +30,10 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, selectedCount, fil
   return (
     <Stack className={styles.formControl}>
       <Stack
+        className={styles.controlSelectCont}
         sx={{
-          backgroundColor: (theme) => (selectedCount !== 0 ? "#FE734911" : theme.palette.action.active),
-          borderRadius: "1rem",
-          flex: "0 0 40%",
-          m: 0,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          pr: "50px",
-          boxSizing: "border-box",
+          backgroundColor: (theme) =>
+            selectedCount !== 0 ? (theme.palette.mode === "dark" ? "#FE734911" : "#FE73492A") : theme.palette.action.active,
         }}
       >
         <FormControlLabel
@@ -59,7 +53,6 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, selectedCount, fil
               }}
               sx={{
                 color: selectedCount !== 0 ? "#FE7349" : "gray",
-                borderRadius: "20px",
                 "&.Mui-checked": {
                   color: "#FE7349",
                 },
@@ -69,22 +62,26 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, selectedCount, fil
           labelPlacement="end"
           label="Select All"
         />
-        <Typography sx={{ color: "#FE7349" }}>{selectedCount !== 0 ? `${selectedCount} selected` : ""}</Typography>
+        <Typography component={motion.p} animate={{ y: selectedCount !== 0 ? "0px" : "50px" }} sx={{ color: "#FE7349" }}>
+          {selectedCount !== 0 ? `${selectedCount} selected` : ""}
+        </Typography>
       </Stack>
+      {/* "linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%)" */}
       <ControlButton
         className={styles.inputButton}
         shouldDisable={selectedCount === 0}
         sx={{ outlineColor: (theme) => theme.palette.divider }}
-        backgroundcolor="linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%)"
+        backgroundcolor="rgba(54, 95, 255, 1)"
         type="submit"
       >
         <DoneAllIcon />
         Finish Selected
       </ControlButton>
+      {/* linear-gradient(90deg, rgba(234, 57, 67, 1) 0%, rgba(255, 49, 61, 1) 100%) */}
       <ControlButton
         className={styles.inputButton}
         shouldDisable={selectedCount === 0}
-        backgroundcolor="linear-gradient(90deg, rgba(234, 57, 67, 1) 0%, rgba(255, 49, 61, 1) 100%)"
+        backgroundcolor="rgba(255, 49, 61, 1)"
         sx={{ outlineColor: (theme) => theme.palette.divider }}
         onClick={(e) => {
           e.preventDefault();

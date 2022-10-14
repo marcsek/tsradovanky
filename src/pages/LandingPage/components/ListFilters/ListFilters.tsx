@@ -1,6 +1,6 @@
-import { FiltersTypes, SetFiltersType } from "../../types";
+import { SetFiltersType } from "../../types";
 import styles from "../../StyleLandingPage.module.css";
-import { Box, Stack } from "@mui/system";
+import { Box, Stack } from "@mui/material";
 import FilterTextField from "../../../../custom-material-styles/FilterTextField";
 import FilterSortSelector from "./FilterSortSelector";
 import { useState } from "react";

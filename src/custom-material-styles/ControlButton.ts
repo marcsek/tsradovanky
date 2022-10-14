@@ -14,10 +14,14 @@ const ControlButton = styled(Button, {
   outlineColor: theme.palette.divider,
   pointerEvents: shouldDisable ? "none" : "all",
 
-  transition: "outline 0.075s ease-in-out",
+  transition: "outline 0.075s ease-in-out, background-color 0.15s, color 0.075s ease-in-out",
 
   "&:focus": {
     outline: `3px solid ${theme.palette.divider}`,
+  },
+
+  "&:hover": {
+    backgroundColor: backgroundColor,
   },
 }));
 

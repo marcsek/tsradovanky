@@ -7,7 +7,7 @@
 
   width: clamp(60%, 700px, 90%);
   height: min(60%, 300px);
-  min-height: 550px;
+  min-height: 680px;
   max-height: 550px;
   box-sizing: border-box;
   padding: 50px;

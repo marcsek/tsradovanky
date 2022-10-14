@@ -37,9 +37,6 @@
   overflow: hidden;
 }
 
-.listElContainer:hover {
-}
-
 .elementDate {
   align-self: flex-end;
   font-size: 0.9rem !important;
@@ -50,7 +47,7 @@
   text-align: left;
   font-size: 1.15rem !important;
   font-weight: 400 !important;
-  word-break: break-all;
+  word-break: break-word;
   /* text-overflow: ellipsis; */
   -webkit-line-clamp: 7;
   -webkit-box-orient: vertical;

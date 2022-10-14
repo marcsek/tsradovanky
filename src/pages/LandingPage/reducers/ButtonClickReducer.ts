@@ -6,7 +6,17 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
 
   switch (action.type) {
     case "add":
-      return [...state, { title: action.props.title, value: action.props.value, id: uuidv4(), checked: false, date: new Date() }];
+      return [
+        ...state,
+        {
+          title: action.props.title,
+          value: action.props.value,
+          id: uuidv4(),
+          checked: false,
+          date: new Date(),
+          color: action.props.color || "#00AB55",
+        },
+      ];
 
     case "removeSelected":
       let newArray: ListValues = [];
