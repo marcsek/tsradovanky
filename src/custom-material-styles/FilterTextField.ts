@@ -28,6 +28,8 @@ const FilterTextField = styled(TextField, {
   },
   label: {
     color: theme.palette.text.secondary,
+    // fontSize: "1.02rem",
+    // left: "-2px",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {

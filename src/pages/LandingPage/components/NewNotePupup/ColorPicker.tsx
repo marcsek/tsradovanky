@@ -1,12 +1,13 @@
 import { Box, Stack } from "@mui/material";
 import { motion } from "framer-motion";
 import ColorPickButton from "../../../../custom-material-styles/ColorPickButton";
+import { ElementColors } from "../../types";
 
-const colors = ["#00AB55", "#FDA92D", "#2065D1", "#FF3030", "#7635DC"];
+const colors = Object.values(ElementColors);
 
 interface ColorPickerProps {
-  selectedColor: string;
-  setSelectedColor: React.Dispatch<React.SetStateAction<string>>;
+  selectedColor: ElementColors;
+  setSelectedColor: (color: ElementColors) => void;
 }
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ selectedColor, setSelectedColor }) => {
@@ -15,6 +16,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ selectedColor, setSelectedCol
       sx={{
         flexDirection: "row",
         gap: "10px",
+        flexWrap: "wrap",
       }}
     >
       {colors.map((color, index) => (
@@ -28,7 +30,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ selectedColor, setSelectedCol
             overflow: "hidden",
           }}
           variant="outlined"
-          onClick={(e) => {
+          onClick={() => {
             setSelectedColor(color);
           }}
         >

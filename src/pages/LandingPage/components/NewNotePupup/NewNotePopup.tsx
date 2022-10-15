@@ -1,11 +1,10 @@
 import { useState } from "react";
 import styles from "./NotePopup.module.css";
 import { Typography, Stack, Box } from "@mui/material";
-import Button from "@mui/material/Button";
 import FilterTextField from "../../../../custom-material-styles/FilterTextField";
 import ControlButton from "../../../../custom-material-styles/ControlButton";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { bClickActions } from "../../types";
+import { bClickActions, ElementColors } from "../../types";
 import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion } from "framer-motion";
@@ -18,37 +17,53 @@ interface NewNotePopupProps {
   closeNewNote: () => void;
 }
 
-interface NewNoteFormType {
+interface NewNoteFormType extends NewNoteInpuType {
+  color: ElementColors;
+}
+
+interface NewNoteInpuType {
   title: { value: string; maxSize: number };
   text: { value: string; maxSize: number };
 }
 
-const defaultFormValues = { text: { value: "", maxSize: 230 }, title: { value: "", maxSize: 50 } };
+const defaultFormValues = {
+  text: { value: "", maxSize: 230 },
+  title: { value: "", maxSize: 50 },
+  color: ElementColors.GREEN,
+};
 
 const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, closeNewNote }) => {
-  const [textValue, setTextValue] = useState<NewNoteFormType>(defaultFormValues);
-  const [color, setColor] = useState("#00AB55");
+  const [formValues, setFormValues] = useState<NewNoteFormType>(defaultFormValues);
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (textValue[event.target.name as keyof NewNoteFormType].maxSize - event.target.value.length >= 0) {
-      setTextValue({ ...textValue, [event.target.name]: { ...textValue[event.target.name as keyof NewNoteFormType], value: event.target.value } });
+    const { color, ...onlyTextValues } = formValues;
+
+    if (onlyTextValues[event.target.name as keyof NewNoteInpuType].maxSize >= event.target.value.length) {
+      setFormValues({
+        ...formValues,
+        [event.target.name]: { ...onlyTextValues[event.target.name as keyof NewNoteInpuType], value: event.target.value },
+      });
     }
+  };
+
+  const handleColorChange = (color: ElementColors) => {
+    setFormValues({ ...formValues, color });
   };
 
   const handleInputReset = () => {
     closeNewNote();
-    setTextValue(defaultFormValues);
+    setFormValues(defaultFormValues);
   };
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!checkIfCanAdd(textValue.title.value)) {
+    if (!checkIfCanAdd(formValues.title.value)) {
       toast.warn("Uwaga, toto uz existuje!");
       return;
     }
-    if (textValue.text.value && textValue.title.value) {
+    if (formValues.text.value && formValues.title.value) {
       handleInputReset();
-      dispatch({ type: "add", props: { value: textValue.text.value, title: textValue.title.value, color } });
+      dispatch({ type: "add", props: { value: formValues.text.value, title: formValues.title.value, color: formValues.color } });
     }
   };
 
@@ -77,7 +92,7 @@ const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, cl
             <Stack className={styles.textInputTitle}>
               <FilterTextField
                 onChange={handleInputChange}
-                value={textValue.title.value}
+                value={formValues.title.value}
                 className={styles.input}
                 label="Title"
                 variant="outlined"
@@ -87,13 +102,13 @@ const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, cl
                 InputLabelProps={{ shrink: true }}
               />
               <Typography
-                sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.9rem" }}
-              >{`${textValue.title.value.length} / ${textValue.title.maxSize}`}</Typography>
+                sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.75rem" }}
+              >{`${formValues.title.value.length} / ${formValues.title.maxSize}`}</Typography>
             </Stack>
             <Stack className={styles.textInputCont}>
               <FilterTextField
                 onChange={handleInputChange}
-                value={textValue.text.value}
+                value={formValues.text.value}
                 className={styles.input}
                 label="Text"
                 name="text"
@@ -105,18 +120,18 @@ const NewNotePopup: React.FC<NewNotePopupProps> = ({ checkIfCanAdd, dispatch, cl
                 InputLabelProps={{ shrink: true }}
               />
               <Typography
-                sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.9rem" }}
-              >{`${textValue.text.value.length} / ${textValue.text.maxSize}`}</Typography>
+                sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.75rem" }}
+              >{`${formValues.text.value.length} / ${formValues.text.maxSize}`}</Typography>
             </Stack>
             <Stack>
-              <Typography sx={{ color: (theme) => theme.palette.text.secondary, width: "fit-content", mb: "5px", fontSize: "0.8rem" }}>
+              <Typography sx={{ color: (theme) => theme.palette.text.secondary, width: "fit-content", mb: "5px", fontSize: "0.75rem" }}>
                 Color
               </Typography>
-              <ColorPicker selectedColor={color} setSelectedColor={setColor} />
+              <ColorPicker selectedColor={formValues.color} setSelectedColor={handleColorChange} />
             </Stack>
             <ControlButton
               className={styles.inputButton}
-              shouldDisable={textValue.title.value === "" || textValue.text.value === ""}
+              shouldDisable={formValues.title.value === "" || formValues.text.value === ""}
               sx={{ outlineColor: (theme) => theme.palette.divider }}
               backgroundcolor="rgba(54, 95, 255, 1)"
               type="submit"
