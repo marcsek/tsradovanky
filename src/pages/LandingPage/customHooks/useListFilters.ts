@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useTransition } from "react";
 import { ListValues, ListValue, FiltersTypes, ApplyReturn, SetFiltersType, SortType } from "../types";
 import { sortByDate, sortAtoZ } from "../../../utils/SortingFunctions";
 import { defaultFilters } from "../components/ListFilters/DefaultFilters";
@@ -11,6 +11,7 @@ const filterValue = (el: ListValue, filters: string) => {
 
 const handleListFiltering = (filters: FiltersTypes, listToFilter: ListValues): ListValues => {
   let filteredList = listToFilter.filter((el) => filterValue(el, filters.keyword));
+
   if (filters.sort === SortType.AtoZ) {
     filteredList = filteredList.sort(sortAtoZ);
   } else if (filters.sort === SortType.Date) {
@@ -25,6 +26,7 @@ const handleListFiltering = (filters: FiltersTypes, listToFilter: ListValues): L
 const useListFilters = (baseList: ListValues): FiltersHookType => {
   const filters = useRef<FiltersTypes>(defaultFilters);
   const [filtered, setFiltered] = useState<ApplyReturn>({ filteredIds: [], filteredList: [] });
+  const [, startTransition] = useTransition();
 
   const updateFilters = useCallback(() => {
     const filteredList: ListValues = handleListFiltering(filters.current, baseList);
@@ -40,7 +42,7 @@ const useListFilters = (baseList: ListValues): FiltersHookType => {
   const setFilters = useCallback(
     (prev: (prev: FiltersTypes) => FiltersTypes) => {
       filters.current = prev(filters.current);
-      updateFilters();
+      startTransition(updateFilters);
     },
     [updateFilters]
   );

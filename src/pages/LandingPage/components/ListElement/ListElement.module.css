@@ -1,6 +1,7 @@
 .listElLi {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .listElContainer {
@@ -24,10 +25,12 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 10px;
 }
 .elementTitle {
   font-size: 1.45rem !important;
+  height: fit-content;
   display: -webkit-box;
   text-align: left;
   word-break: break-all;

@@ -1,7 +1,8 @@
 import { Box, Stack } from "@mui/material";
 import { motion } from "framer-motion";
-import ColorPickButton from "../../../../custom-material-styles/ColorPickButton";
-import { ElementColors } from "../../types";
+import ColorPickButton from "../../../../../custom-material-styles/ColorPickButton";
+import { ElementColors } from "../../../types";
+import { cBallScaleVariant } from "../NotePopupAnimations";
 
 const colors = Object.values(ElementColors);
 
@@ -36,10 +37,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ selectedColor, setSelectedCol
         >
           <Box
             component={motion.div}
-            animate={{
-              scale: selectedColor === color ? 1.5 : 1,
-              transition: { type: "spring", stiffness: 300 },
-            }}
+            animate="scaleUp"
+            variants={cBallScaleVariant}
+            custom={selectedColor === color}
             sx={{
               backgroundColor: color,
               height: "15px",

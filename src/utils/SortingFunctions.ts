@@ -3,7 +3,7 @@ import { ListValue } from "../pages/LandingPage/types";
 type SortFuncionType = (a: ListValue, b: ListValue) => 1 | -1 | 0;
 
 const sortAtoZ: SortFuncionType = (a, b) => {
-  if (a.value.toLowerCase() > b.value.toLowerCase()) {
+  if (a.title.toLowerCase() > b.title.toLowerCase()) {
     return 1;
   }
   return -1;

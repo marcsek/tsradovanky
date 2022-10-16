@@ -15,3 +15,10 @@ export const windowAnimation = {
 
   transition,
 };
+
+export const cBallScaleVariant = {
+  scaleUp: (isSelected: boolean) => ({
+    scale: isSelected ? 1.5 : 0.9,
+    transition: { type: "spring", stiffness: 350 },
+  }),
+};

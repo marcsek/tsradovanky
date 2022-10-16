@@ -1,16 +1,19 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 
 import { Box, Stack } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
-import { ListValue } from "../../types";
+import { ElementColors, ListValue, NewNoteFormType } from "../../types";
 import { Typography } from "@mui/material";
 import { elementAnimation } from "./ElementAnimation";
 import styles from "./ListElement.module.css";
 import { dateFormatSettings } from "../../../../utils/DateFormatSettings";
+import EditIcon from "@mui/icons-material/Edit";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import NotePopupService from "../NotePupup/NotePopupService";
+import AnotherTestTwo from "../NotePupup/NotePopupElements/EditNotePopUp";
 
 interface ListElementProps {
   isLast: boolean;
@@ -19,8 +22,18 @@ interface ListElementProps {
 }
 
 const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProps> = ({ isLast, handleClick, values }, ref) => {
+  const [isHovered, setHovered] = useState(false);
+
   return (
-    <motion.li className={styles.listElLi} {...elementAnimation} layout layoutScroll={true} ref={ref}>
+    <motion.li
+      className={styles.listElLi}
+      {...elementAnimation}
+      layout
+      layoutScroll={true}
+      ref={ref}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <Box
         className={styles.listElContainer}
         onClick={() => handleClick(values)}
@@ -58,6 +71,43 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
             </Typography>
           </Stack>
         </Box>
+        <AnimatePresence>
+          {isHovered && (
+            <Box
+              component={motion.div}
+              initial={{ translate: "-50%", opacity: 0 }}
+              animate={{ translate: "0%", opacity: 1 }}
+              exit={{ scale: "0%", opacity: 0 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                const daco: NewNoteFormType = {
+                  text: { value: values.value, maxSize: 230 },
+                  title: { value: values.title, maxSize: 50 },
+                  color: values.color as ElementColors,
+                };
+                NotePopupService.open(AnotherTestTwo, { initialValues: daco, id: values.id });
+              }}
+              sx={{
+                backgroundColor: "rgba(27,27,30, 0.5)",
+                position: "absolute",
+                height: 25,
+                p: "2px 10px",
+                left: 0,
+                top: 0,
+                borderRadius: "8px 15px 15px 0px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "5px",
+                color: (theme) => theme.palette.text.primary,
+                cursor: "pointer",
+              }}
+            >
+              <EditIcon sx={{ height: 18, width: 18 }}></EditIcon>
+              <Typography sx={{}}>Edit</Typography>
+            </Box>
+          )}
+        </AnimatePresence>
       </Box>
     </motion.li>
   );

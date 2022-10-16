@@ -18,6 +18,13 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
         },
       ];
 
+    case "edit":
+      let idx = state.findIndex((el) => el.id === action.id);
+      let array = [...state];
+      array[idx] = { ...array[idx], color: action.props.color, value: action.props.value, title: action.props.title };
+
+      return array;
+
     case "removeSelected":
       let newArray: ListValues = [];
       if (action.ids !== undefined) {

@@ -44,4 +44,27 @@ export type bClickActions =
   | { type: "add"; props: { title: string; value: string; color?: string } }
   | { type: "removeSelected"; ids?: string[] }
   | { type: "check"; id?: string; ids?: string[]; value: boolean }
-  | { type: "reorder"; reorderedState: ListValues };
+  | { type: "reorder"; reorderedState: ListValues }
+  | { type: "edit"; id: string; props: { title: string; value: string; color: string } };
+
+export interface NewNoteFormType extends NewNoteInpuType {
+  color: ElementColors;
+}
+
+export interface NewNoteInpuType {
+  title: { value: string; maxSize: number };
+  text: { value: string; maxSize: number };
+}
+
+export interface NewNotePopupProps extends DefaultNotePopupProps, CustomNotePopupProps {}
+
+export interface DefaultNotePopupProps {
+  doesAlreadyExist: (newValue: string) => boolean;
+  dispatch: React.Dispatch<bClickActions>;
+  handleClose: any;
+}
+
+export interface CustomNotePopupProps {
+  initialValues?: NewNoteFormType;
+  id?: string;
+}

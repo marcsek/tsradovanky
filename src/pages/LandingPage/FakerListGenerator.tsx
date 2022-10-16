@@ -7,7 +7,7 @@ const FakerListGenerator: React.FC<{ dispatch: React.Dispatch<bClickActions> }> 
   const generateData = () => {
     for (let i = 0; i < 10; i++) {
       const color = faker.helpers.arrayElement(colors);
-      dispatch({ type: "add", props: { title: faker.name.fullName(), value: faker.lorem.words(40), color } });
+      dispatch({ type: "add", props: { title: faker.name.fullName(), value: faker.lorem.words(33), color } });
     }
   };
 

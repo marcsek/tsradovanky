@@ -10,6 +10,7 @@ import useListFilters from "./customHooks/useListFilters";
 
 /* iba pre test */
 import FakerListGenerator from "./FakerListGenerator";
+import NotePopupRoot from "./components/NotePupup/NotePopupRoot";
 /*---------------*/
 
 const LandingPage: React.FC = () => {
@@ -22,18 +23,7 @@ const LandingPage: React.FC = () => {
     return !filtered.filteredList.some((el) => el.checked === false);
   };
 
-  const selectedCount = () => {
-    // return filtered.filteredList.some((el) => el.checked === true);
-    let count = 0;
-    filtered.filteredList.forEach((el) => {
-      if (el.checked) {
-        count++;
-      }
-    });
-    return count;
-  };
-
-  const checkIfCanAdd = (newValue: string): boolean => {
+  const doesAlreadyExist = (newValue: string): boolean => {
     return listValues.find((listValue) => listValue.value === newValue) === undefined;
   };
 
@@ -51,12 +41,12 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className={styles.LandingContainer}>
-      <ListHeader setFilters={setFilters} dispatch={dispatch} checkIfCanAdd={checkIfCanAdd} />
+      <NotePopupRoot dispatch={dispatch} doesAlreadyExist={doesAlreadyExist} />
+      <ListHeader setFilters={setFilters} />
       <InputList listValues={filtered.filteredList} dispatch={dispatch} />
       <ListControls
         shouldBeChecked={areAllSelected()}
         filteredIds={filtered.filteredIds}
-        selectedCount={selectedCount()}
         dispatch={dispatch}
         filteredSelectedIds={getFilteredSelectedIds()}
       />
