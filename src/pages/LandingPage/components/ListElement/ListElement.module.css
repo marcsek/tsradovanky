@@ -70,3 +70,23 @@
   width: 42px;
   height: 42px;
 }
+
+.elementEditBox {
+  position: absolute;
+  height: 25px;
+  padding: 2px 10px;
+  left: 0;
+  top: 0;
+  border-radius: 8px 15px 15px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.elementColorIndicator {
+  width: 15%;
+  height: 14.4px;
+  border-radius: 1rem;
+}

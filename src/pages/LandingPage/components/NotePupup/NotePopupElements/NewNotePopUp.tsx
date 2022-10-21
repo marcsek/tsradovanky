@@ -1,9 +1,9 @@
 import React from "react";
 import { NewNoteFormType, NewNotePopupProps } from "../../../types";
 import NotePopup from "../NotePopUpBuildingEl/NotePopup";
-import CreateNoteBody from "../NotePopUpBuildingEl/CreateNoteBody";
 import { toast } from "react-toastify";
 import { defaultFormValues } from "./DefaultFormValues";
+import NoteBody from "../NotePopUpBuildingEl/NoteBody";
 
 const NewNotePopUp: React.FC<NewNotePopupProps> = ({ dispatch, doesAlreadyExist, handleClose }) => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>, formValues?: NewNoteFormType) => {
@@ -24,8 +24,8 @@ const NewNotePopUp: React.FC<NewNotePopupProps> = ({ dispatch, doesAlreadyExist,
   };
 
   return (
-    <NotePopup defaultFormValues={defaultFormValues}>
-      <CreateNoteBody handleClose={handleClose} handleFormSubmit={handleFormSubmit} />
+    <NotePopup defaultFormValues={defaultFormValues} handleClose={handleClose}>
+      <NoteBody handleFormSubmit={handleFormSubmit} type="create" />
     </NotePopup>
   );
 };

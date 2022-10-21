@@ -1,12 +1,11 @@
 import { forwardRef, useState } from "react";
 
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import { ElementColors, ListValue, NewNoteFormType } from "../../types";
-import { Typography } from "@mui/material";
-import { elementAnimation } from "./ElementAnimation";
+import { elementAnimation, editButtonAnimation } from "./ElementAnimation";
 import styles from "./ListElement.module.css";
 import { dateFormatSettings } from "../../../../utils/DateFormatSettings";
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,6 +22,16 @@ interface ListElementProps {
 
 const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProps> = ({ isLast, handleClick, values }, ref) => {
   const [isHovered, setHovered] = useState(false);
+
+  const handleEditButtonClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    const currentElementValues: NewNoteFormType = {
+      text: { value: values.value, maxSize: 230 },
+      title: { value: values.title, maxSize: 50 },
+      color: values.color as ElementColors,
+    };
+    NotePopupService.open(AnotherTestTwo, { initialValues: currentElementValues, id: values.id });
+  };
 
   return (
     <motion.li
@@ -65,7 +74,7 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
             {values.value}
           </Typography>
           <Stack flexDirection="row" alignItems="center" justifyContent="space-between" width="100%">
-            <Box sx={{ backgroundColor: values.color, width: "15%", height: "14.4px", borderRadius: "1rem" }}></Box>
+            <Box className={styles.elementColorIndicator} sx={{ backgroundColor: values.color }}></Box>
             <Typography className={styles.elementDate} sx={{ color: (theme) => theme.palette.text.secondary }} variant="h6">
               {values.date.toLocaleDateString("en-US", dateFormatSettings)}
             </Typography>
@@ -75,36 +84,16 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
           {isHovered && (
             <Box
               component={motion.div}
-              initial={{ translate: "-50%", opacity: 0 }}
-              animate={{ translate: "0%", opacity: 1 }}
-              exit={{ scale: "0%", opacity: 0 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                const daco: NewNoteFormType = {
-                  text: { value: values.value, maxSize: 230 },
-                  title: { value: values.title, maxSize: 50 },
-                  color: values.color as ElementColors,
-                };
-                NotePopupService.open(AnotherTestTwo, { initialValues: daco, id: values.id });
-              }}
+              className={styles.elementEditBox}
+              onClick={handleEditButtonClick}
+              {...editButtonAnimation}
               sx={{
-                backgroundColor: "rgba(27,27,30, 0.5)",
-                position: "absolute",
-                height: 25,
-                p: "2px 10px",
-                left: 0,
-                top: 0,
-                borderRadius: "8px 15px 15px 0px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "5px",
                 color: (theme) => theme.palette.text.primary,
-                cursor: "pointer",
+                backgroundColor: (theme) => (theme.palette.mode === "dark" ? "rgba(27 27 30 / 0.5)" : "rgba(194, 194, 194, 0.5)"),
               }}
             >
-              <EditIcon sx={{ height: 18, width: 18 }}></EditIcon>
-              <Typography sx={{}}>Edit</Typography>
+              <EditIcon sx={{ height: 18, width: 18 }} />
+              <Typography>Edit</Typography>
             </Box>
           )}
         </AnimatePresence>

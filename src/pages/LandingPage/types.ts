@@ -61,7 +61,7 @@ export interface NewNotePopupProps extends DefaultNotePopupProps, CustomNotePopu
 export interface DefaultNotePopupProps {
   doesAlreadyExist: (newValue: string) => boolean;
   dispatch: React.Dispatch<bClickActions>;
-  handleClose: any;
+  handleClose: () => void;
 }
 
 export interface CustomNotePopupProps {

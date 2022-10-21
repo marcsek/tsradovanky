@@ -2,15 +2,24 @@ import styles from "./NotePopup.module.css";
 import { Typography, Stack, Box } from "@mui/material";
 import FilterTextField from "../../../../../custom-material-styles/FilterTextField";
 import ControlButton from "../../../../../custom-material-styles/ControlButton";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { ElementColors } from "../../../types";
-import { PopupChildProps } from "../types";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion } from "framer-motion";
 import { windowAnimation, backgroundAnimation } from "../NotePopupAnimations";
 import ColorPicker from "./ColorPicker";
+import { PopupChildProps } from "../types";
+import { ElementColors } from "../../../types";
 
-const CreateNoteBody: React.FC<PopupChildProps> = ({ handleColorChange, handleInputChange, handleFormSubmit, handleClose, formValues }) => {
+const NoteBody: React.FC<PopupChildProps> = ({
+  handleColorChange,
+  handleInputChange,
+  handleFormSubmit,
+  handleClose,
+  formValues,
+  initialValues,
+  type,
+}) => {
   return (
     <>
       <Box className={styles.popupBackground} onClick={handleClose} component={motion.div} {...backgroundAnimation} />
@@ -22,7 +31,15 @@ const CreateNoteBody: React.FC<PopupChildProps> = ({ handleColorChange, handleIn
       >
         <Stack className={styles.titleCont}>
           <Typography variant="h4" sx={{ color: (theme) => theme.palette.text.primary }}>
-            New&nbsp;<strong>Nxte</strong>
+            {type === "edit" ? (
+              <>
+                Edit&nbsp;<strong>Nxte</strong>
+              </>
+            ) : (
+              <>
+                New&nbsp;<strong>Nxte</strong>
+              </>
+            )}
           </Typography>
           <ControlButton
             onClick={handleClose}
@@ -78,13 +95,28 @@ const CreateNoteBody: React.FC<PopupChildProps> = ({ handleColorChange, handleIn
             </Stack>
             <ControlButton
               className={styles.inputButton}
-              shouldDisable={formValues?.title.value === "" || formValues?.text.value === ""}
+              shouldDisable={
+                type === "edit"
+                  ? formValues?.title.value === initialValues?.title.value &&
+                    formValues?.text.value === initialValues?.text.value &&
+                    formValues?.color === initialValues?.color
+                  : formValues?.title.value === "" || formValues?.text.value === ""
+              }
               sx={{ outlineColor: (theme) => theme.palette.divider }}
               backgroundcolor="rgba(54, 95, 255, 1)"
               type="submit"
             >
-              <AddCircleOutlineIcon />
-              Create
+              {type === "edit" ? (
+                <>
+                  <PublishedWithChangesIcon />
+                  Apply Changes
+                </>
+              ) : (
+                <>
+                  <AddCircleOutlineIcon />
+                  Create
+                </>
+              )}
             </ControlButton>
           </Stack>
         </form>
@@ -93,4 +125,4 @@ const CreateNoteBody: React.FC<PopupChildProps> = ({ handleColorChange, handleIn
   );
 };
 
-export default CreateNoteBody;
+export default NoteBody;

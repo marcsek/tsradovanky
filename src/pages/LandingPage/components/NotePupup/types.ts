@@ -14,4 +14,5 @@ export interface PopupChildProps {
   handleClose?: () => void;
   initialValues?: NewNoteFormType;
   formValues?: NewNoteFormType;
+  type: "create" | "edit";
 }

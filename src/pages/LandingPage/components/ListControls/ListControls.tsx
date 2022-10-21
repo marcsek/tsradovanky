@@ -11,6 +11,7 @@ import Checkbox from "@mui/material/Checkbox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { motion } from "framer-motion";
+import { selectedCountAnimation } from "./ListControlsAnimations";
 
 interface ListControlProps {
   dispatch: React.Dispatch<bClickActions>;
@@ -33,13 +34,13 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, filteredSelectedId
         className={styles.controlSelectCont}
         sx={{
           backgroundColor: (theme) =>
-            filteredSelectedIds.length !== 0 ? (theme.palette.mode === "dark" ? "#FE734911" : "#FE73492A") : theme.palette.action.active,
+            filteredSelectedIds.length !== 0 ? (theme.palette.mode === "dark" ? "var(--dark-pink)" : "#FE73492A") : theme.palette.action.active,
         }}
       >
         <FormControlLabel
           sx={{
             "&	.MuiFormControlLabel-label": {
-              color: (theme) => (filteredSelectedIds.length === 0 ? theme.palette.text.primary : "#FE7349"),
+              color: (theme) => (filteredSelectedIds.length === 0 ? theme.palette.text.primary : "var(--pink)"),
               whiteSpace: "nowrap",
             },
             m: 0,
@@ -52,9 +53,9 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, filteredSelectedId
                 dispatch({ type: "check", value: e.target.checked, ids: filteredIds });
               }}
               sx={{
-                color: filteredSelectedIds.length !== 0 ? "#FE7349" : "gray",
+                color: filteredSelectedIds.length !== 0 ? "var(--pink)" : "gray",
                 "&.Mui-checked": {
-                  color: "#FE7349",
+                  color: "var(--pink)",
                 },
               }}
             />
@@ -63,12 +64,11 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, filteredSelectedId
           label="Select All"
         />
         {filteredSelectedIds.length !== 0 && (
-          <Typography component={motion.p} initial={{ y: "120%" }} animate={{ y: "0" }} exit={{ y: "120%" }} sx={{ color: "#FE7349" }}>
+          <Typography component={motion.p} {...selectedCountAnimation} sx={{ color: "var(--pink)" }}>
             {`${filteredSelectedIds.length} selected`}
           </Typography>
         )}
       </Stack>
-      {/* "linear-gradient(90deg, rgba(71, 108, 250, 1) 0%, rgba(54, 95, 255, 1) 100%)" */}
       <ControlButton
         className={styles.inputButton}
         shouldDisable={filteredSelectedIds.length === 0}
@@ -79,7 +79,6 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, filteredSelectedId
         <DoneAllIcon />
         Finish Selected
       </ControlButton>
-      {/* linear-gradient(90deg, rgba(234, 57, 67, 1) 0%, rgba(255, 49, 61, 1) 100%) */}
       <ControlButton
         className={styles.inputButton}
         shouldDisable={filteredSelectedIds.length === 0}

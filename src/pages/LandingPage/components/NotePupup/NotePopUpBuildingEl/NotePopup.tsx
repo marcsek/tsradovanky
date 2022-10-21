@@ -5,9 +5,10 @@ import { PopupChildProps } from "../types";
 interface NewNotePopupExtra {
   children?: JSX.Element;
   defaultFormValues: NewNoteFormType;
+  handleClose: () => void;
 }
 
-const NewNotePopup: React.FC<NewNotePopupExtra> = ({ children, defaultFormValues }) => {
+const NewNotePopup: React.FC<NewNotePopupExtra> = ({ children, defaultFormValues, handleClose }) => {
   const [formValues, setFormValues] = useState<NewNoteFormType>(defaultFormValues);
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,13 +22,24 @@ const NewNotePopup: React.FC<NewNotePopupExtra> = ({ children, defaultFormValues
     }
   };
 
+  const handleCloseExtended = () => {
+    setFormValues(defaultFormValues);
+    handleClose();
+  };
+
   const handleColorChange = (color: ElementColors) => {
     setFormValues({ ...formValues, color });
   };
 
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement<PopupChildProps>(child)) {
-      return React.cloneElement(child, { handleColorChange, handleInputChange, formValues, initialValues: defaultFormValues });
+      return React.cloneElement(child, {
+        handleColorChange,
+        handleInputChange,
+        formValues,
+        initialValues: defaultFormValues,
+        handleClose: handleCloseExtended,
+      });
     }
     return child;
   });

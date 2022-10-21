@@ -17,3 +17,9 @@ export const elementAnimation = {
 
   transition,
 };
+
+export const editButtonAnimation = {
+  initial: { translate: "-50%", opacity: 0 },
+  animate: { translate: "0%", opacity: 1 },
+  exit: { scale: "0%", opacity: 0 },
+};

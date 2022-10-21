@@ -34,7 +34,7 @@ export const NotePopupRoot: React.FC<ListHeaderProps> = ({ dispatch, doesAlready
     };
   }, []);
 
-  const PopupComponent: PopupComponentType = popUpComp.component ? popUpComp.component : null;
+  const PopupComponent: PopupComponentType = popUpComp.component ?? null;
 
   return (
     <AnimatePresence>

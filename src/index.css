@@ -13,6 +13,9 @@ body {
 
 :root {
   color-scheme: dark;
+
+  --pink: #ff5953;
+  --dark-pink: #ff656523;
 }
 
 code {
