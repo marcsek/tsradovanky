@@ -10,7 +10,7 @@ export interface EventDataType {
 export interface PopupChildProps {
   handleColorChange?: (color: ElementColors) => void;
   handleInputChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleFormSubmit?: (e: React.FormEvent<HTMLFormElement>, formValues?: NewNoteFormType) => void;
+  handleFormSubmit: (e: React.FormEvent<HTMLFormElement>, formValues?: NewNoteFormType) => void;
   handleClose?: () => void;
   initialValues?: NewNoteFormType;
   formValues?: NewNoteFormType;

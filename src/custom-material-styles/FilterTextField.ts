@@ -4,12 +4,11 @@ import { blue } from "@mui/material/colors";
 
 type FilterText = TextFieldProps & {
   shouldShowBorder?: boolean;
-  height?: string | number;
 };
 
 const FilterTextField = styled(TextField, {
   shouldForwardProp: (prop) => prop !== "shouldShowBorder",
-})<FilterText>(({ shouldShowBorder, height, theme }) => ({
+})<FilterText>(({ shouldShowBorder, theme }) => ({
   padding: 0,
   width: "100%",
 
@@ -18,8 +17,7 @@ const FilterTextField = styled(TextField, {
   },
   input: {
     color: theme.palette.text.primary,
-    padding: "0 8px",
-    height,
+    padding: "9px 12px",
     zIndex: 1,
   },
   textarea: {
@@ -28,8 +26,6 @@ const FilterTextField = styled(TextField, {
   },
   label: {
     color: theme.palette.text.secondary,
-    // fontSize: "1.02rem",
-    // left: "-2px",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {

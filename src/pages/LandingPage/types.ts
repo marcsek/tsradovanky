@@ -9,11 +9,6 @@ export interface ListValue {
 
 export type ListValues = ListValue[];
 
-export interface ListReducerState {
-  filteredList: ListValues;
-  baseList: ListValues;
-}
-
 export interface FiltersTypes {
   sort: SortType;
   reverse?: boolean;
@@ -41,10 +36,9 @@ export interface ApplyReturn {
 }
 
 export type bClickActions =
-  | { type: "add"; props: { title: string; value: string; color?: string } }
-  | { type: "removeSelected"; ids?: string[] }
-  | { type: "check"; id?: string; ids?: string[]; value: boolean }
-  | { type: "reorder"; reorderedState: ListValues }
+  | { type: "add"; props: { title: string; value: string; color: string } }
+  | { type: "remove"; ids?: string[] }
+  | { type: "check"; id: string | string[]; value: boolean }
   | { type: "edit"; id: string; props: { title: string; value: string; color: string } };
 
 export interface NewNoteFormType extends NewNoteInpuType {

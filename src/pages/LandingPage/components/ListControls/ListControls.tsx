@@ -50,7 +50,7 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, filteredSelectedId
               icon={filteredSelectedIds.length === 0 ? <CheckBoxOutlineBlankIcon /> : <IndeterminateCheckBoxIcon />}
               checked={shouldBeChecked}
               onChange={(e) => {
-                dispatch({ type: "check", value: e.target.checked, ids: filteredIds });
+                dispatch({ type: "check", value: e.target.checked, id: filteredIds });
               }}
               sx={{
                 color: filteredSelectedIds.length !== 0 ? "var(--pink)" : "gray",
@@ -88,7 +88,7 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, filteredSelectedId
           e.preventDefault();
           handleRemoveReset();
           toast.success(`${filteredSelectedIds.length} reminders were deleted!`);
-          dispatch({ type: "removeSelected", ids: filteredSelectedIds });
+          dispatch({ type: "remove", ids: filteredSelectedIds });
         }}
       >
         <DeleteOutlineIcon />

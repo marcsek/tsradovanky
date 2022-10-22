@@ -14,7 +14,7 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
           id: uuidv4(),
           checked: false,
           date: new Date(),
-          color: action.props.color || "#00AB55",
+          color: action.props.color,
         },
       ];
 
@@ -25,9 +25,9 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
 
       return array;
 
-    case "removeSelected":
+    case "remove":
       let newArray: ListValues = [];
-      if (action.ids !== undefined) {
+      if (Array.isArray(action.ids)) {
         state.forEach((listElement) => {
           if (!action.ids?.includes(listElement.id)) {
             newArray.push(listElement);
@@ -44,16 +44,16 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
       return newArray;
 
     case "check":
-      if (action.id !== undefined) {
+      if (typeof action.id === "string") {
         let itemToCheck = stateCopy.find((el) => el.id === action.id);
         if (itemToCheck) {
           itemToCheck.checked = action.value;
           return stateCopy;
         }
       }
-      if (action.ids !== undefined) {
+      if (Array.isArray(action.id)) {
         stateCopy.forEach((el) => {
-          if (action.ids?.includes(el.id)) {
+          if (action.id.includes(el.id)) {
             el.checked = action.value;
             return el;
           }
@@ -66,9 +66,6 @@ const ButtonClickReducer = (state: ListValues, action: bClickActions): ListValue
         return listElement;
       });
       return stateCopy;
-
-    case "reorder":
-      return action.reorderedState;
 
     default:
       return state;

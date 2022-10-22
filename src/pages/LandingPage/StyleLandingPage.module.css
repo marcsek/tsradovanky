@@ -58,7 +58,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 30px;
-  height: 42px;
+  height: 41px;
   flex-grow: 1;
   max-width: 600px;
 }
@@ -87,6 +87,7 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
+  clip-path: inset(1px);
 }
 
 .filterSelector {

@@ -10,16 +10,48 @@ import { windowAnimation, backgroundAnimation } from "../NotePopupAnimations";
 import ColorPicker from "./ColorPicker";
 import { PopupChildProps } from "../types";
 import { ElementColors } from "../../../types";
+import { defaultFormValues } from "../NotePopupElements/DefaultFormValues";
 
 const NoteBody: React.FC<PopupChildProps> = ({
-  handleColorChange,
-  handleInputChange,
+  handleColorChange = (color: ElementColors) => {},
+  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {},
   handleFormSubmit,
   handleClose,
-  formValues,
-  initialValues,
+  formValues = defaultFormValues,
+  initialValues = defaultFormValues,
   type,
 }) => {
+  const TitleVariant: React.ReactNode =
+    type === "edit" ? (
+      <>
+        Edit&nbsp;<strong>Nxte</strong>
+      </>
+    ) : (
+      <>
+        New&nbsp;<strong>Nxte</strong>
+      </>
+    );
+
+  const ButtonTextVariant: React.ReactNode =
+    type === "edit" ? (
+      <>
+        <PublishedWithChangesIcon />
+        Apply Changes
+      </>
+    ) : (
+      <>
+        <AddCircleOutlineIcon />
+        Create
+      </>
+    );
+
+  const shouldDisableBtn: boolean =
+    type === "edit"
+      ? formValues.title.value === initialValues.title.value &&
+        formValues.text.value === initialValues.text.value &&
+        formValues.color === initialValues.color
+      : formValues.title.value === "" || formValues.text.value === "";
+
   return (
     <>
       <Box className={styles.popupBackground} onClick={handleClose} component={motion.div} {...backgroundAnimation} />
@@ -31,15 +63,7 @@ const NoteBody: React.FC<PopupChildProps> = ({
       >
         <Stack className={styles.titleCont}>
           <Typography variant="h4" sx={{ color: (theme) => theme.palette.text.primary }}>
-            {type === "edit" ? (
-              <>
-                Edit&nbsp;<strong>Nxte</strong>
-              </>
-            ) : (
-              <>
-                New&nbsp;<strong>Nxte</strong>
-              </>
-            )}
+            {TitleVariant}
           </Typography>
           <ControlButton
             onClick={handleClose}
@@ -48,28 +72,27 @@ const NoteBody: React.FC<PopupChildProps> = ({
             <CloseIcon></CloseIcon>
           </ControlButton>
         </Stack>
-        <form onSubmit={(e) => (handleFormSubmit ? handleFormSubmit(e, formValues) : null)}>
+        <form onSubmit={(e) => handleFormSubmit(e, formValues)}>
           <Stack className={styles.inputCont}>
             <Stack className={styles.textInputTitle}>
               <FilterTextField
                 onChange={handleInputChange}
-                value={formValues?.title.value}
+                value={formValues.title.value}
                 className={styles.input}
                 label="Title"
                 variant="outlined"
                 name="title"
                 autoComplete="off"
-                height="42px"
                 InputLabelProps={{ shrink: true }}
               />
               <Typography
                 sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.75rem" }}
-              >{`${formValues?.title.value.length} / ${formValues?.title.maxSize}`}</Typography>
+              >{`${formValues.title.value.length} / ${formValues.title.maxSize}`}</Typography>
             </Stack>
             <Stack className={styles.textInputCont}>
               <FilterTextField
                 onChange={handleInputChange}
-                value={formValues?.text.value}
+                value={formValues.text.value}
                 className={styles.input}
                 label="Text"
                 name="text"
@@ -77,46 +100,26 @@ const NoteBody: React.FC<PopupChildProps> = ({
                 autoComplete="off"
                 multiline
                 rows={5}
-                height="42px"
                 InputLabelProps={{ shrink: true }}
               />
               <Typography
                 sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.75rem" }}
-              >{`${formValues?.text.value.length} / ${formValues?.text.maxSize}`}</Typography>
+              >{`${formValues.text.value.length} / ${formValues.text.maxSize}`}</Typography>
             </Stack>
             <Stack>
               <Typography sx={{ color: (theme) => theme.palette.text.secondary, width: "fit-content", mb: "5px", fontSize: "0.75rem" }}>
                 Color
               </Typography>
-              <ColorPicker
-                selectedColor={formValues?.color ? formValues.color : ElementColors.GREEN}
-                setSelectedColor={handleColorChange ? handleColorChange : () => {}}
-              />
+              <ColorPicker selectedColor={formValues.color} setSelectedColor={handleColorChange} />
             </Stack>
             <ControlButton
               className={styles.inputButton}
-              shouldDisable={
-                type === "edit"
-                  ? formValues?.title.value === initialValues?.title.value &&
-                    formValues?.text.value === initialValues?.text.value &&
-                    formValues?.color === initialValues?.color
-                  : formValues?.title.value === "" || formValues?.text.value === ""
-              }
+              shouldDisable={shouldDisableBtn}
               sx={{ outlineColor: (theme) => theme.palette.divider }}
               backgroundcolor="rgba(54, 95, 255, 1)"
               type="submit"
             >
-              {type === "edit" ? (
-                <>
-                  <PublishedWithChangesIcon />
-                  Apply Changes
-                </>
-              ) : (
-                <>
-                  <AddCircleOutlineIcon />
-                  Create
-                </>
-              )}
+              {ButtonTextVariant}
             </ControlButton>
           </Stack>
         </form>

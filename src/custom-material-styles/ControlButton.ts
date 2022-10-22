@@ -21,7 +21,7 @@ const ControlButton = styled(Button, {
   },
 
   "&:hover": {
-    backgroundColor: backgroundColor,
+    backgroundColor,
   },
 }));
 

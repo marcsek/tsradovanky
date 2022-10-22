@@ -7,7 +7,6 @@ import { useState } from "react";
 
 interface ListControlProps {
   setFilters: SetFiltersType;
-  // filters: FiltersTypes;
 }
 
 const ListFilters: React.FC<ListControlProps> = ({ setFilters }) => {
@@ -27,7 +26,6 @@ const ListFilters: React.FC<ListControlProps> = ({ setFilters }) => {
           label="Keyword"
           variant="outlined"
           autoComplete="off"
-          height="42px"
           InputLabelProps={{ shrink: true }}
           shouldShowBorder={keyword.length !== 0}
           sx={{

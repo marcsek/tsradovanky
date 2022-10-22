@@ -3,6 +3,7 @@ import { createTheme } from "@mui/material/styles";
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+
     text: {
       primary: "#eaebf1",
       secondary: "gray",
@@ -53,6 +54,7 @@ const darkTheme = createTheme({
 const lightTheme = createTheme({
   palette: {
     mode: "light",
+
     text: {
       primary: "#212B36",
       secondary: "#86939E",
