@@ -3,6 +3,9 @@
 # dependencies
 nxtes/node_modules
 server/node_modules
+server/prisma/generated
+/server/dist
+
 /.pnp
 .pnp.js
 
