@@ -10,12 +10,12 @@ const darkTheme = createTheme({
       disabled: "#cfcfcf",
     },
     background: {
-      default: "#171719",
-      paper: "#24232a",
+      // default: "#171719",
+      paper: "rgb(23,23,23)",
     },
     action: {
       disabledBackground: "gray",
-      active: "rgb(27,27,30)",
+      active: "rgb(23,23,23)",
     },
     common: {
       white: "#5e5e5e25",

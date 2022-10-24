@@ -12,7 +12,7 @@
   list-style: none;
   overflow-y: auto;
   box-sizing: border-box;
-  margin: 30px 0px;
+  margin: 20px 0px;
   position: relative;
   flex-grow: 1;
   background-color: #24232a;
@@ -25,18 +25,20 @@
   grid-template-rows: repeat(auto-fill, 330px);
 }
 
-.listContainer::-webkit-scrollbar {
-  width: 5px;
-}
+@media only screen and (min-width: 500px) {
+  .listContainer::-webkit-scrollbar {
+    width: 5px;
+  }
 
-.listContainer::-webkit-scrollbar-track {
-  background: rgb(50, 53, 70);
-  border-radius: 1rem;
-}
+  .listContainer::-webkit-scrollbar-track {
+    /* background: rgb(50, 53, 70); */
+    border-radius: 1rem;
+  }
 
-.listContainer::-webkit-scrollbar-thumb {
-  background: #252525;
-  border-radius: 1rem;
+  .listContainer::-webkit-scrollbar-thumb {
+    background: #252525;
+    border-radius: 1rem;
+  }
 }
 
 .button {
@@ -101,5 +103,11 @@
   .listContainer {
     padding: 25px;
     grid-template-columns: 1fr;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .listContainer {
+    padding: 0px;
   }
 }

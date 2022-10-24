@@ -53,7 +53,7 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, filteredSelectedId
                 dispatch({ type: "check", value: e.target.checked, id: filteredIds });
               }}
               sx={{
-                color: filteredSelectedIds.length !== 0 ? "var(--pink)" : "gray",
+                color: filteredSelectedIds.length !== 0 ? "var(--pink)" : "rgb(90,90,90)",
                 "&.Mui-checked": {
                   color: "var(--pink)",
                 },

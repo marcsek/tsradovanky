@@ -1,8 +1,9 @@
 import { Query, Resolver, Mutation, Arg, Ctx, UseMiddleware } from "type-graphql";
 import { isAuth } from "../middleware/isAuth";
-import { User, CreateUserInput, LogInInput } from "../model/user.model";
+import { User } from "../model/user.model";
 import { UserService } from "../service";
 import Context from "../types/context";
+import { CreateUserInput, LoginInput } from "./inputs";
 
 @Resolver()
 export default class UserResolver {
@@ -18,7 +19,7 @@ export default class UserResolver {
 
   @Query(() => User)
   async getUser(): Promise<User> {
-    return { name: "kokotek", id: 1, password: "co" };
+    return { name: "kokotek", id: "", password: "co" };
   }
 
   @Mutation(() => User)
@@ -27,7 +28,7 @@ export default class UserResolver {
   }
 
   @Mutation(() => String)
-  loginUser(@Arg("input") input: LogInInput, @Ctx() context: Context) {
+  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context) {
     return this.userService.logIn(input, context);
   }
 }

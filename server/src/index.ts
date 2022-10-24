@@ -5,12 +5,15 @@ import cors from "cors";
 
 import cookieParser from "cookie-parser";
 import { buildSchema } from "type-graphql";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, ApolloError } from "apollo-server-express";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { resolvers } from "./resolvers";
 import { verifyJwt } from "./utils/jwt";
 import { User } from "../prisma/generated";
 import Context from "./types/context";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 dotenv.config();
 const port = process.env.PORT || 3001;
@@ -49,4 +52,10 @@ const corsOptions = {
   app.listen({ port }, () => {
     console.log(`⚡️[server]: Server is running at https://localhost:3001`);
   });
+
+  try {
+    await prisma.$connect();
+  } catch (_err) {
+    throw new ApolloError("Connot connect to database");
+  }
 })();

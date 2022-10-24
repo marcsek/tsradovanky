@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { ApolloError } from "apollo-server-express";
-import { CreateUserInput, LogInInput } from "../model/user.model";
 import bcrypt from "bcrypt";
+import { CreateUserInput, LoginInput } from "../resolvers/inputs";
 import Context from "../types/context";
 import { signJwt } from "../utils/jwt";
 
@@ -39,7 +39,7 @@ export default class UserService {
     try {
       createdUser = await prisma.user.create({ data: input });
     } catch (error) {
-      console.log(error);
+      throw new ApolloError("User alredy exists");
     }
     if (!createdUser) {
       throw new ApolloError("User could not be created");
@@ -48,7 +48,7 @@ export default class UserService {
     return createdUser;
   }
 
-  async logIn(input: LogInInput, context: Context) {
+  async logIn(input: LoginInput, context: Context) {
     const user = await this.findByName(input.name);
 
     const passwordIsValid = await bcrypt.compare(input.password, user.password);

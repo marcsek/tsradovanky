@@ -16,7 +16,19 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String @unique
+  id       String @id @default(uuid())
+  name     String
   password String
+  email    String @unique
+  Nxte     Nxte[]
+}
+
+model Nxte {
+  id        String   @id @default(uuid())
+  creator   User     @relation(fields: [creatorId], references: [id])
+  creatorId String
+  title     String
+  value     String
+  createdAt DateTime @default(now())
+  color     String
 }

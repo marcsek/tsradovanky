@@ -12,7 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import { AnimatePresence, motion } from "framer-motion";
 import NotePopupService from "../NotePupup/NotePopupService";
-import AnotherTestTwo from "../NotePupup/NotePopupElements/EditNotePopUp";
+import EditNotePopup from "../NotePupup/NotePopupElements/EditNotePopUp";
 
 interface ListElementProps {
   isLast: boolean;
@@ -30,7 +30,7 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
       title: { value: values.title, maxSize: 50 },
       color: values.color as ElementColors,
     };
-    NotePopupService.open(AnotherTestTwo, { initialValues: currentElementValues, id: values.id });
+    NotePopupService.open(EditNotePopup, { initialValues: currentElementValues, id: values.id });
   };
 
   return (
@@ -89,7 +89,7 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
               {...editButtonAnimation}
               sx={{
                 color: (theme) => theme.palette.text.primary,
-                backgroundColor: (theme) => (theme.palette.mode === "dark" ? "rgba(27 27 30 / 0.5)" : "rgba(194, 194, 194, 0.5)"),
+                backgroundColor: (theme) => (theme.palette.mode === "dark" ? "rgba(42 42 42)" : "rgba(194, 194, 194, 0.5)"),
               }}
             >
               <EditIcon sx={{ height: 18, width: 18 }} />
