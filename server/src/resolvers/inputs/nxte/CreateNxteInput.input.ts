@@ -1,35 +1,36 @@
 import * as TypeGraphQL from "type-graphql";
-import { Nxte } from "./nxte.model";
-import { UserCount } from "../resolvers/outputs";
 
-@TypeGraphQL.ObjectType("User", {
+@TypeGraphQL.InputType("NxteCreateInput", {
   isAbstract: true,
 })
-export class User {
+export class NxteCreateInput {
   @TypeGraphQL.Field((_type) => String, {
-    nullable: false,
-  })
-  id!: string;
-
-  @TypeGraphQL.Field((_type) => String, {
-    nullable: false,
-  })
-  name!: string;
-
-  @TypeGraphQL.Field((_type) => String, {
-    nullable: false,
-  })
-  password!: string;
-
-  @TypeGraphQL.Field((_type) => String, {
-    nullable: false,
-  })
-  email!: string;
-
-  Nxte?: Nxte[];
-
-  @TypeGraphQL.Field((_type) => UserCount, {
     nullable: true,
   })
-  _count?: UserCount | null;
+  id?: string;
+
+  @TypeGraphQL.Field((_type) => String, {
+    nullable: false,
+  })
+  creatorId!: string;
+
+  @TypeGraphQL.Field((_type) => String, {
+    nullable: false,
+  })
+  title!: string;
+
+  @TypeGraphQL.Field((_type) => String, {
+    nullable: false,
+  })
+  value!: string;
+
+  @TypeGraphQL.Field((_type) => Date, {
+    nullable: true,
+  })
+  createdAt?: Date;
+
+  @TypeGraphQL.Field((_type) => String, {
+    nullable: false,
+  })
+  color!: string;
 }

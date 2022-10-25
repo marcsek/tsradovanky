@@ -1,4 +1,5 @@
 import { Query, Resolver, Mutation, Arg, Ctx, UseMiddleware } from "type-graphql";
+import { Nxte } from "../../prisma/generated";
 import { isAuth } from "../middleware/isAuth";
 import { User } from "../model/user.model";
 import { UserService } from "../service";
@@ -17,9 +18,10 @@ export default class UserResolver {
     return context.user;
   }
 
-  @Query(() => User)
-  async getUser(): Promise<User> {
-    return { name: "kokotek", id: "", password: "co" };
+  @UseMiddleware(isAuth)
+  @Query(() => [Nxte])
+  async getUserPosts(@Ctx() context: Context) {
+    return this.userService.getUsersPosts(context.user?.id ?? "");
   }
 
   @Mutation(() => User)

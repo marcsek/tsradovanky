@@ -19,11 +19,26 @@ prisma.$use(async (params, next) => {
 });
 
 export default class UserService {
-  async findByName(name: string) {
+  async findByEmail(email: string) {
     let user;
 
     try {
-      user = await prisma.user.findUnique({ where: { name } });
+      user = await prisma.user.findUnique({ where: { email } });
+    } catch (error) {
+      console.log(error);
+    }
+    if (!user) {
+      throw new ApolloError("User doesnt exist");
+    }
+
+    return user;
+  }
+
+  async findById(id: string) {
+    let user;
+
+    try {
+      user = await prisma.user.findUnique({ where: { id } });
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +64,7 @@ export default class UserService {
   }
 
   async logIn(input: LoginInput, context: Context) {
-    const user = await this.findByName(input.name);
+    const user = await this.findByEmail(input.email);
 
     const passwordIsValid = await bcrypt.compare(input.password, user.password);
 
@@ -68,5 +83,25 @@ export default class UserService {
     });
 
     return token;
+  }
+
+  async getUsersPosts(input: string) {
+    let user;
+    try {
+      user = await prisma.user.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          Nxte: true,
+        },
+      });
+    } catch (error) {
+      throw new ApolloError(`Could not get users posts (provided id: ${input})`);
+    }
+    if (!user) {
+      throw new ApolloError("User doesnt exist");
+    }
+    return user.Nxte;
   }
 }

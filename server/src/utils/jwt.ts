@@ -1,4 +1,3 @@
-import config from "config";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
@@ -8,7 +7,7 @@ const privateKey = Buffer.from(process.env.PRIVATE_KEY ?? "", "base64").toString
 
 export function signJwt(object: Object, options?: jwt.SignOptions | undefined) {
   return jwt.sign(object, privateKey, {
-    ...(options && options),
+    ...options,
     algorithm: "RS256",
   });
 }

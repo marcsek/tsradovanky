@@ -1,7 +1,14 @@
 import * as TypeGraphQL from "type-graphql";
 
-@TypeGraphQL.InputType()
+@TypeGraphQL.InputType("CreateUserInput", {
+  isAbstract: true,
+})
 export class CreateUserInput {
+  @TypeGraphQL.Field((_type) => String, {
+    nullable: true,
+  })
+  id?: string;
+
   @TypeGraphQL.Field((_type) => String, {
     nullable: false,
   })
@@ -11,4 +18,9 @@ export class CreateUserInput {
     nullable: false,
   })
   password!: string;
+
+  @TypeGraphQL.Field((_type) => String, {
+    nullable: false,
+  })
+  email!: string;
 }

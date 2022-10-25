@@ -5,7 +5,7 @@ export class LoginInput {
   @TypeGraphQL.Field((_type) => String, {
     nullable: false,
   })
-  name!: string;
+  email!: string;
 
   @TypeGraphQL.Field((_type) => String, {
     nullable: false,

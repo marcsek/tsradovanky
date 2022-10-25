@@ -56,6 +56,6 @@ const corsOptions = {
   try {
     await prisma.$connect();
   } catch (_err) {
-    throw new ApolloError("Connot connect to database");
+    throw new ApolloError("Cannot connect to database");
   }
 })();
