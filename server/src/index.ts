@@ -9,7 +9,7 @@ import { ApolloServer, ApolloError } from "apollo-server-express";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { resolvers } from "./resolvers";
 import { verifyJwt } from "./utils/jwt";
-import { User } from "../prisma/generated";
+import { User } from "./model/user.model";
 import Context from "./types/context";
 import { PrismaClient } from "@prisma/client";
 

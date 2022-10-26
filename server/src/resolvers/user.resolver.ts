@@ -1,10 +1,12 @@
 import { Query, Resolver, Mutation, Arg, Ctx, UseMiddleware } from "type-graphql";
-import { Nxte } from "../../prisma/generated";
+import { Nxte } from "../model/nxte.model";
 import { isAuth } from "../middleware/isAuth";
 import { User } from "../model/user.model";
 import { UserService } from "../service";
 import Context from "../types/context";
 import { CreateUserInput, LoginInput } from "./inputs";
+import { UpdateUserInputFields } from "./inputs/user/UpdateUserInputFields.input";
+import { UserWP } from "../model/custom/userWithoutPassword";
 
 @Resolver()
 export default class UserResolver {
@@ -20,17 +22,29 @@ export default class UserResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [Nxte])
-  async getUserPosts(@Ctx() context: Context) {
-    return this.userService.getUsersPosts(context.user?.id ?? "");
+  async getUserNxtes(@Ctx() context: Context): Promise<Nxte[]> {
+    return this.userService.getUsersNxtes(context.user?.id ?? "");
   }
 
-  @Mutation(() => User)
-  createUser(@Arg("input") input: CreateUserInput) {
+  @UseMiddleware(isAuth)
+  @Query(() => UserWP)
+  async getUser(@Arg("input") input: string): Promise<UserWP> {
+    return this.userService.getUser(input);
+  }
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => UserWP)
+  async updateUser(@Arg("input") input: UpdateUserInputFields, @Ctx() context: Context): Promise<User> {
+    return this.userService.updateUser({ id: context.user?.id ?? "", newValues: input });
+  }
+
+  @Mutation(() => UserWP)
+  createUser(@Arg("input") input: CreateUserInput): Promise<UserWP> {
     return this.userService.createUser(input);
   }
 
   @Mutation(() => String)
-  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context) {
+  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context): Promise<string> {
     return this.userService.logIn(input, context);
   }
 }

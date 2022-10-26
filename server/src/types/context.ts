@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "../../prisma/generated";
+import { User } from "../model/user.model";
 
 interface Context {
   req: Request;

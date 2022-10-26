@@ -1,27 +1,28 @@
-import { PrismaClient } from "@prisma/client";
+import { Nxte, PrismaClient } from "@prisma/client";
 import { ApolloError } from "apollo-server-express";
 import { DeleteManyNxteInput, NxteCreateInput, NxteUpdateInput } from "../resolvers/inputs";
+import { NxteDeleteManyOutput } from "../resolvers/outputs";
 
 const prisma = new PrismaClient();
 
 export default class NxteService {
-  async createNxte(input: NxteCreateInput) {
-    let createdNxte;
+  async createNxte(input: NxteCreateInput): Promise<Nxte> {
+    let Nxte;
 
     try {
-      createdNxte = await prisma.nxte.create({ data: input });
+      Nxte = await prisma.nxte.create({ data: input });
     } catch (error) {
       console.log(error);
       throw new ApolloError("There was an error while creating Nxte");
     }
 
-    return createdNxte;
+    return Nxte;
   }
 
-  async updateNxte(input: NxteUpdateInput, userID: string) {
-    let updatedNxte;
+  async updateNxte(input: NxteUpdateInput, userID: string): Promise<Nxte> {
+    let allNxtes;
     try {
-      updatedNxte = await prisma.user.update({
+      allNxtes = await prisma.user.update({
         where: {
           id: userID,
         },
@@ -42,10 +43,17 @@ export default class NxteService {
     } catch (error) {
       throw new ApolloError("Couldnt update this Nxte");
     }
-    return updatedNxte.Nxte.at(-1);
+
+    const updatedElement = allNxtes.Nxte.at(-1);
+
+    if (!updatedElement) {
+      throw new ApolloError("Error getting Nxte");
+    }
+
+    return updatedElement;
   }
 
-  async deleteOneNxte(postID: string, userID: string) {
+  async deleteOneNxte(postID: string, userID: string): Promise<Nxte[]> {
     let deletion;
     try {
       deletion = await prisma.user.update({
@@ -69,30 +77,44 @@ export default class NxteService {
     return deletion.Nxte;
   }
 
-  async deleteManyNxtes({ ids: postIDs }: DeleteManyNxteInput, userID: string) {
-    let deletion;
+  async deleteManyNxtes({ ids: postIDs }: DeleteManyNxteInput, userID: string): Promise<NxteDeleteManyOutput> {
+    let deletionResult;
+    let leftPostsResult;
 
-    const prismaCompatIDs: Object[] = postIDs.map((id) => {
-      return { id };
-    });
-    ///problem nevyhadzuje error
-    try {
-      deletion = await prisma.user.update({
-        where: {
-          id: userID,
-        },
-        data: {
-          Nxte: {
-            deleteMany: prismaCompatIDs,
+    const deletionAction = prisma.nxte.deleteMany({
+      where: {
+        AND: [
+          {
+            creator: {
+              id: userID,
+            },
           },
-        },
-        select: {
-          Nxte: true,
-        },
-      });
+          {
+            id: {
+              in: postIDs,
+            },
+          },
+        ],
+      },
+    });
+
+    const leftPostsAction = prisma.user.findUnique({
+      where: {
+        id: userID,
+      },
+      select: {
+        Nxte: true,
+      },
+    });
+
+    try {
+      const results = await prisma.$transaction([deletionAction, leftPostsAction]);
+      deletionResult = results[0];
+      leftPostsResult = results[1];
     } catch (error) {
       throw new ApolloError("Couldnt delete these Nxtes");
     }
-    return deletion.Nxte;
+
+    return { count: deletionResult.count, Nxte: leftPostsResult?.Nxte ?? [] };
   }
 }

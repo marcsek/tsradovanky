@@ -1,1 +1,2 @@
-export { UserCount } from "../../../prisma/generated";
+export { UserCount } from "./user/userCount.output";
+export { NxteDeleteManyOutput } from "./nxte/NxteDeleteManyOutput.output";

@@ -1,25 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+import { Nxte, PrismaClient } from "@prisma/client";
 import { ApolloError } from "apollo-server-express";
 import bcrypt from "bcrypt";
-import { CreateUserInput, LoginInput } from "../resolvers/inputs";
+import { prismaHashPassword } from "../middleware";
+import { User } from "../model/user.model";
+import { UserWP } from "../model/custom/userWithoutPassword";
+import { CreateUserInput, LoginInput, UpdateUserInput } from "../resolvers/inputs";
 import Context from "../types/context";
 import { signJwt } from "../utils/jwt";
 
 const prisma = new PrismaClient();
 
-prisma.$use(async (params, next) => {
-  if (params.model == "User" && params.action == "create") {
-    const salt = await bcrypt.genSalt(10);
-    const hash = bcrypt.hashSync(params.args.data.password, salt);
-
-    params.args.data.password = hash;
-  }
-
-  return next(params);
-});
+prisma.$use(prismaHashPassword);
 
 export default class UserService {
-  async findByEmail(email: string) {
+  async findByEmail(email: string): Promise<User> {
     let user;
 
     try {
@@ -34,7 +28,7 @@ export default class UserService {
     return user;
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<User> {
     let user;
 
     try {
@@ -49,7 +43,7 @@ export default class UserService {
     return user;
   }
 
-  async createUser(input: CreateUserInput) {
+  async createUser(input: CreateUserInput): Promise<UserWP> {
     let createdUser;
     try {
       createdUser = await prisma.user.create({ data: input });
@@ -63,7 +57,7 @@ export default class UserService {
     return createdUser;
   }
 
-  async logIn(input: LoginInput, context: Context) {
+  async logIn(input: LoginInput, context: Context): Promise<string> {
     const user = await this.findByEmail(input.email);
 
     const passwordIsValid = await bcrypt.compare(input.password, user.password);
@@ -85,14 +79,33 @@ export default class UserService {
     return token;
   }
 
-  async getUsersPosts(input: string) {
+  async getUser(input: string): Promise<UserWP> {
     let user;
     try {
       user = await prisma.user.findUnique({
         where: {
           id: input,
         },
-        include: {
+      });
+    } catch (error) {
+      throw new ApolloError(`Could not get user (provided id: ${input})`);
+    }
+
+    if (!user) {
+      throw new ApolloError("User doesnt exist");
+    }
+
+    return user;
+  }
+
+  async getUsersNxtes(input: string): Promise<Nxte[]> {
+    let user;
+    try {
+      user = await prisma.user.findUnique({
+        where: {
+          id: input,
+        },
+        select: {
           Nxte: true,
         },
       });
@@ -103,5 +116,25 @@ export default class UserService {
       throw new ApolloError("User doesnt exist");
     }
     return user.Nxte;
+  }
+
+  async updateUser(input: UpdateUserInput): Promise<User> {
+    let updatedUser: User;
+    try {
+      updatedUser = await prisma.user.update({
+        where: {
+          id: input.id,
+        },
+        data: input.newValues,
+      });
+    } catch (error) {
+      throw new ApolloError("Couldnt update this User");
+    }
+
+    if (!updatedUser) {
+      throw new ApolloError("Error getting User");
+    }
+
+    return updatedUser;
   }
 }

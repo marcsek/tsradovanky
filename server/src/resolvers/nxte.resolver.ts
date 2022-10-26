@@ -1,9 +1,10 @@
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { isAuth } from "../middleware";
-import { Nxte } from "../../prisma/generated";
 import { NxteService } from "../service";
 import { NxteCreateInput, NxteUpdateInput, DeleteManyNxteInput } from "./inputs";
 import Context from "../types/context";
+import { NxteDeleteManyOutput } from "./outputs";
+import { Nxte } from "../model/nxte.model";
 
 @Resolver()
 export default class NxteResolver {
@@ -30,7 +31,7 @@ export default class NxteResolver {
   }
 
   @UseMiddleware(isAuth)
-  @Mutation(() => [Nxte])
+  @Mutation(() => NxteDeleteManyOutput)
   deleteManyNxtes(@Arg("input") id: DeleteManyNxteInput, @Ctx() context: Context) {
     return this.nxteService.deleteManyNxtes(id, context.user?.id ?? "");
   }
