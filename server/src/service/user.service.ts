@@ -3,7 +3,7 @@ import { ApolloError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import { prismaHashPassword } from "../middleware";
 import { User } from "../model/user.model";
-import { UserWP } from "../model/custom/userWithoutPassword";
+import { UserWP } from "../model/userWithoutPassword";
 import { CreateUserInput, LoginInput, UpdateUserInput } from "../resolvers/inputs";
 import Context from "../types/context";
 import { signJwt } from "../utils/jwt";

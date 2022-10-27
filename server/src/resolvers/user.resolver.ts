@@ -6,7 +6,7 @@ import { UserService } from "../service";
 import Context from "../types/context";
 import { CreateUserInput, LoginInput } from "./inputs";
 import { UpdateUserInputFields } from "./inputs/user/UpdateUserInputFields.input";
-import { UserWP } from "../model/custom/userWithoutPassword";
+import { UserWP } from "../model/userWithoutPassword";
 
 @Resolver()
 export default class UserResolver {
