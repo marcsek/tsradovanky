@@ -1,4 +1,4 @@
-import { ListValue } from "../pages/LandingPage/types";
+import { ListValue } from "../pages/NxtePage/types";
 
 type SortFuncionType = (a: ListValue, b: ListValue) => 1 | -1 | 0;
 

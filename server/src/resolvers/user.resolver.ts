@@ -28,8 +28,8 @@ export default class UserResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => UserWP)
-  async getUser(@Arg("input") input: string): Promise<UserWP> {
-    return this.userService.getUser(input);
+  async getUser(@Ctx() context: Context, @Arg("input", { nullable: true }) input?: string): Promise<UserWP> {
+    return this.userService.getUser(input ?? context.user!.id);
   }
 
   @UseMiddleware(isAuth)
@@ -46,5 +46,10 @@ export default class UserResolver {
   @Mutation(() => String)
   loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context): Promise<string> {
     return this.userService.logIn(input, context);
+  }
+
+  @Mutation(() => Boolean)
+  logoutUser(@Ctx() context: Context): Promise<boolean> {
+    return this.userService.logOut(context);
   }
 }

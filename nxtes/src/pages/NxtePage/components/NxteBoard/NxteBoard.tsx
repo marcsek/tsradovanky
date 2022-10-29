@@ -4,7 +4,7 @@ import { ListValues, bClickActions, ListValue } from "../../types";
 import styles from "../../StyleLandingPage.module.css";
 
 import { Stack, Typography } from "@mui/material";
-import ListElement from "../ListElement/ListElement";
+import { ListElement } from "../index";
 import { AnimatePresence, motion } from "framer-motion";
 import { inputListAnimation } from "./InputListAnimation";
 
@@ -15,7 +15,7 @@ interface ListControlProps {
 
 let lastLength = 0;
 
-const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
+const NxteBoard: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
   const scollToRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -58,4 +58,4 @@ const InputList: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
   );
 };
 
-export default memo(InputList);
+export default memo(NxteBoard);

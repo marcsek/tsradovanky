@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import { SetFiltersType } from "../../types";
-import ListFilters from "../ListFilters/ListFilters";
+import { ListFilters } from "../index";
 import styles from "./ListHeader.module.css";
 import AddIcon from "@mui/icons-material/Add";
 import ControlButton from "../../../../custom-material-styles/ControlButton";

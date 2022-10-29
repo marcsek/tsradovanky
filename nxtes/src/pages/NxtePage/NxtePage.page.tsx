@@ -2,9 +2,7 @@ import { useReducer } from "react";
 import ButtonClickReducer from "./reducers/ButtonClickReducer";
 import styles from "./StyleLandingPage.module.css";
 
-import InputList from "./components/inputList/InputList";
-import ListControls from "./components/ListControls/ListControls";
-import ListHeader from "./components/ListHeader/ListHeader";
+import { ListHeader, ListControls, NxteBoard } from "./components";
 
 import useListFilters from "./customHooks/useListFilters";
 
@@ -43,7 +41,7 @@ const LandingPage: React.FC = () => {
     <div className={styles.LandingContainer}>
       <NotePopupRoot dispatch={dispatch} doesAlreadyExist={doesAlreadyExist} />
       <ListHeader setFilters={setFilters} />
-      <InputList listValues={filtered.filteredList} dispatch={dispatch} />
+      <NxteBoard listValues={filtered.filteredList} dispatch={dispatch} />
       <ListControls
         shouldBeChecked={areAllSelected()}
         filteredIds={filtered.filteredIds}

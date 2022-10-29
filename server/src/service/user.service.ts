@@ -66,17 +66,26 @@ export default class UserService {
       throw new ApolloError("Wrong credentials");
     }
 
-    const token: string = signJwt(user);
+    const token: string = signJwt(user, { expiresIn: "1h" });
     context.res.cookie("accessToken", token, {
       maxAge: 3_600_000, // 1h
       httpOnly: true,
-      domain: "localhost",
-      path: "/",
-      sameSite: "strict",
+      // domain: "localhost",
+      // path: "/",
+      // sameSite: "strict",
       secure: false, // !!!
     });
 
     return token;
+  }
+
+  async logOut(context: Context): Promise<boolean> {
+    if (!context.req.cookies.accessToken) {
+      return false;
+    }
+
+    context.res.clearCookie("accessToken");
+    return true;
   }
 
   async getUser(input: string): Promise<UserWP> {
