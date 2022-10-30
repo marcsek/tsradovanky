@@ -57,7 +57,7 @@ export default class UserService {
     return createdUser;
   }
 
-  async logIn(input: LoginInput, context: Context): Promise<string> {
+  async logIn(input: LoginInput, context: Context): Promise<boolean> {
     const user = await this.findByEmail(input.email);
 
     const passwordIsValid = await bcrypt.compare(input.password, user.password);
@@ -76,7 +76,7 @@ export default class UserService {
       secure: false, // !!!
     });
 
-    return token;
+    return Boolean(token);
   }
 
   async logOut(context: Context): Promise<boolean> {

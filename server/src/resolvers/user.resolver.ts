@@ -43,8 +43,8 @@ export default class UserResolver {
     return this.userService.createUser(input);
   }
 
-  @Mutation(() => String)
-  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context): Promise<string> {
+  @Mutation(() => Boolean)
+  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context): Promise<boolean> {
     return this.userService.logIn(input, context);
   }
 

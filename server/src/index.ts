@@ -41,6 +41,7 @@ const corsOptions: CorsOptions = {
 
       return context;
     },
+    debug: false,
     plugins: [
       process.env.NODE_ENV === "production" ? ApolloServerPluginLandingPageProductionDefault() : ApolloServerPluginLandingPageGraphQLPlayground(),
       {
