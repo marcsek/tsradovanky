@@ -1,20 +1,18 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import { lightTheme, darkTheme } from "./themes";
 import { ToastContainer, ToastContainerProps } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
-import { UserType } from "./types/user.type";
-import { UserContext } from "./context/UserContext";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import UserContextProvider from "./context/UserContextProvider";
 
 //Pages
 import { NxtePage, ErrorPage, UserPage } from "./pages";
 
 import Header from "./components/Header/Header";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { getUser } from "./queries";
 
 function App() {
   const [theme, setTheme] = useState<boolean>(false);
@@ -29,31 +27,25 @@ function App() {
     limit: 3,
   };
 
-  const { data: user }: UseQueryResult<UserType> = useQuery<UserType>(["user"], getUser, {
-    onError(err) {
-      // console.log(err);
-      // if (!user) {
-      //   navigate("/userpage");
-      // }
-    },
-  });
-
   return (
     <ThemeProvider theme={!theme ? darkTheme : lightTheme}>
-      <UserContext.Provider value={{ user: user ?? null }}>
-        <Box className="App" sx={{ backgroundColor: (theme) => theme.palette.background.default }}>
-          <h6>{user?.name}</h6>
+      <Box className="App" sx={{ backgroundColor: (theme) => theme.palette.background.default }}>
+        <Suspense fallback={<div>Loading...</div>}>
           <Router>
-            <Header setTheme={setTheme} />
-            <Routes>
-              <Route path="/" element={user ? <NxtePage /> : <h1>Please log in</h1>} />
-              <Route path="/userpage" element={<UserPage />} />
-              <Route path="*" element={<ErrorPage />} />
-            </Routes>
+            <UserContextProvider>
+              {/* <h6>{user?.name}</h6> */}
+              <Header setTheme={setTheme} />
+              <Routes>
+                <Route path="/" element={<div>Base route</div>}></Route>
+                <Route path="/board" element={<NxtePage />} />
+                <Route path="/userpage" element={<UserPage />} />
+                <Route path="*" element={<ErrorPage />} />
+              </Routes>
+            </UserContextProvider>
           </Router>
-        </Box>
-        <ToastContainer {...toastifyCfg} />
-      </UserContext.Provider>
+        </Suspense>
+      </Box>
+      <ToastContainer {...toastifyCfg} />
     </ThemeProvider>
   );
 }

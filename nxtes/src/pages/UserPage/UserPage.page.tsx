@@ -7,16 +7,16 @@ import { LoginUserParams } from "../../queries/types/inputTypes";
 
 const UserPage: React.FC = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const { mutate: login }: UseMutationResult<boolean, Error, LoginUserParams> = useMutation<boolean, Error, LoginUserParams>(
     async ({ email, password }) => loginUser({ email, password }),
     {
       onSuccess: (data) => {
         if (data) {
-          queryClient.invalidateQueries(["user"]);
-          navigate("/");
+          queryClient.resetQueries(["user"]);
+          navigate("/board");
         }
       },
       onError: (error) => {

@@ -76,6 +76,12 @@ export default class UserService {
       secure: false, // !!!
     });
 
+    context.res.cookie("is_loggedin", "yes", {
+      maxAge: 3_600_000,
+      httpOnly: false,
+      secure: false,
+    });
+
     return Boolean(token);
   }
 
@@ -85,6 +91,7 @@ export default class UserService {
     }
 
     context.res.clearCookie("accessToken");
+    context.res.clearCookie("is_loggedin");
     return true;
   }
 

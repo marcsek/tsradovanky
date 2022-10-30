@@ -5,13 +5,14 @@ import styles from "./StyleLandingPage.module.css";
 import { ListHeader, ListControls, NxteBoard } from "./components";
 
 import useListFilters from "./customHooks/useListFilters";
+import NotePopupRoot from "./components/NotePupup/NotePopupRoot";
+import { checkIfProtected } from "../../context/checkIfProtected";
 
 /* iba pre test */
 import FakerListGenerator from "./FakerListGenerator";
-import NotePopupRoot from "./components/NotePupup/NotePopupRoot";
 /*---------------*/
 
-const LandingPage: React.FC = () => {
+const NxtePage: React.FC = () => {
   const [listValues, dispatch] = useReducer(ButtonClickReducer, []);
   const [filtered, setFilters] = useListFilters(listValues);
 
@@ -53,4 +54,4 @@ const LandingPage: React.FC = () => {
   );
 };
 
-export default LandingPage;
+export default checkIfProtected(NxtePage);

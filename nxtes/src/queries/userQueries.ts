@@ -11,6 +11,7 @@ const graphQLClient = new GraphQLClient(API_URL, {
   responseMiddleware(response) {
     if (response instanceof Error) {
       const error: any = JSON.parse(JSON.stringify(response, undefined, 2));
+
       throw new Error(error.response.errors[0].message, { cause: error.response.errors[0] });
     }
   },
