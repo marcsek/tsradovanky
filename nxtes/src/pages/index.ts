@@ -1,3 +1,3 @@
-export { default as NxtePage } from "./NxtePage/NxtePage.page";
-export { default as ErrorPage } from "./ErrorPage/ErrorPage.page";
-export { default as UserPage } from "./UserPage/UserPage.page";
+export { default as NxtePage } from "./NxtePage/Nxte.page";
+export { default as ErrorPage } from "./ErrorPage/Error.page";
+export { default as AuthPage } from "./AuthPage/Auth.page";

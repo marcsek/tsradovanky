@@ -1,6 +1,6 @@
 import { GraphQLClient, gql } from "graphql-request";
 import { UserType } from "../types/user.type";
-import { LoginUserParams } from "./types/inputTypes";
+import { LoginUserParams, RegisterUserParams } from "./types/inputTypes";
 
 const API_URL = "http://localhost:3001/graphql";
 
@@ -54,4 +54,19 @@ export const getUser = async (): Promise<UserType> => {
   `);
 
   return getUser;
+};
+
+export const registerUser = async (input: RegisterUserParams): Promise<boolean> => {
+  const { createUser } = await graphQLClient.request(
+    gql`
+      mutation loginUser($input: CreateUserInput!) {
+        createUser(input: $input) {
+          name
+        }
+      }
+    `,
+    { input }
+  );
+
+  return createUser;
 };

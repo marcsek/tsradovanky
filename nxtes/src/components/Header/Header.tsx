@@ -1,22 +1,32 @@
-import { useContext } from "react";
+import { useUser } from "../../context/userContext";
 import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import style from "./Header.module.css";
 import ThemeSwitch from "./HeaderThemeSwitch";
-import { UserContext } from "../../context/UserContext";
+import useLogout from "../../hooks/useLogout";
+import { useMyTheme } from "../../context/themeContext";
 
-const Header: React.FC<{ setTheme: React.Dispatch<React.SetStateAction<boolean>> }> = ({ setTheme }) => {
-  const { user } = useContext(UserContext);
+const Header: React.FC = () => {
+  const { user } = useUser();
+  const logout = useLogout();
+  const myTheme = useMyTheme();
 
   return (
     <Box sx={{ backgroundColor: (theme) => theme.palette.action.active }} className={style.header}>
       <h3 style={{ marginRight: "200px" }}>{user?.name}</h3>
+      <h6
+        onClick={() => {
+          logout.mutate({});
+        }}
+      >
+        Logout
+      </h6>
       <Link to="/userpage">UserPage</Link>
       <Link to="/board">Nxte Board</Link>
       <ThemeSwitch
         defaultChecked
         onChange={(e) => {
-          setTheme(!e.target.checked);
+          myTheme.setTheme(!e.target.checked);
         }}
       />
     </Box>

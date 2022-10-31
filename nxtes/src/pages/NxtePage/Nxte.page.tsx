@@ -6,7 +6,6 @@ import { ListHeader, ListControls, NxteBoard } from "./components";
 
 import useListFilters from "./customHooks/useListFilters";
 import NotePopupRoot from "./components/NotePupup/NotePopupRoot";
-import { checkIfProtected } from "../../context/checkIfProtected";
 
 /* iba pre test */
 import FakerListGenerator from "./FakerListGenerator";
@@ -54,4 +53,4 @@ const NxtePage: React.FC = () => {
   );
 };
 
-export default checkIfProtected(NxtePage);
+export default NxtePage;
