@@ -34,7 +34,7 @@ const ListControls: React.FC<ListControlProps> = ({ dispatch, filteredSelectedId
         className={styles.controlSelectCont}
         sx={{
           backgroundColor: (theme) =>
-            filteredSelectedIds.length !== 0 ? (theme.palette.mode === "dark" ? "var(--dark-pink)" : "#FE73492A") : theme.palette.action.active,
+            filteredSelectedIds.length !== 0 ? (theme.palette.mode === "dark" ? "var(--dark-pink)" : "#ff66662A") : theme.palette.action.active,
         }}
       >
         <FormControlLabel

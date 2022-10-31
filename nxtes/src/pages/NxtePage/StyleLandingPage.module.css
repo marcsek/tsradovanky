@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  padding: 20px 40px 25px;
+  box-sizing: border-box;
 }
 
 .listContainer {
@@ -82,14 +84,8 @@
   white-space: normal;
 }
 
-.noReminders strong {
-  background: #ca5010;
-  background: linear-gradient(to bottom right, #fe0100 0%, #ffa002 90%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-  clip-path: inset(1px);
+.noReminders span {
+  color: #ff6666;
 }
 
 .filterSelector {

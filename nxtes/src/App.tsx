@@ -11,17 +11,19 @@ import RequireAuth from "./components/RequireAuth";
 
 import Layout from "./components/Layout";
 import { MyThemeProvider } from "./context/themeContext";
+import Loader from "./components/Loader/Loader.component";
 
 function App() {
   return (
     <MyThemeProvider>
       <Box className="App" sx={{ backgroundColor: (theme) => theme.palette.background.default }}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loader />}>
           <UserContextProvider>
             <Router>
               <Routes>
                 <Route path="/" element={<Layout />}>
-                  <Route path="userpage" element={<AuthPage />}>
+                  <Route path="/" element={<div>Nxtes app</div>} />
+                  <Route path="auth" element={<AuthPage />}>
                     <Route path=":type" element={<AuthPage />} />
                   </Route>
                   <Route element={<RequireAuth />}>

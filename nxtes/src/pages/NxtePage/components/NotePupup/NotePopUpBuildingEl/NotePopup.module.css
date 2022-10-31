@@ -33,11 +33,8 @@
   font-size: 1.7rem;
 }
 
-.titleCont h4 strong {
-  background: #ca5010;
-  background: linear-gradient(to bottom right, red 0%, orange 100%);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.titleCont h4 span {
+  color: #ff6666;
 }
 
 .titleCont h6 {

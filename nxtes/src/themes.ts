@@ -13,8 +13,11 @@ const darkTheme = createTheme({
       // default: "#171719",
       paper: "rgb(23,23,23)",
     },
+    error: {
+      main: "#ef5350",
+    },
     action: {
-      disabledBackground: "gray",
+      disabledBackground: "red",
       active: "rgb(23,23,23)",
     },
     common: {
@@ -59,6 +62,9 @@ const lightTheme = createTheme({
       primary: "#212B36",
       secondary: "#86939E",
       disabled: "#535a61",
+    },
+    error: {
+      main: "#ef5350",
     },
     background: {
       default: "#FFFFFF",

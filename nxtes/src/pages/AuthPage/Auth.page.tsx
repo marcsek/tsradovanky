@@ -1,3 +1,4 @@
+import { Stack, Box, Paper } from "@mui/material";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import LoginPage from "./Components/Login.component";
 import RegisterComponent from "./Components/Register.component";
@@ -12,7 +13,14 @@ const AuthPage: React.FC = () => {
     <Navigate to="login" state={{ from: location }} replace />
   );
 
-  return <div>{InnerComponent}</div>;
+  return (
+    <Stack sx={{ flexDirection: "row", height: "100%" }}>
+      <Box sx={{ flexGrow: 1, backgroundColor: (theme) => theme.palette.background.paper }}></Box>
+      <Paper elevation={1} sx={{ flexBasis: "80%", maxWidth: "500px", background: (theme) => theme.palette.background.default }}>
+        {InnerComponent}
+      </Paper>
+    </Stack>
+  );
 };
 
 export default AuthPage;

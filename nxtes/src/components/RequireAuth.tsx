@@ -6,7 +6,7 @@ const RequireAuth: React.FC = () => {
   const { user } = useContext(UserContext);
   const location = useLocation();
 
-  return user ? <Outlet /> : <Navigate to="/userpage" state={{ from: location }} replace />;
+  return user ? <Outlet /> : <Navigate to="/auth" state={{ from: location }} replace />;
 };
 
 export default RequireAuth;

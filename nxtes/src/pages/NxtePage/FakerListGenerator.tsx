@@ -11,7 +11,12 @@ const FakerListGenerator: React.FC<{ dispatch: React.Dispatch<bClickActions> }> 
     }
   };
 
-  return <button onClick={generateData} style={{ width: 5, height: 5, backgroundColor: "black", outline: "none", border: "none" }}></button>;
+  return (
+    <button
+      onClick={generateData}
+      style={{ width: 5, height: 5, backgroundColor: "black", outline: "none", border: "none", marginLeft: "20px" }}
+    ></button>
+  );
 };
 
 export default FakerListGenerator;

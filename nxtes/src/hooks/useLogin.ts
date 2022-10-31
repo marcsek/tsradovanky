@@ -15,7 +15,7 @@ const useLogin = (): UseMutationResult<boolean, Error, LoginUserParams> => {
       }
     },
     onError: (error) => {
-      console.log(error, error.cause);
+      // console.log(error, error.cause);
     },
   });
 };

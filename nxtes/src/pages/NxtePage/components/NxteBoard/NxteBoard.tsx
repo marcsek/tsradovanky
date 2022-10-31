@@ -45,7 +45,7 @@ const NxteBoard: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
             sx={{ color: (theme) => theme.palette.text.primary }}
           >
             <p>
-              No <strong>Nxtes</strong>, add some...
+              No <span>Nxtes</span>, add some...
             </p>
           </Typography>
         ) : (

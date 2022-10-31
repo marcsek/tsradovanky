@@ -8,7 +8,7 @@ type FilterText = TextFieldProps & {
 
 const FilterTextField = styled(TextField, {
   shouldForwardProp: (prop) => prop !== "shouldShowBorder",
-})<FilterText>(({ shouldShowBorder, theme }) => ({
+})<FilterText>(({ shouldShowBorder, theme, error }) => ({
   padding: 0,
   width: "100%",
 
@@ -31,14 +31,14 @@ const FilterTextField = styled(TextField, {
     "& fieldset": {
       transition: "border 0.05s",
       backgroundColor: theme.palette.action.active,
-      borderColor: shouldShowBorder ? blue[600] : theme.palette.divider,
+      borderColor: shouldShowBorder ? (error ? theme.palette.error : blue[600]) : theme.palette.divider,
       borderWidth: shouldShowBorder ? "2px" : "",
     },
     "&:hover fieldset": {
-      borderColor: shouldShowBorder ? blue[400] : theme.palette.divider,
+      borderColor: shouldShowBorder ? blue[400] : error ? theme.palette.error : theme.palette.divider,
     },
     "&.Mui-focused fieldset": {
-      borderColor: blue[600],
+      borderColor: error ? theme.palette.error : blue[600],
     },
   },
 }));

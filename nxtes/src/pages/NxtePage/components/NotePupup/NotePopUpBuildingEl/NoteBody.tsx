@@ -24,11 +24,11 @@ const NoteBody: React.FC<PopupChildProps> = ({
   const TitleVariant: React.ReactNode =
     type === "edit" ? (
       <>
-        Edit&nbsp;<strong>Nxte</strong>
+        Edit&nbsp;<span>Nxte</span>
       </>
     ) : (
       <>
-        New&nbsp;<strong>Nxte</strong>
+        New&nbsp;<span>Nxte</span>
       </>
     );
 
