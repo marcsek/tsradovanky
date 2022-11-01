@@ -17,7 +17,7 @@ export function IsName(validationOptions?: ValidationOptions) {
       options: customValidationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          return maxLength(value, 12) && minLength(value, 2);
+          return maxLength(value, 15) && minLength(value, 2);
         },
         defaultMessage(args: ValidationArguments) {
           return "Name doesn't meet requirements";

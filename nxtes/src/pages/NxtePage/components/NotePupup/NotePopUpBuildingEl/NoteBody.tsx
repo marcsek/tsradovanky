@@ -84,10 +84,8 @@ const NoteBody: React.FC<PopupChildProps> = ({
                 name="title"
                 autoComplete="off"
                 InputLabelProps={{ shrink: true }}
+                helperText={`${formValues.title.value.length} / ${formValues.title.maxSize}`}
               />
-              <Typography
-                sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.75rem" }}
-              >{`${formValues.title.value.length} / ${formValues.title.maxSize}`}</Typography>
             </Stack>
             <Stack className={styles.textInputCont}>
               <FilterTextField
@@ -101,10 +99,8 @@ const NoteBody: React.FC<PopupChildProps> = ({
                 multiline
                 rows={5}
                 InputLabelProps={{ shrink: true }}
+                helperText={`${formValues.text.value.length} / ${formValues.text.maxSize}`}
               />
-              <Typography
-                sx={{ color: (theme) => theme.palette.text.secondary, fontSize: "0.75rem" }}
-              >{`${formValues.text.value.length} / ${formValues.text.maxSize}`}</Typography>
             </Stack>
             <Stack>
               <Typography sx={{ color: (theme) => theme.palette.text.secondary, width: "fit-content", mb: "5px", fontSize: "0.75rem" }}>

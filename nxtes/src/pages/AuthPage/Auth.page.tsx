@@ -16,7 +16,7 @@ const AuthPage: React.FC = () => {
   return (
     <Stack sx={{ flexDirection: "row", height: "100%" }}>
       <Box sx={{ flexGrow: 1, backgroundColor: (theme) => theme.palette.background.paper }}></Box>
-      <Paper elevation={1} sx={{ flexBasis: "80%", maxWidth: "500px", background: (theme) => theme.palette.background.default }}>
+      <Paper elevation={1} sx={{ flexBasis: "clamp(80%, 700px, 100%)", maxWidth: "500px", background: (theme) => theme.palette.background.default }}>
         {InnerComponent}
       </Paper>
     </Stack>

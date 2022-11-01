@@ -8,14 +8,15 @@ const useLogin = (): UseMutationResult<boolean, Error, LoginUserParams> => {
   const navigate = useNavigate();
 
   return useMutation<boolean, Error, LoginUserParams>(async ({ email, password }) => loginUser({ email, password }), {
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data) {
-        queryClient.resetQueries(["user"]);
+        queryClient.setQueryData(["user"], null);
+        await queryClient.resetQueries(["user"]);
         navigate("/board");
       }
     },
     onError: (error) => {
-      // console.log(error, error.cause);
+      console.log(error, error.cause);
     },
   });
 };

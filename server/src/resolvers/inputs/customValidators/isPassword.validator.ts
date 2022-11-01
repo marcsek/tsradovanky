@@ -17,7 +17,7 @@ export function IsPassword(validationOptions?: ValidationOptions) {
       options: customValidationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          return minLength(value, 8) && maxLength(value, 40) && matches(value, /^(?=.*\d)(?=.*[a-z]).{6,20}$/);
+          return minLength(value, 8) && maxLength(value, 40) && matches(value, /^(?=.*\d)(?=.*[a-z]).{8,40}$/);
         },
         defaultMessage(args: ValidationArguments) {
           return "Password doesn't meet requirements";

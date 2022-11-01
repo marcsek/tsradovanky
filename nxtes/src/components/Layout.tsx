@@ -1,9 +1,10 @@
 import { useTheme } from "@mui/material";
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { ToastContainer, ToastContainerProps } from "react-toastify";
+import { cssTransition, ToastContainer, ToastContainerProps } from "react-toastify";
 import Header from "./Header/Header";
 import "react-toastify/dist/ReactToastify.css";
+import "../toastifyStyles.css";
 
 const Layout: React.FC = () => {
   const theme = useTheme();
@@ -11,18 +12,25 @@ const Layout: React.FC = () => {
   const toastifyCfg: ToastContainerProps = {
     theme: theme.palette.mode === "light" ? "light" : "dark",
     pauseOnHover: true,
+    hideProgressBar: true,
     closeOnClick: true,
-    autoClose: 5000,
+    autoClose: 3000,
     pauseOnFocusLoss: false,
     position: "bottom-right",
     limit: 3,
+    toastStyle: { borderRadius: "0.6rem", textAlign: "left", fontSize: "1rem" },
   };
+
+  const slideAnimation = cssTransition({
+    enter: "swirl-in-fwd",
+    exit: "swirl-out-bck",
+  });
 
   return (
     <>
       <Header />
       <Outlet />
-      <ToastContainer {...toastifyCfg} />
+      <ToastContainer {...toastifyCfg} transition={slideAnimation} />
     </>
   );
 };

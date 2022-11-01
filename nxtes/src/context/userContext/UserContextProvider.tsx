@@ -1,5 +1,4 @@
 import { useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
-import React from "react";
 import { getUser } from "../../queries";
 import { UserType } from "../../types/user.type";
 import { UserContext } from "./UserContext";
@@ -15,9 +14,14 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       }
     },
 
+    onSettled() {
+      console.log("settle");
+    },
+
+    enabled: !!document.cookie.match(/^(.*;)?\s*is_loggedin\s*=\s*[^;]+(.*)?$/),
     suspense: true,
     retry: false,
-    refetchInterval: 20000,
+    refetchInterval: 60000,
   });
 
   return <UserContext.Provider value={{ user: user ?? null }}>{children}</UserContext.Provider>;
