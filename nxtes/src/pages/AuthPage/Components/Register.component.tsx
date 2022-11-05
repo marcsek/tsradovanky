@@ -1,12 +1,10 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useRegister } from "../../../hooks";
-import { useFormik, FormikProps } from "formik";
+import { useRegister } from "../../../queries/queryHooks/User";
+import { useFormik } from "formik";
 import { registerValidatioSchema } from "../schemas";
 import { Box, Link } from "@mui/material";
-import { RegisterUserParams } from "../../../queries/types/inputTypes";
 import ErrorPupup from "./BuildingComponents/ErrorPupup.component";
 import { parseError } from "../../../utils/ParseError";
-
 import AuthTitle from "./BuildingComponents/AuthTitle.component";
 import AuthTextInput from "./BuildingComponents/AuthTextInput.component";
 import AuthPasswordInput from "./BuildingComponents/AuthPasswordInput.component";
@@ -15,14 +13,14 @@ import AuthButton from "./BuildingComponents/AuthButton.component";
 const RegisterComponent = () => {
   const register = useRegister();
 
-  const formik: FormikProps<RegisterUserParams> = useFormik<RegisterUserParams>({
+  const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
       name: "",
     },
     validationSchema: registerValidatioSchema,
-    onSubmit: (values) => {
+    onSubmit: values => {
       register.mutate(values);
     },
   });
@@ -31,7 +29,15 @@ const RegisterComponent = () => {
     <Box
       component="form"
       onSubmit={formik.handleSubmit}
-      sx={{ display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "center", height: "100%", gap: "40px", px: "40px" }}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
+        height: "100%",
+        gap: "40px",
+        px: "40px",
+      }}
     >
       <AuthTitle
         headingComp={
@@ -42,13 +48,14 @@ const RegisterComponent = () => {
         subHeadComp={
           <>
             Already a user?&nbsp;
-            <Link sx={{ color: (theme) => theme.palette.text.secondary }} underline="hover" to="/auth/login" component={RouterLink}>
+            <Link sx={{ color: theme => theme.palette.text.secondary }} underline="hover" to="/auth/login" component={RouterLink}>
               Log in!
             </Link>
           </>
         }
       />
-      {register.isError && <ErrorPupup errorMessage={parseError(register.error).cause} />}
+      {register.isError && <ErrorPupup errorMessage={parseError(register.error as Error).cause} />}
+
       <Box sx={{ display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box", gap: "25px" }}>
         <AuthTextInput formik={formik} name="name" label="Name" />
         <AuthTextInput formik={formik} name="email" label="Email" />

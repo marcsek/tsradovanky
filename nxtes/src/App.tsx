@@ -11,12 +11,12 @@ import RequireAuth from "./components/RequireAuth";
 
 import Layout from "./components/Layout";
 import { MyThemeProvider } from "./context/themeContext";
-import Loader from "./components/Loader/Loader.component";
+import Loader from "./components/Loader";
 
 function App() {
   return (
     <MyThemeProvider>
-      <Box className="App" sx={{ backgroundColor: (theme) => theme.palette.background.default }}>
+      <Box className="App" sx={{ backgroundColor: theme => theme.palette.background.default }}>
         <Suspense fallback={<Loader />}>
           <UserContextProvider>
             <Router>

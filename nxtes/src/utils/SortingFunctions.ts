@@ -10,7 +10,7 @@ const sortAtoZ: SortFuncionType = (a, b) => {
 };
 
 const sortByDate: SortFuncionType = (a, b) => {
-  if (a.date.getTime() < b.date.getTime()) {
+  if (a.createdAt.getTime() < b.createdAt.getTime()) {
     return 1;
   }
   return -1;

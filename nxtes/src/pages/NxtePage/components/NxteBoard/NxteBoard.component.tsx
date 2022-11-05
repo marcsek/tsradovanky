@@ -1,21 +1,22 @@
 import { useEffect, useRef, memo } from "react";
-
-import { ListValues, bClickActions, ListValue } from "../../types";
+import { ListValue } from "../../types";
 import styles from "../../StyleLandingPage.module.css";
 
 import { Stack, Typography } from "@mui/material";
 import { ListElement } from "../index";
 import { AnimatePresence, motion } from "framer-motion";
 import { inputListAnimation } from "./InputListAnimation";
+import { DispatchSelectAction } from "../../customHooks/useSelectedNxtes";
 
 interface ListControlProps {
-  listValues: ListValues;
-  dispatch: React.Dispatch<bClickActions>;
+  listValues: ListValue[];
+  selected: Map<string, boolean>;
+  dispatchSelect: React.Dispatch<DispatchSelectAction>;
 }
 
 let lastLength = 0;
 
-const NxteBoard: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
+const NxteBoard: React.FC<ListControlProps> = ({ listValues, selected, dispatchSelect }) => {
   const scollToRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -30,19 +31,25 @@ const NxteBoard: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
   };
 
   const handleElementClick = (values: ListValue) => {
-    dispatch({ type: "check", id: values.id, value: !values.checked });
+    dispatchSelect({ type: "switchOne", id: values.id, value: !selected.get(values.id) ?? false });
   };
 
   return (
-    <Stack component={motion.div} layoutScroll className={styles.listContainer} sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
+    <Stack
+      component={motion.div}
+      layoutScroll
+      className={styles.listContainer}
+      sx={{ backgroundColor: theme => theme.palette.background.paper }}
+    >
       <AnimatePresence mode="popLayout">
         {listValues.length === 0 ? (
           <Typography
             component={motion.div}
             {...inputListAnimation}
             variant="h4"
+            initial={false}
             className={styles.noReminders}
-            sx={{ color: (theme) => theme.palette.text.primary }}
+            sx={{ color: theme => theme.palette.text.primary }}
           >
             <p>
               No <span>Nxtes</span>, add some...
@@ -50,7 +57,15 @@ const NxteBoard: React.FC<ListControlProps> = ({ listValues, dispatch }) => {
           </Typography>
         ) : (
           listValues.map((listValue, index) => {
-            return <ListElement isLast={isLastElement(index)} key={listValue.id} handleClick={handleElementClick} values={listValue} />;
+            return (
+              <ListElement
+                isLast={isLastElement(index)}
+                key={listValue.id}
+                handleClick={handleElementClick}
+                values={listValue}
+                isSelected={selected.get(listValue.id) ?? false}
+              />
+            );
           })
         )}
       </AnimatePresence>

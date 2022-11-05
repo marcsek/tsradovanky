@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
-import { getUser } from "../../queries";
+import { getUser } from "../../queries/UserQueries";
 import { UserType } from "../../types/user.type";
 import { UserContext } from "./UserContext";
 

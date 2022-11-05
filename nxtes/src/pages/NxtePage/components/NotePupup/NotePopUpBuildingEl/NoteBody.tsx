@@ -57,22 +57,22 @@ const NoteBody: React.FC<PopupChildProps> = ({
       <Box className={styles.popupBackground} onClick={handleClose} component={motion.div} {...backgroundAnimation} />
       <Stack
         className={styles.pupupCont}
-        sx={{ backgroundColor: (theme) => theme.palette.background.default }}
+        sx={{ backgroundColor: theme => theme.palette.background.default }}
         component={motion.div}
         {...windowAnimation}
       >
         <Stack className={styles.titleCont}>
-          <Typography variant="h4" sx={{ color: (theme) => theme.palette.text.primary }}>
+          <Typography variant="h4" sx={{ color: theme => theme.palette.text.primary }}>
             {TitleVariant}
           </Typography>
           <ControlButton
             onClick={handleClose}
-            sx={{ color: (theme) => theme.palette.text.primary, p: 0.5, minWidth: "fit-content", borderRadius: "50%" }}
+            sx={{ color: theme => theme.palette.text.primary, p: 0.5, minWidth: "fit-content", borderRadius: "50%" }}
           >
             <CloseIcon></CloseIcon>
           </ControlButton>
         </Stack>
-        <form onSubmit={(e) => handleFormSubmit(e, formValues)}>
+        <form onSubmit={e => handleFormSubmit(e, formValues)}>
           <Stack className={styles.inputCont}>
             <Stack className={styles.textInputTitle}>
               <FilterTextField
@@ -103,7 +103,7 @@ const NoteBody: React.FC<PopupChildProps> = ({
               />
             </Stack>
             <Stack>
-              <Typography sx={{ color: (theme) => theme.palette.text.secondary, width: "fit-content", mb: "5px", fontSize: "0.75rem" }}>
+              <Typography sx={{ color: theme => theme.palette.text.secondary, width: "fit-content", mb: "5px", fontSize: "0.75rem" }}>
                 Color
               </Typography>
               <ColorPicker selectedColor={formValues.color} setSelectedColor={handleColorChange} />
@@ -111,7 +111,7 @@ const NoteBody: React.FC<PopupChildProps> = ({
             <ControlButton
               className={styles.inputButton}
               shouldDisable={shouldDisableBtn}
-              sx={{ outlineColor: (theme) => theme.palette.divider }}
+              sx={{ outlineColor: theme => theme.palette.divider }}
               backgroundcolor="rgba(54, 95, 255, 1)"
               type="submit"
             >

@@ -1,54 +1,42 @@
-import { useReducer } from "react";
-import ButtonClickReducer from "./reducers/ButtonClickReducer";
+import { useEffect } from "react";
 import styles from "./StyleLandingPage.module.css";
 
 import { ListHeader, ListControls, NxteBoard } from "./components";
 
 import useListFilters from "./customHooks/useListFilters";
-import NotePopupRoot from "./components/NotePupup/NotePopupRoot";
+import NotePopupRoot from "./components/NotePupup/NotePopupRoot.component";
 
 /* iba pre test */
 import FakerListGenerator from "./FakerListGenerator";
+import { useNxtes } from "../../queries/queryHooks/Nxte";
+import useSelectedNxtes from "./customHooks/useSelectedNxtes";
 /*---------------*/
 
 const NxtePage: React.FC = () => {
-  const [listValues, dispatch] = useReducer(ButtonClickReducer, []);
-  const [filtered, setFilters] = useListFilters(listValues);
-
-  const areAllSelected = () => {
-    if (filtered.filteredList.length === 0) return false;
-
-    return !filtered.filteredList.some((el) => el.checked === false);
-  };
+  const { data: nxtes } = useNxtes();
+  const [filtered, setFilters] = useListFilters(nxtes);
+  const { selected, dispatchSelect, getFilteredSelectedIds, areAllFilteredSelected } = useSelectedNxtes(filtered.filteredList);
 
   const doesAlreadyExist = (newValue: string): boolean => {
-    return listValues.find((listValue) => listValue.value === newValue) === undefined;
+    return nxtes.find(listValue => listValue.value === newValue) === undefined;
   };
 
-  const getFilteredSelectedIds = () => {
-    const filteredIds: string[] = [];
-
-    filtered.filteredList.forEach((el) => {
-      if (el.checked) {
-        filteredIds.push(el.id);
-      }
-    });
-
-    return filteredIds;
-  };
+  useEffect(() => {
+    console.log("render");
+  });
 
   return (
     <div className={styles.LandingContainer}>
-      <NotePopupRoot dispatch={dispatch} doesAlreadyExist={doesAlreadyExist} />
+      <NotePopupRoot doesAlreadyExist={doesAlreadyExist} />
       <ListHeader setFilters={setFilters} />
-      <NxteBoard listValues={filtered.filteredList} dispatch={dispatch} />
+      <NxteBoard listValues={filtered.filteredList} selected={selected} dispatchSelect={dispatchSelect} />
       <ListControls
-        shouldBeChecked={areAllSelected()}
-        filteredIds={filtered.filteredIds}
-        dispatch={dispatch}
-        filteredSelectedIds={getFilteredSelectedIds()}
+        shouldBeChecked={areAllFilteredSelected(filtered.filteredIds)}
+        filteredSelectedIds={getFilteredSelectedIds(filtered.filteredIds)}
+        selected={selected}
+        dispatchSelect={dispatchSelect}
       />
-      <FakerListGenerator dispatch={dispatch} />
+      <FakerListGenerator />
     </div>
   );
 };

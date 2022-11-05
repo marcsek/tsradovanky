@@ -1,11 +1,14 @@
 import React from "react";
-import { NewNoteFormType, NewNotePopupProps } from "../../../types";
+import { NewNoteFormType, NewNotePopupProps } from "../types";
 import NotePopup from "../NotePopUpBuildingEl/NotePopup";
 import { toast } from "react-toastify";
 import { defaultFormValues } from "./DefaultFormValues";
 import NoteBody from "../NotePopUpBuildingEl/NoteBody";
+import { useUpdateNxte } from "../../../../../queries/queryHooks/Nxte";
 
-const EditNotePopUp: React.FC<NewNotePopupProps> = ({ dispatch, doesAlreadyExist, handleClose, initialValues = defaultFormValues, id }) => {
+const EditNotePopUp: React.FC<NewNotePopupProps> = ({ doesAlreadyExist, handleClose, initialValues = defaultFormValues, id }) => {
+  const { mutate } = useUpdateNxte(handleClose);
+
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>, formValues?: NewNoteFormType) => {
     e.preventDefault();
     if (!formValues) {
@@ -16,12 +19,14 @@ const EditNotePopUp: React.FC<NewNotePopupProps> = ({ dispatch, doesAlreadyExist
       return;
     }
     if (formValues.text.value && formValues.title.value) {
-      handleClose();
-
-      let newId = id ? id : "";
-      dispatch({ type: "edit", id: newId, props: { value: formValues.text.value, title: formValues.title.value, color: formValues.color } });
+      mutate({
+        id: id ?? "",
+        newValues: { value: formValues.text.value, title: formValues.title.value, color: formValues.color as string },
+      });
     }
   };
+
+  console.log(initialValues);
 
   return (
     <NotePopup handleClose={handleClose} defaultFormValues={initialValues}>

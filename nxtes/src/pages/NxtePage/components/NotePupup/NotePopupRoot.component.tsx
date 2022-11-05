@@ -1,6 +1,5 @@
 import { AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { bClickActions } from "../../types";
 import NotePopupService from "./NotePopupService";
 import { EventDataType, PopupComponentType } from "./types";
 
@@ -9,13 +8,12 @@ interface RootPopupCompType extends EventDataType {
 }
 
 interface ListHeaderProps {
-  dispatch: React.Dispatch<bClickActions>;
   doesAlreadyExist: (newValue: string) => boolean;
 }
 
 const defaultPopUpCompState: RootPopupCompType = { component: null, close: () => {} };
 
-export const NotePopupRoot: React.FC<ListHeaderProps> = ({ dispatch, doesAlreadyExist }) => {
+export const NotePopupRoot: React.FC<ListHeaderProps> = ({ doesAlreadyExist }) => {
   const [popUpComp, setPopUpComp] = useState<RootPopupCompType>(defaultPopUpCompState);
 
   useEffect(() => {
@@ -39,12 +37,7 @@ export const NotePopupRoot: React.FC<ListHeaderProps> = ({ dispatch, doesAlready
   return (
     <AnimatePresence>
       {PopupComponent && (
-        <PopupComponent
-          {...popUpComp.customProps}
-          dispatch={dispatch}
-          doesAlreadyExist={doesAlreadyExist}
-          handleClose={popUpComp.close}
-        ></PopupComponent>
+        <PopupComponent {...popUpComp.customProps} doesAlreadyExist={doesAlreadyExist} handleClose={popUpComp.close}></PopupComponent>
       )}
     </AnimatePresence>
   );

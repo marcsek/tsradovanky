@@ -1,4 +1,4 @@
-import { ElementColors, NewNoteFormType } from "../../../types";
+import { NewNoteFormType, ElementColors } from "../types";
 
 export const defaultFormValues: NewNoteFormType = {
   text: { value: "", maxSize: 230 },

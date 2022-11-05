@@ -1,21 +1,12 @@
-import { GraphQLClient, gql } from "graphql-request";
+import { gql } from "graphql-request";
+import { ListValue } from "../pages/NxtePage/types";
 import { UserType } from "../types/user.type";
-import { LoginUserParams, RegisterUserParams } from "./types/inputTypes";
+import graphQLClient from "./GraphQLClient";
 
-const API_URL = "http://localhost:3001/graphql";
-
-const graphQLClient = new GraphQLClient(API_URL, {
-  errorPolicy: "ignore",
-  credentials: "include",
-  mode: "cors",
-  responseMiddleware(response) {
-    if (response instanceof Error) {
-      const error: any = JSON.parse(JSON.stringify(response, undefined, 2));
-
-      throw new Error(error.response.errors[0].message, { cause: error.response.errors[0] });
-    }
-  },
-});
+interface LoginUserParams {
+  email: string;
+  password: string;
+}
 
 export const loginUser = async (input: LoginUserParams): Promise<boolean> => {
   const { loginUser } = await graphQLClient.request(
@@ -43,6 +34,7 @@ export const logoutUser = async (): Promise<boolean> => {
 };
 
 export const getUser = async (): Promise<UserType> => {
+  await new Promise(resolve => setTimeout(resolve, 500));
   const { getUser } = await graphQLClient.request(gql`
     query {
       getUser {
@@ -55,6 +47,10 @@ export const getUser = async (): Promise<UserType> => {
 
   return getUser;
 };
+
+interface RegisterUserParams extends LoginUserParams {
+  name: string;
+}
 
 export const registerUser = async (input: RegisterUserParams): Promise<boolean> => {
   const { createUser } = await graphQLClient.request(
@@ -69,4 +65,27 @@ export const registerUser = async (input: RegisterUserParams): Promise<boolean> 
   );
 
   return createUser;
+};
+
+export const getUserNxtes = async (): Promise<ListValue[]> => {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const { getUserNxtes: userNxtes } = await graphQLClient.request(
+    gql`
+      query {
+        getUserNxtes {
+          title
+          color
+          value
+          createdAt
+          id
+        }
+      }
+    `
+  );
+  // parse date
+  const parsedNxtes: ListValue[] = userNxtes.map((nxte: ListValue) => {
+    return { ...nxte, createdAt: new Date(nxte.createdAt) };
+  });
+
+  return parsedNxtes;
 };

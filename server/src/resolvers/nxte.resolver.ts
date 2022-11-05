@@ -14,8 +14,8 @@ export default class NxteResolver {
 
   @UseMiddleware(isAuth)
   @Mutation(() => Nxte)
-  createNote(@Arg("input") input: NxteCreateInput) {
-    return this.nxteService.createNxte(input);
+  createNote(@Arg("input") input: NxteCreateInput, @Ctx() context: Context) {
+    return this.nxteService.createNxte(input, context.user?.id!);
   }
 
   @UseMiddleware(isAuth)

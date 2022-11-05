@@ -1,10 +1,9 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useLogin } from "../../../hooks";
+import { useLogin } from "../../../queries/queryHooks/User";
 import { Box, Link } from "@mui/material";
 import { useFormik } from "formik";
 import { loginValidationSchema } from "../schemas";
 import ErrorPupup from "./BuildingComponents/ErrorPupup.component";
-import { LoginUserParams } from "../../../queries/types/inputTypes";
 import { parseError } from "../../../utils/ParseError";
 
 import AuthTitle from "./BuildingComponents/AuthTitle.component";
@@ -15,13 +14,13 @@ import AuthButton from "./BuildingComponents/AuthButton.component";
 const LoginPage: React.FC = () => {
   const login = useLogin();
 
-  const formik = useFormik<LoginUserParams>({
+  const formik = useFormik({
     initialValues: {
       email: "ds@gmail.com",
       password: "kubo2013",
     },
     validationSchema: loginValidationSchema,
-    onSubmit: (values) => {
+    onSubmit: values => {
       login.mutate(values);
     },
   });
@@ -30,7 +29,15 @@ const LoginPage: React.FC = () => {
     <Box
       component="form"
       onSubmit={formik.handleSubmit}
-      sx={{ display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "center", height: "100%", gap: "40px", px: "40px" }}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
+        height: "100%",
+        gap: "40px",
+        px: "40px",
+      }}
     >
       <AuthTitle
         headingComp={
@@ -41,13 +48,13 @@ const LoginPage: React.FC = () => {
         subHeadComp={
           <>
             or&nbsp;
-            <Link sx={{ color: (theme) => theme.palette.text.secondary }} underline="hover" to="/auth/register" component={RouterLink}>
+            <Link sx={{ color: theme => theme.palette.text.secondary }} underline="hover" to="/auth/register" component={RouterLink}>
               create an account!
             </Link>
           </>
         }
       />
-      {login.isError && <ErrorPupup errorMessage={parseError(login.error).cause} />}
+      {login.isError && <ErrorPupup errorMessage={parseError(login.error as Error).cause} />}
       <Box sx={{ display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box", gap: "25px" }}>
         <AuthTextInput formik={formik} label="Email" name="email" />
         <AuthPasswordInput formik={formik} label="Password" name="password" />

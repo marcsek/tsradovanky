@@ -4,7 +4,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
-import { ElementColors, ListValue, NewNoteFormType } from "../../types";
+import { ElementColors, ListValue } from "../../types";
 import { elementAnimation, editButtonAnimation } from "./ElementAnimation";
 import styles from "./ListElement.module.css";
 import { dateFormatSettings } from "../../../../utils/DateFormatSettings";
@@ -18,19 +18,19 @@ interface ListElementProps {
   isLast: boolean;
   handleClick: (values: ListValue) => void;
   values: ListValue;
+  isSelected: boolean;
 }
 
-const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProps> = ({ isLast, handleClick, values }, ref) => {
+const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProps> = ({ isLast, handleClick, values, isSelected }, ref) => {
   const [isHovered, setHovered] = useState(false);
 
   const handleEditButtonClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    const currentElementValues: NewNoteFormType = {
-      text: { value: values.value, maxSize: 230 },
-      title: { value: values.title, maxSize: 50 },
-      color: values.color as ElementColors,
-    };
-    NotePopupService.open(EditNotePopup, { initialValues: currentElementValues, id: values.id });
+
+    NotePopupService.open(EditNotePopup, {
+      initialValues: { text: { value: values.color }, title: { value: values.title }, color: values.color as ElementColors },
+      id: values.id,
+    });
   };
 
   return (
@@ -47,16 +47,16 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
         className={styles.listElContainer}
         onClick={() => handleClick(values)}
         sx={{
-          color: (theme) => theme.palette.text.primary,
-          backgroundColor: (theme) => theme.palette.common.white,
+          color: theme => theme.palette.text.primary,
+          backgroundColor: theme => theme.palette.common.white,
         }}
       >
         <Box className={styles.listElTop}>
-          <Typography className={styles.elementTitle} sx={{ color: (theme) => theme.palette.text.primary }} variant="h4">
+          <Typography className={styles.elementTitle} sx={{ color: theme => theme.palette.text.primary }} variant="h4">
             {values.title}
           </Typography>
           <Checkbox
-            checked={values.checked}
+            checked={isSelected}
             className={styles.checkbox}
             onChange={() => handleClick(values)}
             checkedIcon={<CheckCircleRoundedIcon />}
@@ -70,13 +70,13 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
           />
         </Box>
         <Box className={styles.listElementBox}>
-          <Typography className={styles.elementText} variant="h5" sx={{ color: (theme) => theme.palette.text.disabled }}>
+          <Typography className={styles.elementText} variant="h5" sx={{ color: theme => theme.palette.text.disabled }}>
             {values.value}
           </Typography>
           <Stack flexDirection="row" alignItems="center" justifyContent="space-between" width="100%">
             <Box className={styles.elementColorIndicator} sx={{ backgroundColor: values.color }}></Box>
-            <Typography className={styles.elementDate} sx={{ color: (theme) => theme.palette.text.secondary }} variant="h6">
-              {values.date.toLocaleDateString("en-US", dateFormatSettings)}
+            <Typography className={styles.elementDate} sx={{ color: theme => theme.palette.text.secondary }} variant="h6">
+              {values.createdAt.toLocaleDateString("en-US", dateFormatSettings)}
             </Typography>
           </Stack>
         </Box>
@@ -88,8 +88,8 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
               onClick={handleEditButtonClick}
               {...editButtonAnimation}
               sx={{
-                color: (theme) => theme.palette.text.primary,
-                backgroundColor: (theme) => (theme.palette.mode === "dark" ? "rgba(42 42 42)" : "rgba(194, 194, 194, 0.5)"),
+                color: theme => theme.palette.text.primary,
+                backgroundColor: theme => (theme.palette.mode === "dark" ? "rgba(42 42 42)" : "rgba(194, 194, 194, 0.5)"),
               }}
             >
               <EditIcon sx={{ height: 18, width: 18 }} />

@@ -1,5 +1,4 @@
-import { EventDataType, PopupComponentType } from "./types";
-import { CustomNotePopupProps } from "../../types";
+import { EventDataType, PopupComponentType, CustomNotePopupProps } from "./types";
 
 const PopUpService = {
   on(eventName: string, callback: (data: EventDataType) => void) {
@@ -11,8 +10,7 @@ const PopUpService = {
   },
 
   open(component: PopupComponentType, customProps?: CustomNotePopupProps) {
-    const eventDetail: EventDataType = { component, customProps };
-    const event = new CustomEvent("open", { detail: eventDetail });
+    const event = new CustomEvent("open", { detail: { component, customProps } as EventDataType });
     document.dispatchEvent(event);
   },
 };

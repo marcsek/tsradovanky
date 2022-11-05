@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { ElementColors, NewNoteInpuType, NewNoteFormType } from "../../../types";
-import { PopupChildProps } from "../types";
+import { ElementColors, NewNoteInpuType, NewNoteFormType, PopupChildProps } from "../types";
 
 interface NewNotePopupExtra {
   children?: JSX.Element;
@@ -14,7 +13,7 @@ const NewNotePopup: React.FC<NewNotePopupExtra> = ({ children, defaultFormValues
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { color, ...onlyTextValues } = formValues;
 
-    if (onlyTextValues[event.target.name as keyof NewNoteInpuType].maxSize >= event.target.value.length) {
+    if (onlyTextValues[event.target.name as keyof NewNoteInpuType].maxSize! >= event.target.value.length) {
       setFormValues({
         ...formValues,
         [event.target.name]: { ...onlyTextValues[event.target.name as keyof NewNoteInpuType], value: event.target.value },
@@ -31,7 +30,7 @@ const NewNotePopup: React.FC<NewNotePopupExtra> = ({ children, defaultFormValues
     setFormValues({ ...formValues, color });
   };
 
-  const childrenWithProps = React.Children.map(children, (child) => {
+  const childrenWithProps = React.Children.map(children, child => {
     if (React.isValidElement<PopupChildProps>(child)) {
       return React.cloneElement(child, {
         handleColorChange,

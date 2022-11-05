@@ -6,11 +6,11 @@ import { NxteDeleteManyOutput } from "../resolvers/outputs";
 const prisma = new PrismaClient();
 
 export default class NxteService {
-  async createNxte(input: NxteCreateInput): Promise<Nxte> {
+  async createNxte(input: NxteCreateInput, id: string): Promise<Nxte> {
     let Nxte;
 
     try {
-      Nxte = await prisma.nxte.create({ data: input });
+      Nxte = await prisma.nxte.create({ data: { ...input, creatorId: id } });
     } catch (error) {
       console.log(error);
       throw new ApolloError("There was an error while creating Nxte");

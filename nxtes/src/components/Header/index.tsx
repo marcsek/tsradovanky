@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import style from "./Header.module.css";
 import ThemeSwitch from "./HeaderThemeSwitch";
-import useLogout from "../../hooks/useLogout";
+import { useLogout } from "../../queries/queryHooks/User";
 import { useMyTheme } from "../../context/themeContext";
 
 const Header: React.FC = () => {
@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   const myTheme = useMyTheme();
 
   return (
-    <Box sx={{ backgroundColor: (theme) => theme.palette.action.active }} className={style.header}>
+    <Box sx={{ backgroundColor: theme => theme.palette.action.active }} className={style.header}>
       {/* <h3 style={{ marginRight: "200px" }}>{user?.name}</h3> */}
       <h6
         onClick={() => {
@@ -21,11 +21,18 @@ const Header: React.FC = () => {
       >
         Logout
       </h6>
-      {/* <Link to="/userpage">UserPage</Link>
-      <Link to="/board">Nxte Board</Link> */}
+      {/* <h6
+        onClick={() => {
+          logout.mutate({});
+        }}
+      >
+        Logout
+      </h6> */}
+      <Link to="/">UserPage</Link>
+      <Link to="/board">Nxte Board</Link>
       <ThemeSwitch
         defaultChecked
-        onChange={(e) => {
+        onChange={e => {
           myTheme.setTheme(!e.target.checked);
         }}
       />
