@@ -5,9 +5,10 @@ import { toast } from "react-toastify";
 import { defaultFormValues } from "./DefaultFormValues";
 import NoteBody from "../NotePopUpBuildingEl/NoteBody";
 import { useCreateNxte } from "../../../../../queries/queryHooks/Nxte";
+import { v4 as uuidv4 } from "uuid";
 
 const NewNotePopUp: React.FC<NewNotePopupProps> = ({ doesAlreadyExist, handleClose }) => {
-  const { mutate } = useCreateNxte(handleClose);
+  const { mutate } = useCreateNxte();
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>, formValues?: NewNoteFormType) => {
     e.preventDefault();
@@ -21,7 +22,8 @@ const NewNotePopUp: React.FC<NewNotePopupProps> = ({ doesAlreadyExist, handleClo
     }
 
     if (formValues.text.value && formValues.title.value) {
-      mutate({ value: formValues.text.value, title: formValues.title.value, color: formValues.color });
+      mutate({ value: formValues.text.value, title: formValues.title.value, color: formValues.color, id: uuidv4() });
+      handleClose();
     }
   };
 

@@ -28,7 +28,11 @@ const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProp
     e.stopPropagation();
 
     NotePopupService.open(EditNotePopup, {
-      initialValues: { text: { value: values.color }, title: { value: values.title }, color: values.color as ElementColors },
+      initialValues: {
+        text: { value: values.value, maxSize: 230 },
+        title: { value: values.title, maxSize: 50 },
+        color: values.color as ElementColors,
+      },
       id: values.id,
     });
   };

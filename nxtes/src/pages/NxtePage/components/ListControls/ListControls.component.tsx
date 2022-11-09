@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { selectedCountAnimation } from "./ListControlsAnimations";
 import { DispatchSelectAction } from "../../customHooks/useSelectedNxtes";
 import { useDeleteNxtes } from "../../../../queries/queryHooks/Nxte";
+import MyLoadingButton from "../../../../custom-material-styles/LoadingButton";
 
 interface ListControlProps {
   filteredSelectedIds: string[];
@@ -20,7 +21,7 @@ interface ListControlProps {
 }
 
 const ListControls: React.FC<ListControlProps> = ({ filteredSelectedIds, shouldBeChecked, selected, dispatchSelect }) => {
-  const { mutate: deleteNxtes } = useDeleteNxtes();
+  const { mutate: deleteNxtes, isLoading: isDeleting } = useDeleteNxtes();
 
   return (
     <Stack className={styles.formControl}>
@@ -69,19 +70,25 @@ const ListControls: React.FC<ListControlProps> = ({ filteredSelectedIds, shouldB
       </Stack>
       <ControlButton
         className={styles.inputButton}
-        shouldDisable={filteredSelectedIds.length === 0}
+        disabled={filteredSelectedIds.length === 0}
         sx={{ outlineColor: theme => theme.palette.divider }}
         backgroundcolor="rgba(54, 95, 255, 1)"
         type="submit"
+        variant="contained"
       >
         <DoneAllIcon />
         Finish Selected
       </ControlButton>
-      <ControlButton
+      <MyLoadingButton
         className={styles.inputButton}
-        shouldDisable={filteredSelectedIds.length === 0}
+        // shouldDisable={filteredSelectedIds.length === 0 || isDeleting}
+        disabled={filteredSelectedIds.length === 0 || isDeleting}
         backgroundcolor="rgba(255, 49, 61, 1)"
-        sx={{ outlineColor: theme => theme.palette.divider }}
+        loading={isDeleting}
+        variant="contained"
+        sx={{
+          outlineColor: theme => theme.palette.divider,
+        }}
         onClick={e => {
           e.preventDefault();
           deleteNxtes({ ids: filteredSelectedIds });
@@ -89,7 +96,7 @@ const ListControls: React.FC<ListControlProps> = ({ filteredSelectedIds, shouldB
       >
         <DeleteOutlineIcon />
         Remove Selected
-      </ControlButton>
+      </MyLoadingButton>
     </Stack>
   );
 };

@@ -23,10 +23,9 @@ const EditNotePopUp: React.FC<NewNotePopupProps> = ({ doesAlreadyExist, handleCl
         id: id ?? "",
         newValues: { value: formValues.text.value, title: formValues.title.value, color: formValues.color as string },
       });
+      handleClose();
     }
   };
-
-  console.log(initialValues);
 
   return (
     <NotePopup handleClose={handleClose} defaultFormValues={initialValues}>

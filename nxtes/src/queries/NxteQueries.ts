@@ -1,7 +1,8 @@
 import { gql } from "graphql-request";
 import graphQLClient from "./GraphQLClient";
+import { parseDate } from "./UserQueries";
 
-interface NxteOutput {
+export interface NxteOutput {
   title: string;
   value: string;
   id: string;
@@ -9,7 +10,8 @@ interface NxteOutput {
   color: string;
 }
 
-export const createNxte = async (input: { title: string; value: string; color: string }): Promise<NxteOutput> => {
+// the id is generated on client beacause of an optimistic update
+export const createNxte = async (input: { title: string; value: string; color: string; id: string }): Promise<NxteOutput> => {
   const { createNote } = await graphQLClient.request(
     gql`
       mutation createNxte($input: NxteCreateInput!) {
@@ -29,6 +31,7 @@ export const createNxte = async (input: { title: string; value: string; color: s
 interface DeleteNxteOutput {
   Nxte: NxteOutput[];
   count: number;
+  deletedIds: string[];
 }
 
 export const deleteNxtes = async (input: { ids: string[] }): Promise<DeleteNxteOutput> => {
@@ -41,6 +44,8 @@ export const deleteNxtes = async (input: { ids: string[] }): Promise<DeleteNxteO
             value
             title
             color
+            id
+            createdAt
           }
         }
       }
@@ -48,7 +53,7 @@ export const deleteNxtes = async (input: { ids: string[] }): Promise<DeleteNxteO
     { input }
   );
 
-  return deleteManyNxtes;
+  return { ...deleteManyNxtes, Nxte: parseDate(deleteManyNxtes.Nxte) };
 };
 
 export const updateNxte = async (input: {

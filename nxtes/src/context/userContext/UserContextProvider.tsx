@@ -1,15 +1,14 @@
-import { useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUser } from "../../queries/UserQueries";
-import { UserType } from "../../types/user.type";
 import { UserContext } from "./UserContext";
 
 export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const queryClient = useQueryClient();
 
-  const { data: user }: UseQueryResult<UserType, Error> = useQuery<UserType, Error>(["user"], getUser, {
+  const { data: user } = useQuery(["user"], getUser, {
     onError(err) {
       console.log(err);
-      if (err.message === "not authenticated") {
+      if ((err as Error).message === "not authenticated") {
         queryClient.setQueryData(["user"], null);
       }
     },

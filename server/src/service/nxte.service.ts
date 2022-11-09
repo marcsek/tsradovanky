@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 export default class NxteService {
   async createNxte(input: NxteCreateInput, id: string): Promise<Nxte> {
     let Nxte;
-
     try {
       Nxte = await prisma.nxte.create({ data: { ...input, creatorId: id } });
     } catch (error) {
@@ -115,6 +114,6 @@ export default class NxteService {
       throw new ApolloError("Couldnt delete these Nxtes");
     }
 
-    return { count: deletionResult.count, Nxte: leftPostsResult?.Nxte ?? [] };
+    return { count: deletionResult.count, Nxte: leftPostsResult?.Nxte ?? [], ids: postIDs };
   }
 }

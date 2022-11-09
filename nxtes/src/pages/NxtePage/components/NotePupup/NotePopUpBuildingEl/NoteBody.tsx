@@ -110,10 +110,11 @@ const NoteBody: React.FC<PopupChildProps> = ({
             </Stack>
             <ControlButton
               className={styles.inputButton}
-              shouldDisable={shouldDisableBtn}
+              disabled={shouldDisableBtn}
               sx={{ outlineColor: theme => theme.palette.divider }}
               backgroundcolor="rgba(54, 95, 255, 1)"
               type="submit"
+              variant="contained"
             >
               {ButtonTextVariant}
             </ControlButton>

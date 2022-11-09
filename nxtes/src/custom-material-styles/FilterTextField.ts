@@ -7,7 +7,7 @@ type FilterText = TextFieldProps & {
 };
 
 const FilterTextField = styled(TextField, {
-  shouldForwardProp: (prop) => prop !== "shouldShowBorder",
+  shouldForwardProp: prop => prop !== "shouldShowBorder",
 })<FilterText>(({ shouldShowBorder, theme, error }) => ({
   padding: 0,
   width: "100%",
@@ -21,7 +21,6 @@ const FilterTextField = styled(TextField, {
     zIndex: 1,
   },
   textarea: {
-    color: theme.palette.text.disabled,
     zIndex: 1,
   },
   label: {

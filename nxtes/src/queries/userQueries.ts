@@ -22,7 +22,6 @@ export const loginUser = async (input: LoginUserParams): Promise<boolean> => {
 };
 
 export const logoutUser = async (): Promise<boolean> => {
-  console.log("logout");
   const { logoutUser } = await graphQLClient.request(
     gql`
       mutation {
@@ -34,7 +33,6 @@ export const logoutUser = async (): Promise<boolean> => {
 };
 
 export const getUser = async (): Promise<UserType> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
   const { getUser } = await graphQLClient.request(gql`
     query {
       getUser {
@@ -68,7 +66,6 @@ export const registerUser = async (input: RegisterUserParams): Promise<boolean> 
 };
 
 export const getUserNxtes = async (): Promise<ListValue[]> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
   const { getUserNxtes: userNxtes } = await graphQLClient.request(
     gql`
       query {
@@ -83,9 +80,12 @@ export const getUserNxtes = async (): Promise<ListValue[]> => {
     `
   );
   // parse date
-  const parsedNxtes: ListValue[] = userNxtes.map((nxte: ListValue) => {
+
+  return parseDate(userNxtes as ListValue[]);
+};
+
+export const parseDate = (userNxtes: ListValue[]) => {
+  return userNxtes.map((nxte: ListValue) => {
     return { ...nxte, createdAt: new Date(nxte.createdAt) };
   });
-
-  return parsedNxtes;
 };
