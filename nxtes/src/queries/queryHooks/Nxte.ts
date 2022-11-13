@@ -89,7 +89,7 @@ export const useDeleteNxtes = () => {
       }
 
       toast.success(`${leftNxte.count} reminders were deleted!`);
-      queryClient.refetchQueries(["nxtes"]);
+      queryClient.invalidateQueries(["nxtes"]);
     },
   });
 };
