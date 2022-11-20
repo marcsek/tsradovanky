@@ -7,8 +7,14 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 10%;
   box-sizing: border-box;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 20px -10px;
   z-index: 100;
+  padding: 10px 10% 10px 0%;
+  gap: 25px;
+}
+
+.link {
+  font-size: 1.05rem;
+  text-decoration: none;
 }

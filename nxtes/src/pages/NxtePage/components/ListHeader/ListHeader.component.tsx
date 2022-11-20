@@ -24,9 +24,6 @@ const ListHeader: React.FC<ListHeaderProps> = ({ setFilters }) => {
           backgroundColor: theme => theme.palette.background.default,
           color: theme => theme.palette.text.primary,
           transition: "background-color 0.12s ease-in-out",
-          "&:hover": {
-            backgroundColor: theme => (theme.palette.mode === "dark" ? "rgba(234, 235, 241, 0.16);" : "rgba(33, 43, 54, 0.08);"),
-          },
         }}
         onClick={handleNewNoteClick}
       >

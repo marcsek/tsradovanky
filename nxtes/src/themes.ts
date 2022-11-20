@@ -19,6 +19,7 @@ const darkTheme = createTheme({
     action: {
       disabledBackground: "#5e5e5e25",
       active: "rgb(23,23,23)",
+      hover: "rgba(234, 235, 241, 0.16)",
     },
     common: {
       white: "#5e5e5e25",
@@ -73,6 +74,7 @@ const lightTheme = createTheme({
     action: {
       disabledBackground: "#F4F6F8",
       active: "rgb(251,252,252)",
+      hover: "rgba(33, 43, 54, 0.08)",
     },
     common: {
       white: "#F4F6F8",

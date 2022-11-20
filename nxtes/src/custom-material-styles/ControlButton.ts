@@ -18,7 +18,7 @@ const ControlButton = styled(Button, {
 
   "&:hover": {
     boxShadow: "none",
-    backgroundColor,
+    backgroundColor: backgroundColor ? backgroundColor : theme.palette.action.hover,
   },
 }));
 
