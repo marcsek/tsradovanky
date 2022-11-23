@@ -1,4 +1,4 @@
-import { useEffect, useRef, memo } from "react";
+import { memo } from "react";
 import { ListValue } from "../../types";
 import styles from "../../StyleLandingPage.module.css";
 
@@ -12,24 +12,10 @@ interface ListControlProps {
   listValues: ListValue[];
   selected: Map<string, boolean>;
   dispatchSelect: React.Dispatch<DispatchSelectAction>;
+  dataExists: boolean;
 }
 
-let lastLength = 0;
-
-const NxteBoard: React.FC<ListControlProps> = ({ listValues, selected, dispatchSelect }) => {
-  const scollToRef = useRef<HTMLLIElement>(null);
-
-  useEffect(() => {
-    if (lastLength < listValues.length) {
-      scollToRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    lastLength = listValues.length;
-  }, [listValues]);
-
-  const isLastElement = (index: number): boolean => {
-    return index === listValues.length - 1;
-  };
-
+const NxteBoard: React.FC<ListControlProps> = ({ listValues, selected, dispatchSelect, dataExists }) => {
   const handleElementClick = (values: ListValue) => {
     dispatchSelect({ type: "switchOne", id: values.id, value: !selected.get(values.id) ?? false });
   };
@@ -47,19 +33,26 @@ const NxteBoard: React.FC<ListControlProps> = ({ listValues, selected, dispatchS
             component={motion.div}
             {...inputListAnimation}
             variant="h4"
-            initial={false}
+            // initial={false}
             className={styles.noReminders}
             sx={{ color: theme => theme.palette.text.primary }}
           >
             <p>
-              No <span>Nxtes</span>, add some...
+              {!dataExists ? (
+                <>
+                  No <span>Nxtes</span>, add some...
+                </>
+              ) : (
+                <>
+                  No <span>Nxtes</span>, for these filters...
+                </>
+              )}
             </p>
           </Typography>
         ) : (
           listValues.map((listValue, index) => {
             return (
               <ListElement
-                isLast={isLastElement(index)}
                 key={listValue.id}
                 handleClick={handleElementClick}
                 values={listValue}

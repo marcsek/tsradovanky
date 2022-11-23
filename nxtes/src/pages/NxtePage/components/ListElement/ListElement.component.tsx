@@ -15,13 +15,12 @@ import NotePopupService from "../NotePupup/NotePopupService";
 import EditNotePopup from "../NotePupup/NotePopupElements/EditNotePopUp";
 
 interface ListElementProps {
-  isLast: boolean;
   handleClick: (values: ListValue) => void;
   values: ListValue;
   isSelected: boolean;
 }
 
-const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProps> = ({ isLast, handleClick, values, isSelected }, ref) => {
+const ListElement: React.ForwardRefRenderFunction<HTMLLIElement, ListElementProps> = ({ handleClick, values, isSelected }, ref) => {
   const [isHovered, setHovered] = useState(false);
 
   const handleEditButtonClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

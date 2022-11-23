@@ -1,14 +1,13 @@
 import React from "react";
-import { Box, Link, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import ControlButton from "../../../custom-material-styles/ControlButton";
-import { Link as RouterLink } from "react-router-dom";
-import { useLogout } from "../../../queries/queryHooks/User";
-import { useUser } from "../../../context/userContext";
+import { useLogout } from "../../../../queries/queryHooks/User";
+import { useUser } from "../../../../context/userContext";
 import { motion } from "framer-motion";
-import ThemeSwitch from "../HeaderThemeSwitch";
-import { useMyTheme } from "../../../context/themeContext";
+import ThemeSwitch from "../../HeaderThemeSwitch";
+import { useMyTheme } from "../../../../context/themeContext";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import DropMenuItem from "./DropMenuItem.component";
 
 const DropMenu: React.FC = () => {
   const logout = useLogout();
@@ -63,26 +62,8 @@ const DropMenu: React.FC = () => {
       </Stack>
 
       <Divider sx={{ mx: "-10px" }} />
-      <DropMenuItem to="" title="Logout" onClick={() => logout.mutate({})} />
+      <DropMenuItem title="Logout" onClick={() => logout.mutate({})} />
     </Box>
-  );
-};
-
-const DropMenuItem: React.FC<{ title: string; to: string; onClick?: () => void }> = ({ title, to, onClick }) => {
-  return (
-    <ControlButton
-      onClick={onClick}
-      sx={{
-        justifyContent: "flex-start",
-        width: "100%",
-        py: "4px",
-        fontSize: "0.85rem",
-      }}
-    >
-      <Link sx={{ color: theme => theme.palette.text.disabled }} to={to} underline="none" component={RouterLink}>
-        {title}
-      </Link>
-    </ControlButton>
   );
 };
 

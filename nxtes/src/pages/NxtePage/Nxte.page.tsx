@@ -15,7 +15,7 @@ import useSelectedNxtes from "./customHooks/useSelectedNxtes";
 const NxtePage: React.FC = () => {
   const { data: nxtes } = useNxtes();
   const [filtered, setFilters] = useListFilters(nxtes);
-  const { selected, dispatchSelect, getFilteredSelectedIds, areAllFilteredSelected } = useSelectedNxtes(filtered.filteredList);
+  const { selected, dispatchSelect, getFilteredSelectedIds, areAllFilteredSelected } = useSelectedNxtes(filtered?.filteredList ?? []);
 
   const doesAlreadyExist = (newValue: string): boolean => {
     return nxtes.find(listValue => listValue.value === newValue) === undefined;
@@ -23,16 +23,22 @@ const NxtePage: React.FC = () => {
 
   useEffect(() => {
     console.log("render");
+    console.log(filtered);
   });
 
   return (
     <div className={styles.LandingContainer}>
       <NotePopupRoot doesAlreadyExist={doesAlreadyExist} />
       <ListHeader setFilters={setFilters} />
-      <NxteBoard listValues={filtered.filteredList} selected={selected} dispatchSelect={dispatchSelect} />
+      <NxteBoard
+        listValues={filtered?.filteredList ?? []}
+        selected={selected}
+        dispatchSelect={dispatchSelect}
+        dataExists={nxtes.length !== 0}
+      />
       <ListControls
-        shouldBeChecked={areAllFilteredSelected(filtered.filteredIds)}
-        filteredSelectedIds={getFilteredSelectedIds(filtered.filteredIds)}
+        shouldBeChecked={areAllFilteredSelected(filtered?.filteredIds ?? [])}
+        filteredSelectedIds={getFilteredSelectedIds(filtered?.filteredIds ?? [])}
         selected={selected}
         dispatchSelect={dispatchSelect}
       />

@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import styles from "./ProfileDrop.module.css";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { useTheme } from "@mui/material/styles";
-import DropMenu from "./DropMenu.component";
+import DropMenu from "./DropMenu/DropMenu.component";
 import { AnimatePresence, motion } from "framer-motion";
 
 const ProfileDrop: React.FC = () => {
