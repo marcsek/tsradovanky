@@ -6,24 +6,24 @@ import { UserCount } from "../resolvers/outputs";
   isAbstract: true,
 })
 export class UserWP {
-  @TypeGraphQL.Field((_type) => String, {
-    nullable: false,
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
   })
-  id!: string;
+  id?: string;
 
-  @TypeGraphQL.Field((_type) => String, {
-    nullable: false,
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
   })
-  name!: string;
+  name?: string;
 
-  @TypeGraphQL.Field((_type) => String, {
-    nullable: false,
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
   })
-  email!: string;
+  email?: string;
 
   Nxte?: Nxte[];
 
-  @TypeGraphQL.Field((_type) => UserCount, {
+  @TypeGraphQL.Field(_type => UserCount, {
     nullable: true,
   })
   _count?: UserCount | null;

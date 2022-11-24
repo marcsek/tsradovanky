@@ -2,11 +2,11 @@ import { memo } from "react";
 import { ListValue } from "../../types";
 import styles from "../../StyleLandingPage.module.css";
 
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { ListElement } from "../index";
 import { AnimatePresence, motion } from "framer-motion";
-import { inputListAnimation } from "./InputListAnimation";
 import { DispatchSelectAction } from "../../customHooks/useSelectedNxtes";
+import NoNxteInfo from "./NoNxteInfo/NoNxteInfo.component";
 
 interface ListControlProps {
   listValues: ListValue[];
@@ -29,26 +29,7 @@ const NxteBoard: React.FC<ListControlProps> = ({ listValues, selected, dispatchS
     >
       <AnimatePresence mode="popLayout">
         {listValues.length === 0 ? (
-          <Typography
-            component={motion.div}
-            {...inputListAnimation}
-            variant="h4"
-            // initial={false}
-            className={styles.noReminders}
-            sx={{ color: theme => theme.palette.text.primary }}
-          >
-            <p>
-              {!dataExists ? (
-                <>
-                  No <span>Nxtes</span>, add some...
-                </>
-              ) : (
-                <>
-                  No <span>Nxtes</span>, for these filters...
-                </>
-              )}
-            </p>
-          </Typography>
+          <NoNxteInfo title={dataExists ? "No Nxte matches filters" : "No Nxtes"} />
         ) : (
           listValues.map((listValue, index) => {
             return (

@@ -1,15 +1,19 @@
 import { Nxte, PrismaClient } from "@prisma/client";
 import { ApolloError } from "apollo-server-express";
+import graphqlFields from "graphql-fields";
 import { DeleteManyNxteInput, NxteCreateInput, NxteUpdateInput } from "../resolvers/inputs";
-import { NxteDeleteManyOutput } from "../resolvers/outputs";
+import { NxteDeleteManyOutput, NxteSelectionOutput } from "../resolvers/outputs";
+import { transformFields } from "../utils/transformfields";
 
 const prisma = new PrismaClient();
 
 export default class NxteService {
-  async createNxte(input: NxteCreateInput, id: string): Promise<Nxte> {
+  async createNxte(input: NxteCreateInput, id: string, info: any): Promise<NxteSelectionOutput> {
     let Nxte;
+    const selection = transformFields(graphqlFields(info));
+
     try {
-      Nxte = await prisma.nxte.create({ data: { ...input, creatorId: id } });
+      Nxte = await prisma.nxte.create({ data: { ...input, creatorId: id }, select: { ...selection } });
     } catch (error) {
       console.log(error);
       throw new ApolloError("There was an error while creating Nxte");
@@ -18,10 +22,12 @@ export default class NxteService {
     return Nxte;
   }
 
-  async updateNxte(input: NxteUpdateInput, userID: string): Promise<Nxte> {
-    let allNxtes;
+  async updateNxte(input: NxteUpdateInput, userID: string, info: any): Promise<NxteSelectionOutput> {
+    let updatedNxte;
+    const selection = transformFields(graphqlFields(info));
+
     try {
-      allNxtes = await prisma.user.update({
+      updatedNxte = await prisma.user.update({
         where: {
           id: userID,
         },
@@ -36,24 +42,32 @@ export default class NxteService {
           },
         },
         select: {
-          Nxte: true,
+          Nxte: {
+            where: {
+              id: input.id,
+            },
+            select: {
+              ...selection,
+            },
+          },
         },
       });
     } catch (error) {
       throw new ApolloError("Couldnt update this Nxte");
     }
+    updatedNxte = updatedNxte.Nxte.at(-1);
 
-    const updatedElement = allNxtes.Nxte.at(-1);
-
-    if (!updatedElement) {
+    if (!updatedNxte) {
       throw new ApolloError("Error getting Nxte");
     }
 
-    return updatedElement;
+    return updatedNxte;
   }
 
-  async deleteOneNxte(postID: string, userID: string): Promise<Nxte[]> {
+  async deleteOneNxte(postID: string, userID: string, info: any): Promise<NxteSelectionOutput[]> {
     let deletion;
+    const selection = transformFields(graphqlFields(info));
+
     try {
       deletion = await prisma.user.update({
         where: {
@@ -67,7 +81,7 @@ export default class NxteService {
           },
         },
         select: {
-          Nxte: true,
+          Nxte: { select: { ...selection } },
         },
       });
     } catch (error) {
@@ -76,9 +90,11 @@ export default class NxteService {
     return deletion.Nxte;
   }
 
-  async deleteManyNxtes({ ids: postIDs }: DeleteManyNxteInput, userID: string): Promise<NxteDeleteManyOutput> {
+  async deleteManyNxtes({ ids: postIDs }: DeleteManyNxteInput, userID: string, info: any): Promise<NxteDeleteManyOutput> {
     let deletionResult;
     let leftPostsResult;
+
+    const selection = transformFields(graphqlFields(info));
 
     const deletionAction = prisma.nxte.deleteMany({
       where: {
@@ -102,18 +118,26 @@ export default class NxteService {
         id: userID,
       },
       select: {
-        Nxte: true,
+        Nxte: { select: { ...selection.Nxte } },
       },
     });
 
     try {
-      const results = await prisma.$transaction([deletionAction, leftPostsAction]);
-      deletionResult = results[0];
-      leftPostsResult = results[1];
+      if (selection.Nxte) {
+        const results = await prisma.$transaction([deletionAction, leftPostsAction]);
+        deletionResult = results[0];
+        leftPostsResult = results[1];
+      } else {
+        deletionResult = await deletionAction;
+      }
+
+      if (deletionResult.count !== postIDs.length) {
+        throw new Error();
+      }
+
+      return { count: deletionResult.count, Nxte: leftPostsResult?.Nxte ?? [], ids: postIDs };
     } catch (error) {
       throw new ApolloError("Couldnt delete these Nxtes");
     }
-
-    return { count: deletionResult.count, Nxte: leftPostsResult?.Nxte ?? [], ids: postIDs };
   }
 }

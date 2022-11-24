@@ -1,22 +1,23 @@
 import * as TypeGraphQL from "type-graphql";
 import { Nxte } from "../../../model/nxte.model";
+import { NxteSelectionOutput } from "./NxteSelectionOutput.output";
 
 @TypeGraphQL.ObjectType("NxteDeleteManyOutput", {
   isAbstract: true,
 })
 export class NxteDeleteManyOutput {
   @TypeGraphQL.Field(_type => [Nxte], {
-    nullable: false,
+    nullable: true,
   })
-  Nxte!: Nxte[];
+  Nxte?: NxteSelectionOutput[];
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false,
+    nullable: true,
   })
-  count!: number;
+  count?: number;
 
   @TypeGraphQL.Field(_type => [String], {
-    nullable: false,
+    nullable: true,
   })
-  ids!: string[];
+  ids?: string[];
 }

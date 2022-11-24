@@ -1,12 +1,15 @@
-import { Nxte, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { ApolloError } from "apollo-server-express";
 import bcrypt from "bcrypt";
+import graphqlFields from "graphql-fields";
 import { prismaHashPassword } from "../middleware";
 import { User } from "../model/user.model";
 import { UserWP } from "../model/userWithoutPassword";
 import { CreateUserInput, LoginInput, UpdateUserInput } from "../resolvers/inputs";
 import Context from "../types/context";
 import { signJwt } from "../utils/jwt";
+import { transformFields } from "../utils/transformfields";
+import { NxteSelectionOutput } from "../resolvers/outputs";
 
 const prisma = new PrismaClient();
 
@@ -43,10 +46,12 @@ export default class UserService {
     return user;
   }
 
-  async createUser(input: CreateUserInput): Promise<UserWP> {
+  async createUser(input: CreateUserInput, info: any): Promise<UserWP> {
     let createdUser;
+    const selection = transformFields(graphqlFields(info));
+
     try {
-      createdUser = await prisma.user.create({ data: input });
+      createdUser = await prisma.user.create({ data: input, select: { ...selection } });
     } catch (error) {
       throw new ApolloError("User alredy exists");
     }
@@ -95,13 +100,16 @@ export default class UserService {
     return true;
   }
 
-  async getUser(input: string): Promise<UserWP> {
+  async getUser(input: string, info: any): Promise<UserWP> {
     let user;
+    const selection = transformFields(graphqlFields(info));
+
     try {
       user = await prisma.user.findUnique({
         where: {
           id: input,
         },
+        select: { ...selection },
       });
     } catch (error) {
       throw new ApolloError(`Could not get user (provided id: ${input})`);
@@ -110,19 +118,24 @@ export default class UserService {
     if (!user) {
       throw new ApolloError("User doesnt exist");
     }
-
     return user;
   }
 
-  async getUsersNxtes(input: string): Promise<Nxte[]> {
+  async getUsersNxtes(input: string, info: any): Promise<NxteSelectionOutput[]> {
     let user;
+    const selection = transformFields(graphqlFields(info));
+
     try {
       user = await prisma.user.findUnique({
         where: {
           id: input,
         },
         select: {
-          Nxte: true,
+          Nxte: {
+            select: {
+              ...selection,
+            },
+          },
         },
       });
     } catch (error) {
@@ -134,14 +147,19 @@ export default class UserService {
     return user.Nxte;
   }
 
-  async updateUser(input: UpdateUserInput): Promise<User> {
-    let updatedUser: User;
+  async updateUser(input: UpdateUserInput, info: any): Promise<UserWP> {
+    let updatedUser: UserWP;
+    const selection = transformFields(graphqlFields(info));
+
     try {
       updatedUser = await prisma.user.update({
         where: {
           id: input.id,
         },
         data: input.newValues,
+        select: {
+          ...selection,
+        },
       });
     } catch (error) {
       throw new ApolloError("Couldnt update this User");
@@ -150,7 +168,6 @@ export default class UserService {
     if (!updatedUser) {
       throw new ApolloError("Error getting User");
     }
-
     return updatedUser;
   }
 }
