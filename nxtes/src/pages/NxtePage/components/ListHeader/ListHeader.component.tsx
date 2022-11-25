@@ -1,14 +1,14 @@
 import { Stack } from "@mui/material";
-import { SetFiltersType } from "../../types";
 import { ListFilters } from "../index";
 import styles from "./ListHeader.module.css";
 import AddIcon from "@mui/icons-material/Add";
 import ControlButton from "../../../../custom-material-styles/ControlButton";
 import NotePopupService from "../NotePupup/NotePopupService";
 import NewNotePopUp from "../NotePupup/NotePopupElements/NewNotePopUp";
+import { FiltersTypes } from "../../types";
 
 interface ListHeaderProps {
-  setFilters: SetFiltersType;
+  setFilters: React.Dispatch<React.SetStateAction<FiltersTypes>>;
 }
 
 const ListHeader: React.FC<ListHeaderProps> = ({ setFilters }) => {

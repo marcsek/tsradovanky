@@ -1,21 +1,18 @@
 import { gql } from "graphql-request";
 import graphQLClient from "./GraphQLClient";
-import { parseDate } from "./UserQueries";
 
-export interface NxteOutput {
-  title: string;
-  value: string;
-  id: string;
-  createdAt: Date;
-  color: string;
-}
+import { handleZodParseSchema } from "../utils/handleZodParseSchema";
+import { NxteSchema } from "./schemas/Nxte";
+import { z } from "zod";
+import { parseDate } from "../utils/parseDate";
 
 // the id is generated on client beacause of an optimistic update
-export const createNxte = async (input: { title: string; value: string; color: string; id: string }): Promise<NxteOutput> => {
-  const { createNote } = await graphQLClient.request(
+export const createNxte = async (input: { title: string; value: string; color: string; id: string }) => {
+  const { createNote: createdNxte } = await graphQLClient.request(
     gql`
       mutation createNxte($input: NxteCreateInput!) {
         createNote(input: $input) {
+          id
           title
           color
           value
@@ -25,16 +22,13 @@ export const createNxte = async (input: { title: string; value: string; color: s
     { input }
   );
 
-  return createNote;
+  const PartialNxteSchema = NxteSchema.omit({ createdAt: true });
+  return handleZodParseSchema<z.infer<typeof PartialNxteSchema>>(PartialNxteSchema, createdNxte);
 };
 
-interface DeleteNxteOutput {
-  Nxte: NxteOutput[];
-  count: number;
-  deletedIds: string[];
-}
+const DeletedNxteSchema = z.object({ count: z.number(), Nxte: NxteSchema.array() });
 
-export const deleteNxtes = async (input: { ids: string[] }): Promise<DeleteNxteOutput> => {
+export const deleteNxtes = async (input: { ids: string[] }) => {
   const { deleteManyNxtes } = await graphQLClient.request(
     gql`
       mutation deleteManyNxtes($input: DeleteManyNxteInput!) {
@@ -53,25 +47,26 @@ export const deleteNxtes = async (input: { ids: string[] }): Promise<DeleteNxteO
     { input }
   );
 
-  return { ...deleteManyNxtes, Nxte: parseDate(deleteManyNxtes.Nxte) };
+  return handleZodParseSchema<z.infer<typeof DeletedNxteSchema>>(DeletedNxteSchema, {
+    ...deleteManyNxtes,
+    Nxte: parseDate(deleteManyNxtes.Nxte),
+  });
 };
 
-export const updateNxte = async (input: {
-  id: string;
-  newValues: { title?: string; value?: string; color?: string };
-}): Promise<NxteOutput> => {
-  const { updateNote } = await graphQLClient.request(
+export const updateNxte = async (input: { id: string; newValues: { title?: string; value?: string; color?: string } }) => {
+  const { updateNote: updatedNxte } = await graphQLClient.request(
     gql`
       mutation updateNote($input: NxteUpdateInput!) {
         updateNote(input: $input) {
-          value
           title
           color
+          value
         }
       }
     `,
     { input }
   );
 
-  return updateNote;
+  const PartialNxteSchema = NxteSchema.omit({ createdAt: true, id: true });
+  return handleZodParseSchema<z.infer<typeof PartialNxteSchema>>(PartialNxteSchema, updatedNxte);
 };

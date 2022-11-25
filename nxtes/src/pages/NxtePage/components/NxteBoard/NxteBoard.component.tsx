@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { ListValue } from "../../types";
+import { TNxte } from "../../types";
 import styles from "../../StyleLandingPage.module.css";
 
 import { Stack } from "@mui/material";
@@ -9,14 +9,14 @@ import { DispatchSelectAction } from "../../customHooks/useSelectedNxtes";
 import NoNxteInfo from "./NoNxteInfo/NoNxteInfo.component";
 
 interface ListControlProps {
-  listValues: ListValue[];
+  listValues: TNxte[];
   selected: Map<string, boolean>;
   dispatchSelect: React.Dispatch<DispatchSelectAction>;
   dataExists: boolean;
 }
 
 const NxteBoard: React.FC<ListControlProps> = ({ listValues, selected, dispatchSelect, dataExists }) => {
-  const handleElementClick = (values: ListValue) => {
+  const handleElementClick = (values: TNxte) => {
     dispatchSelect({ type: "switchOne", id: values.id, value: !selected.get(values.id) ?? false });
   };
 

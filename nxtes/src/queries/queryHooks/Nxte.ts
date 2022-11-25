@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { createNxte, deleteNxtes, NxteOutput, updateNxte } from "../NxteQueries";
+import { TNxte } from "../../pages/NxtePage/types";
+import { createNxte, deleteNxtes, updateNxte } from "../NxteQueries";
 import { getUserNxtes } from "../UserQueries";
 
 export const useCreateNxte = () => {
@@ -10,21 +11,29 @@ export const useCreateNxte = () => {
     onMutate: async newNxte => {
       await queryClient.cancelQueries(["nxtes"]);
 
-      const prevNxtes = queryClient.getQueryData<NxteOutput[]>(["nxtes"]);
+      const prevNxtes = queryClient.getQueryData<TNxte[]>(["nxtes"]);
 
       if (prevNxtes) {
-        queryClient.setQueryData<NxteOutput[]>(["nxtes"], [...prevNxtes, { ...newNxte, createdAt: new Date() }]);
+        queryClient.setQueryData<TNxte[]>(["nxtes"], [...prevNxtes, { ...newNxte, createdAt: new Date() }]);
       }
 
       return prevNxtes;
     },
 
-    onError: (_err, _vars, context) => {
+    onError: async (err, vars, context) => {
       if (context) {
-        queryClient.setQueryData<NxteOutput[]>(["nxtes"], context);
+        queryClient.setQueryData<TNxte[]>(["nxtes"], context);
       }
 
       toast.error("Couldn't create this Nxte");
+
+      if ((err as Error).message === "Parsing Schema Failed") {
+        try {
+          await deleteNxtes({ ids: [vars.id] });
+        } catch (_err) {
+          throw new Error("Nxte created after error wasn't deleted");
+        }
+      }
     },
 
     onSettled: () => {
@@ -44,25 +53,39 @@ export const useUpdateNxte = (handleClose: () => void) => {
     onMutate: async updatedNxte => {
       await queryClient.cancelQueries(["nxtes"]);
 
-      const prevNxtes = queryClient.getQueryData<NxteOutput[]>(["nxtes"]);
+      const prevNxtes = queryClient.getQueryData<TNxte[]>(["nxtes"]);
 
       if (prevNxtes) {
         const changedId = prevNxtes.findIndex(e => e.id === updatedNxte.id);
         const prevNxtesCopy = [...prevNxtes];
 
         prevNxtesCopy[changedId] = { ...prevNxtesCopy[changedId], ...updatedNxte.newValues };
-        queryClient.setQueryData<NxteOutput[]>(["nxtes"], prevNxtesCopy);
+        queryClient.setQueryData<TNxte[]>(["nxtes"], prevNxtesCopy);
       }
 
       return prevNxtes;
     },
 
-    onError: (_err, _vars, context) => {
+    onError: async (err, vars, context) => {
       if (context) {
-        queryClient.setQueryData<NxteOutput[]>(["nxtes"], context);
+        queryClient.setQueryData<TNxte[]>(["nxtes"], context);
       }
 
       toast.error("Couldn't update this Nxte");
+      if ((err as Error).message === "Parsing Schema Failed") {
+        try {
+          if (!context) return;
+          const changedId = context?.findIndex(e => e.id === vars.id);
+
+          if (!changedId) return;
+          await updateNxte({
+            id: vars.id,
+            newValues: { value: context[changedId].value, title: context[changedId].title, color: context[changedId].color },
+          });
+        } catch (_err) {
+          throw new Error("Nxte created after error wasn't deleted");
+        }
+      }
     },
 
     onSettled: () => {
@@ -82,10 +105,10 @@ export const useDeleteNxtes = () => {
     onSuccess: async leftNxte => {
       await queryClient.cancelQueries(["nxtes"]);
 
-      const prevNxtes = queryClient.getQueryData<NxteOutput[]>(["nxtes"]);
-
+      const prevNxtes = queryClient.getQueryData<TNxte[]>(["nxtes"]);
+      console.log(leftNxte);
       if (prevNxtes) {
-        queryClient.setQueryData<NxteOutput[]>(["nxtes"], leftNxte.Nxte);
+        queryClient.setQueryData<TNxte[]>(["nxtes"], leftNxte.Nxte);
       }
 
       toast.success(`${leftNxte.count} reminders were deleted!`);

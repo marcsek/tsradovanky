@@ -27,6 +27,7 @@ export const useLogout = () => {
     onSuccess(data) {
       if (data) {
         queryClient.setQueryData(["user"], null);
+        queryClient.setQueryData(["nxtes"], null);
       }
     },
     onError(err) {

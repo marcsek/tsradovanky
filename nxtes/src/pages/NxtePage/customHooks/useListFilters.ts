@@ -1,20 +1,20 @@
 import { useState, useMemo, useTransition } from "react";
-import { ListValue, FiltersTypes, SetFiltersType, SortType } from "../types";
+import { TNxte, FiltersTypes, SortType } from "../types";
 import { sortByDate, sortAtoZ } from "../../../utils/SortingFunctions";
 import { defaultFilters } from "../components/ListFilters/DefaultFilters";
 
 export interface FilteredOutput {
-  filteredList: ListValue[];
+  filteredList: TNxte[];
   filteredIds: string[];
 }
 
-type FiltersHookType = [filtered: FilteredOutput, setFilters: SetFiltersType];
+type FiltersHookType = [filtered: FilteredOutput, setFilters: React.Dispatch<React.SetStateAction<FiltersTypes>>];
 
-const filterValue = (el: ListValue, filters: string) => {
+const filterValue = (el: TNxte, filters: string) => {
   return el.value.includes(filters) || el.title.includes(filters);
 };
 
-const handleListFiltering = (filters: FiltersTypes, listToFilter: ListValue[]): ListValue[] => {
+const handleListFiltering = (filters: FiltersTypes, listToFilter: TNxte[]): TNxte[] => {
   let filteredList = listToFilter.filter(el => filterValue(el, filters.keyword));
 
   if (filters.sort === SortType.AtoZ) {
@@ -28,12 +28,12 @@ const handleListFiltering = (filters: FiltersTypes, listToFilter: ListValue[]): 
   return filteredList;
 };
 
-const useListFilters = (baseList: ListValue[]): FiltersHookType => {
+const useListFilters = (baseList: TNxte[]): FiltersHookType => {
   const [filters, setFilters] = useState<FiltersTypes>(defaultFilters);
   const [, startTransition] = useTransition();
 
   const filtered = useMemo<FilteredOutput>(() => {
-    const filteredList: ListValue[] = handleListFiltering(filters, baseList);
+    const filteredList: TNxte[] = handleListFiltering(filters, baseList);
 
     let filteredIds: string[] = [];
 

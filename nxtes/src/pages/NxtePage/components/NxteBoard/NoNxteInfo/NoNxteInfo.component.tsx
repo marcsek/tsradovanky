@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Stack, Typography, Box } from "@mui/material";
 import { motion } from "framer-motion";
 import NxteIcon from "./NxteIcon.svg";
@@ -6,11 +6,11 @@ import { useTheme } from "@mui/material/styles";
 import NotePopupService from "../../NotePupup/NotePopupService";
 import NewNotePopUp from "../../NotePupup/NotePopupElements/NewNotePopUp";
 
-const NoNxteInfo: React.FC<{ title: string }> = ({ title }) => {
+const NoNxteInfo = forwardRef<HTMLDivElement, { title: string }>(({ title }, ref) => {
   const theme = useTheme();
 
   return (
-    <Stack sx={{ position: "absolute", alignItems: "center", top: "50%", left: "50%", translate: "-50% -50%", gap: "0.6rem" }}>
+    <Stack sx={{ position: "absolute", alignItems: "center", top: "50%", left: "50%", translate: "-50% -50%", gap: "0.6rem" }} ref={ref}>
       <Box>
         <NxteIcon
           forCol={theme.palette.mode === "light" ? "#BCC4CA" : "#343434"}
@@ -25,7 +25,7 @@ const NoNxteInfo: React.FC<{ title: string }> = ({ title }) => {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
       >
-        <Typography variant="h5" sx={{ color: theme => theme.palette.text.primary }}>
+        <Typography variant="h5" sx={{ color: theme => theme.palette.text.primary, minWidth: "max-content" }}>
           {title}
         </Typography>
         <Typography
@@ -41,6 +41,6 @@ const NoNxteInfo: React.FC<{ title: string }> = ({ title }) => {
       </Stack>
     </Stack>
   );
-};
+});
 
 export default NoNxteInfo;

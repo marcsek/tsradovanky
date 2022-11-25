@@ -1,8 +1,8 @@
 import { useReducer, useEffect } from "react";
-import { ListValue } from "../types";
+import { TNxte } from "../types";
 
 export type DispatchSelectAction =
-  | { type: "update"; value: ListValue[] }
+  | { type: "update"; value: TNxte[] }
   | { type: "switchOne"; value: boolean; id: string }
   | { type: "switchMany"; value: boolean; ids: string[] };
 
@@ -32,7 +32,7 @@ function selectReducer(state: Map<string, boolean>, action: DispatchSelectAction
   }
 }
 
-const useSelectedNxtes = (nxtes: ListValue[]) => {
+const useSelectedNxtes = (nxtes: TNxte[]) => {
   //   const [selected, setSelected] = useState<Map<string, boolean>>(new Map());
   const [selected, dispatchSelect] = useReducer(selectReducer, new Map());
 

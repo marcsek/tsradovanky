@@ -1,10 +1,6 @@
-export interface ListValue {
-  title: string;
-  value: string;
-  id: string;
-  createdAt: Date;
-  color: string;
-}
+import { NxteSchema } from "../../queries/schemas/Nxte";
+
+export type TNxte = Zod.infer<typeof NxteSchema>;
 
 export interface FiltersTypes {
   sort: SortType;
@@ -24,5 +20,3 @@ export enum ElementColors {
   RED = "#FF3030",
   PURPLE = "#7635DC",
 }
-
-export type SetFiltersType = (callback: (prev: FiltersTypes) => FiltersTypes) => void;

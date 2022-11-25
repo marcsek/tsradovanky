@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import ToggleButton from "@mui/material/ToggleButton";
 import Divider from "@mui/material/Divider";
-import { SetFiltersType, SortType } from "../../types";
+import { SortType, FiltersTypes } from "../../types";
 import { Stack } from "@mui/material";
 import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import FlipCameraAndroidIcon from "@mui/icons-material/FlipCameraAndroid";
@@ -12,7 +12,7 @@ import StyledToggleButtonGroup from "../../../../custom-material-styles/StyledTo
 import { defaultFilters } from "../../components/ListFilters/DefaultFilters";
 
 interface SortSlectorControlProps {
-  setFilters: SetFiltersType;
+  setFilters: React.Dispatch<React.SetStateAction<FiltersTypes>>;
 }
 
 const FilterSortSelector: React.FC<SortSlectorControlProps> = ({ setFilters }) => {
@@ -36,7 +36,7 @@ const FilterSortSelector: React.FC<SortSlectorControlProps> = ({ setFilters }) =
   };
 
   useEffect(() => {
-    setFilters((prev) => {
+    setFilters(prev => {
       return { ...prev, sort: sortSelect, reverse: reverseToggle.length ? true : false };
     });
   }, [sortSelect, reverseToggle, setFilters]);
@@ -45,8 +45,8 @@ const FilterSortSelector: React.FC<SortSlectorControlProps> = ({ setFilters }) =
     <Stack
       className={styles.filterSelector}
       sx={{
-        border: (theme) => `1px solid ${theme.palette.divider}`,
-        backgroundColor: (theme) => theme.palette.action.active,
+        border: theme => `1px solid ${theme.palette.divider}`,
+        backgroundColor: theme => theme.palette.action.active,
       }}
     >
       <StyledToggleButtonGroup size="small" value={sortSelect} exclusive onChange={handleSortSelect}>

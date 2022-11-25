@@ -1,14 +1,21 @@
 import { gql } from "graphql-request";
-import { ListValue } from "../pages/NxtePage/types";
-import { UserType } from "../types/user.type";
+import { TNxte } from "../pages/NxtePage/types";
 import graphQLClient from "./GraphQLClient";
+import { UserSchema } from "./schemas/User";
+import { z } from "zod";
+import { handleZodParseSchema } from "../utils/handleZodParseSchema";
+import { NxteSchema } from "./schemas/Nxte";
+import { parseDate } from "../utils/parseDate";
 
 interface LoginUserParams {
   email: string;
   password: string;
 }
 
-export const loginUser = async (input: LoginUserParams): Promise<boolean> => {
+const BooleanSchema = z.boolean();
+type TBooleanSchema = z.infer<typeof BooleanSchema>;
+
+export const loginUser = async (input: LoginUserParams) => {
   const { loginUser } = await graphQLClient.request(
     gql`
       mutation loginUser($input: LoginInput!) {
@@ -18,10 +25,10 @@ export const loginUser = async (input: LoginUserParams): Promise<boolean> => {
     { input }
   );
 
-  return loginUser;
+  return handleZodParseSchema<TBooleanSchema>(BooleanSchema, loginUser);
 };
 
-export const logoutUser = async (): Promise<boolean> => {
+export const logoutUser = async () => {
   const { logoutUser } = await graphQLClient.request(
     gql`
       mutation {
@@ -29,10 +36,11 @@ export const logoutUser = async (): Promise<boolean> => {
       }
     `
   );
-  return logoutUser;
+
+  return handleZodParseSchema<TBooleanSchema>(BooleanSchema, logoutUser);
 };
 
-export const getUser = async (): Promise<UserType> => {
+export const getUser = async () => {
   const { getUser } = await graphQLClient.request(gql`
     query {
       getUser {
@@ -43,29 +51,30 @@ export const getUser = async (): Promise<UserType> => {
     }
   `);
 
-  return getUser;
+  return handleZodParseSchema<z.infer<typeof UserSchema>>(UserSchema, getUser);
 };
 
 interface RegisterUserParams extends LoginUserParams {
   name: string;
 }
 
-export const registerUser = async (input: RegisterUserParams): Promise<boolean> => {
+export const registerUser = async (input: RegisterUserParams) => {
   const { createUser } = await graphQLClient.request(
     gql`
       mutation loginUser($input: CreateUserInput!) {
         createUser(input: $input) {
-          name
+          id
         }
       }
     `,
     { input }
   );
 
-  return createUser;
+  const RegisterOutputSchema = z.object({ id: z.string().uuid() });
+  return handleZodParseSchema<z.infer<typeof RegisterOutputSchema>>(RegisterOutputSchema, createUser);
 };
 
-export const getUserNxtes = async (): Promise<ListValue[]> => {
+export const getUserNxtes = async () => {
   const { getUserNxtes: userNxtes } = await graphQLClient.request(
     gql`
       query {
@@ -79,13 +88,8 @@ export const getUserNxtes = async (): Promise<ListValue[]> => {
       }
     `
   );
-  // parse date
 
-  return parseDate(userNxtes as ListValue[]);
-};
+  const NxteArray = NxteSchema.array();
 
-export const parseDate = (userNxtes: ListValue[]) => {
-  return userNxtes.map((nxte: ListValue) => {
-    return { ...nxte, createdAt: new Date(nxte.createdAt) };
-  });
+  return handleZodParseSchema<z.infer<typeof NxteArray>>(NxteArray, parseDate(userNxtes as TNxte[]));
 };

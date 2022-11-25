@@ -1,6 +1,6 @@
-import { ListValue } from "../pages/NxtePage/types";
+import { TNxte } from "../pages/NxtePage/types";
 
-type SortFuncionType = (a: ListValue, b: ListValue) => 1 | -1 | 0;
+type SortFuncionType = (a: TNxte, b: TNxte) => 1 | -1 | 0;
 
 const sortAtoZ: SortFuncionType = (a, b) => {
   if (a.title.toLowerCase() > b.title.toLowerCase()) {

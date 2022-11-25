@@ -4,11 +4,12 @@ import { useFormik } from "formik";
 import { registerValidatioSchema } from "../schemas";
 import { Box, Link } from "@mui/material";
 import ErrorPupup from "./BuildingComponents/ErrorPupup.component";
-import { parseError } from "../../../utils/ParseError";
+import { parseError } from "../../../utils/parseError";
 import AuthTitle from "./BuildingComponents/AuthTitle.component";
 import AuthTextInput from "./BuildingComponents/AuthTextInput.component";
 import AuthPasswordInput from "./BuildingComponents/AuthPasswordInput.component";
 import AuthButton from "./BuildingComponents/AuthButton.component";
+import { toFormikValidationSchema } from "../../../utils/zodToFormik";
 
 const RegisterComponent = () => {
   const register = useRegister();
@@ -19,7 +20,7 @@ const RegisterComponent = () => {
       password: "",
       name: "",
     },
-    validationSchema: registerValidatioSchema,
+    validationSchema: toFormikValidationSchema(registerValidatioSchema),
     onSubmit: values => {
       register.mutate(values);
     },

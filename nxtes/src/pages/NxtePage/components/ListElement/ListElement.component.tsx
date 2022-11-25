@@ -4,7 +4,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
-import { ElementColors, ListValue } from "../../types";
+import { ElementColors, TNxte } from "../../types";
 import { elementAnimation, editButtonAnimation } from "./ElementAnimation";
 import styles from "./ListElement.module.css";
 import { dateFormatSettings } from "../../../../utils/DateFormatSettings";
@@ -15,8 +15,8 @@ import NotePopupService from "../NotePupup/NotePopupService";
 import EditNotePopup from "../NotePupup/NotePopupElements/EditNotePopUp";
 
 interface ListElementProps {
-  handleClick: (values: ListValue) => void;
-  values: ListValue;
+  handleClick: (values: TNxte) => void;
+  values: TNxte;
   isSelected: boolean;
 }
 

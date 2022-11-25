@@ -4,12 +4,13 @@ import { Box, Link } from "@mui/material";
 import { useFormik } from "formik";
 import { loginValidationSchema } from "../schemas";
 import ErrorPupup from "./BuildingComponents/ErrorPupup.component";
-import { parseError } from "../../../utils/ParseError";
+import { parseError } from "../../../utils/parseError";
 
 import AuthTitle from "./BuildingComponents/AuthTitle.component";
 import AuthTextInput from "./BuildingComponents/AuthTextInput.component";
 import AuthPasswordInput from "./BuildingComponents/AuthPasswordInput.component";
 import AuthButton from "./BuildingComponents/AuthButton.component";
+import { toFormikValidationSchema } from "../../../utils/zodToFormik";
 
 const LoginPage: React.FC = () => {
   const login = useLogin();
@@ -19,7 +20,7 @@ const LoginPage: React.FC = () => {
       email: "ds@gmail.com",
       password: "kubo2013",
     },
-    validationSchema: loginValidationSchema,
+    validationSchema: toFormikValidationSchema(loginValidationSchema),
     onSubmit: values => {
       login.mutate(values);
     },
