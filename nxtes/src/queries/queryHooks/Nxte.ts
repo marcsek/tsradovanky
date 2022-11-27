@@ -21,19 +21,17 @@ export const useCreateNxte = () => {
     },
 
     onError: async (err, vars, context) => {
+      if ((err as Error).message.includes("Parsing Schema Failed")) {
+        console.error("Parsing API response failed. Data was created.");
+        return;
+      }
+
       if (context) {
         queryClient.setQueryData<TNxte[]>(["nxtes"], context);
       }
 
       toast.error("Couldn't create this Nxte");
-
-      if ((err as Error).message === "Parsing Schema Failed") {
-        try {
-          await deleteNxtes({ ids: [vars.id] });
-        } catch (_err) {
-          throw new Error("Nxte created after error wasn't deleted");
-        }
-      }
+      // throw new Error("Nxte created after error wasn't deleted");
     },
 
     onSettled: () => {
@@ -66,26 +64,17 @@ export const useUpdateNxte = (handleClose: () => void) => {
       return prevNxtes;
     },
 
-    onError: async (err, vars, context) => {
+    onError: async (err, _vars, context) => {
+      if ((err as Error).message.includes("Parsing Schema Failed")) {
+        console.error("Parsing API response failed. Data was modified.");
+        return;
+      }
+
       if (context) {
         queryClient.setQueryData<TNxte[]>(["nxtes"], context);
       }
 
       toast.error("Couldn't update this Nxte");
-      if ((err as Error).message === "Parsing Schema Failed") {
-        try {
-          if (!context) return;
-          const changedId = context?.findIndex(e => e.id === vars.id);
-
-          if (!changedId) return;
-          await updateNxte({
-            id: vars.id,
-            newValues: { value: context[changedId].value, title: context[changedId].title, color: context[changedId].color },
-          });
-        } catch (_err) {
-          throw new Error("Nxte created after error wasn't deleted");
-        }
-      }
     },
 
     onSettled: () => {
@@ -123,9 +112,11 @@ export const useNxtes = () => {
       console.log(data);
     },
     onError(err) {
-      console.log(err);
+      // console.log(err);
     },
     suspense: true,
+    useErrorBoundary: true,
+    retry: 0,
   });
 
   return { ...data, data: data.data ?? [] };

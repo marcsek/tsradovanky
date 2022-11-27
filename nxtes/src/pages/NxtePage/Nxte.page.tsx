@@ -7,7 +7,7 @@ import useListFilters from "./customHooks/useListFilters";
 import NotePopupRoot from "./components/NotePupup/NotePopupRoot.component";
 
 /* iba pre test */
-import FakerListGenerator from "./FakerListGenerator";
+// import FakerListGenerator from "./FakerListGenerator";
 import { useNxtes } from "../../queries/queryHooks/Nxte";
 import useSelectedNxtes from "./customHooks/useSelectedNxtes";
 /*---------------*/
@@ -42,7 +42,7 @@ const NxtePage: React.FC = () => {
         selected={selected}
         dispatchSelect={dispatchSelect}
       />
-      <FakerListGenerator />
+      {/* <FakerListGenerator /> */}
     </div>
   );
 };

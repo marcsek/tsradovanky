@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ApolloError } from "apollo-server-express";
+import { GraphQLError } from "graphql";
 import bcrypt from "bcrypt";
 import graphqlFields from "graphql-fields";
 import { prismaHashPassword } from "../middleware";
@@ -7,7 +7,7 @@ import { User } from "../model/user.model";
 import { UserWP } from "../model/userWithoutPassword";
 import { CreateUserInput, LoginInput, UpdateUserInput } from "../resolvers/inputs";
 import Context from "../types/context";
-import { signJwt } from "../utils/jwt";
+import { createAccessToken } from "../utils/jwt";
 import { transformFields } from "../utils/transformfields";
 import { NxteSelectionOutput } from "../resolvers/outputs";
 
@@ -25,7 +25,7 @@ export default class UserService {
       console.log(error);
     }
     if (!user) {
-      throw new ApolloError("User doesnt exist");
+      throw new GraphQLError("User doesnt exist");
     }
 
     return user;
@@ -40,7 +40,7 @@ export default class UserService {
       console.log(error);
     }
     if (!user) {
-      throw new ApolloError("User doesnt exist");
+      throw new GraphQLError("User doesnt exist");
     }
 
     return user;
@@ -53,10 +53,10 @@ export default class UserService {
     try {
       createdUser = await prisma.user.create({ data: input, select: { ...selection } });
     } catch (error) {
-      throw new ApolloError("User alredy exists");
+      throw new GraphQLError("User alredy exists");
     }
     if (!createdUser) {
-      throw new ApolloError("User could not be created");
+      throw new GraphQLError("User could not be created");
     }
 
     return createdUser;
@@ -68,11 +68,12 @@ export default class UserService {
     const passwordIsValid = await bcrypt.compare(input.password, user.password);
 
     if (!passwordIsValid) {
-      throw new ApolloError("Wrong credentials");
+      throw new GraphQLError("Wrong credentials");
     }
 
-    const token: string = signJwt(user, { expiresIn: "1h" });
-    context.res.cookie("accessToken", token, {
+    const accessToken: string = createAccessToken({ userID: user.id }, { expiresIn: "1h" });
+
+    context.res.cookie("jit", accessToken, {
       maxAge: 3_600_000, // 1h
       httpOnly: true,
       // domain: "localhost",
@@ -82,20 +83,20 @@ export default class UserService {
     });
 
     context.res.cookie("is_loggedin", "yes", {
-      maxAge: 3_600_000,
+      maxAge: 604_800_000,
       httpOnly: false,
       secure: false,
     });
 
-    return Boolean(token);
+    return Boolean(accessToken);
   }
 
   async logOut(context: Context): Promise<boolean> {
-    if (!context.req.cookies.accessToken) {
+    if (!context.req.cookies.jit) {
       return false;
     }
 
-    context.res.clearCookie("accessToken");
+    context.res.clearCookie("jit");
     context.res.clearCookie("is_loggedin");
     return true;
   }
@@ -112,11 +113,11 @@ export default class UserService {
         select: { ...selection },
       });
     } catch (error) {
-      throw new ApolloError(`Could not get user (provided id: ${input})`);
+      throw new GraphQLError(`Could not get user (provided id: ${input})`);
     }
 
     if (!user) {
-      throw new ApolloError("User doesnt exist");
+      throw new GraphQLError("User doesnt exist");
     }
     return user;
   }
@@ -139,10 +140,10 @@ export default class UserService {
         },
       });
     } catch (error) {
-      throw new ApolloError(`Could not get users posts (provided id: ${input})`);
+      throw new GraphQLError(`Could not get users posts (provided id: ${input})`);
     }
     if (!user) {
-      throw new ApolloError("User doesnt exist");
+      throw new GraphQLError("User doesnt exist");
     }
     return user.Nxte;
   }
@@ -162,11 +163,11 @@ export default class UserService {
         },
       });
     } catch (error) {
-      throw new ApolloError("Couldnt update this User");
+      throw new GraphQLError("Couldnt update this User");
     }
 
     if (!updatedUser) {
-      throw new ApolloError("Error getting User");
+      throw new GraphQLError("Error getting User");
     }
     return updatedUser;
   }

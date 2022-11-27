@@ -4,7 +4,7 @@ import { User } from "../model/user.model";
 interface Context {
   req: Request;
   res: Response;
-  user: User | null;
+  userID?: string;
 }
 
 export default Context;

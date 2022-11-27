@@ -1,5 +1,5 @@
 import { Nxte, PrismaClient } from "@prisma/client";
-import { ApolloError } from "apollo-server-express";
+import { GraphQLError } from "graphql";
 import graphqlFields from "graphql-fields";
 import { DeleteManyNxteInput, NxteCreateInput, NxteUpdateInput } from "../resolvers/inputs";
 import { NxteDeleteManyOutput, NxteSelectionOutput } from "../resolvers/outputs";
@@ -16,7 +16,7 @@ export default class NxteService {
       Nxte = await prisma.nxte.create({ data: { ...input, creatorId: id }, select: { ...selection } });
     } catch (error) {
       console.log(error);
-      throw new ApolloError("There was an error while creating Nxte");
+      throw new GraphQLError("There was an error while creating Nxte");
     }
 
     return Nxte;
@@ -53,12 +53,12 @@ export default class NxteService {
         },
       });
     } catch (error) {
-      throw new ApolloError("Couldnt update this Nxte");
+      throw new GraphQLError("Couldnt update this Nxte");
     }
     updatedNxte = updatedNxte.Nxte.at(-1);
 
     if (!updatedNxte) {
-      throw new ApolloError("Error getting Nxte");
+      throw new GraphQLError("Error getting Nxte");
     }
 
     return updatedNxte;
@@ -85,7 +85,7 @@ export default class NxteService {
         },
       });
     } catch (error) {
-      throw new ApolloError("Couldnt delete this Nxte");
+      throw new GraphQLError("Couldnt delete this Nxte");
     }
     return deletion.Nxte;
   }
@@ -137,7 +137,7 @@ export default class NxteService {
 
       return { count: deletionResult.count, Nxte: leftPostsResult?.Nxte ?? [], ids: postIDs };
     } catch (error) {
-      throw new ApolloError("Couldnt delete these Nxtes");
+      throw new GraphQLError("Couldnt delete these Nxtes");
     }
   }
 }

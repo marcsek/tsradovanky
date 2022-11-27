@@ -12,28 +12,31 @@ import RequireAuth from "./components/RequireAuth";
 import Layout from "./components/Layout";
 import { MyThemeProvider } from "./context/themeContext";
 import Loader from "./components/Loader";
+import TopErrorBoundary from "./components/TopErrorBoundary";
 
 function App() {
   return (
     <MyThemeProvider>
       <Box className="App" sx={{ backgroundColor: theme => theme.palette.background.default }}>
         <Suspense fallback={<Loader />}>
-          <UserContextProvider>
-            <Router>
-              <Routes>
-                <Route path="/" element={<Layout />}>
-                  <Route path="/" element={<div>Nxtes app</div>} />
-                  <Route path="auth" element={<AuthPage />}>
-                    <Route path=":type" element={<AuthPage />} />
+          <TopErrorBoundary>
+            <UserContextProvider>
+              <Router>
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route path="/" element={<div>Nxtes app</div>} />
+                    <Route path="auth" element={<AuthPage />}>
+                      <Route path=":type" element={<AuthPage />} />
+                    </Route>
+                    <Route element={<RequireAuth />}>
+                      <Route path="board" element={<NxtePage />} />
+                    </Route>
+                    <Route path="*" element={<ErrorPage />} />
                   </Route>
-                  <Route element={<RequireAuth />}>
-                    <Route path="board" element={<NxtePage />} />
-                  </Route>
-                  <Route path="*" element={<ErrorPage />} />
-                </Route>
-              </Routes>
-            </Router>
-          </UserContextProvider>
+                </Routes>
+              </Router>
+            </UserContextProvider>
+          </TopErrorBoundary>
         </Suspense>
       </Box>
     </MyThemeProvider>

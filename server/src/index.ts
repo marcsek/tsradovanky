@@ -5,14 +5,19 @@ import cors, { CorsOptions } from "cors";
 
 import cookieParser from "cookie-parser";
 import { buildSchema } from "type-graphql";
-import { ApolloServer, ApolloError } from "apollo-server-express";
-import { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginLandingPageProductionDefault } from "apollo-server-core";
+import { ApolloServer } from "@apollo/server";
+import { GraphQLError } from "graphql";
+import { expressMiddleware } from "@apollo/server/express4";
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from "@apollo/server/plugin/landingPage/default";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import http from "http";
 import { resolvers } from "./resolvers";
-import { verifyJwt } from "./utils/jwt";
-import { User } from "./model/user.model";
-import Context from "./types/context";
 import { PrismaClient } from "@prisma/client";
 import { getComplexity, simpleEstimator, fieldExtensionsEstimator } from "graphql-query-complexity";
+import { json } from "body-parser";
 
 const prisma = new PrismaClient();
 
@@ -29,21 +34,15 @@ const corsOptions: CorsOptions = {
   });
 
   const app: Express = express();
+  const httpServer = http.createServer(app);
 
   const server = new ApolloServer({
     schema,
-    context: (ctx: Context) => {
-      const context = ctx;
-      if (ctx.req.cookies.accessToken) {
-        const user = verifyJwt<User>(context.req.cookies.accessToken);
-        context.user = user;
-      }
-
-      return context;
-    },
-    debug: false,
     plugins: [
-      process.env.NODE_ENV === "production" ? ApolloServerPluginLandingPageProductionDefault() : ApolloServerPluginLandingPageGraphQLPlayground(),
+      process.env.NODE_ENV === "production"
+        ? ApolloServerPluginLandingPageProductionDefault()
+        : ApolloServerPluginLandingPageLocalDefault({ footer: false, includeCookies: true }),
+      ApolloServerPluginDrainHttpServer({ httpServer }),
       {
         requestDidStart: () =>
           ({
@@ -66,17 +65,31 @@ const corsOptions: CorsOptions = {
   });
 
   app.use(cookieParser());
+  app.use(cors(corsOptions));
+
   await server.start();
 
-  server.applyMiddleware({ app, cors: corsOptions });
+  app.use(
+    "/graphql",
+    cors<cors.CorsRequest>(corsOptions),
+    json(),
+    expressMiddleware(server, { context: async ({ req, res }) => ({ req, res }) })
+  );
 
-  app.listen({ port }, () => {
-    console.log(`⚡️[server]: Server is running at https://localhost:3001`);
-  });
+  // app.listen({ port }, () => {
+  //   console.log(`⚡️[server]: Server is running at https://localhost:3001`);
+  // });
+
+  await new Promise<void>(resolve =>
+    httpServer.listen({ port }, () => {
+      console.log(`⚡️[server]: Server is running at https://localhost:3001`);
+      resolve();
+    })
+  );
 
   try {
     await prisma.$connect();
   } catch (_err) {
-    throw new ApolloError("Cannot connect to database");
+    throw new GraphQLError("Cannot connect to database");
   }
 })();

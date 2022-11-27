@@ -7,7 +7,7 @@ import { CreateUserInput, LoginInput } from "./inputs";
 import { UpdateUserInputFields } from "./inputs/user/UpdateUserInputFields.input";
 import { UserWP } from "../model/userWithoutPassword";
 import { GraphQLResolveInfo } from "graphql";
-import { NxteSelectionOutput } from "./outputs";
+import { NxteSelectionOutput, UserLoginOutput } from "./outputs";
 
 @Resolver()
 export default class UserResolver {
@@ -16,15 +16,15 @@ export default class UserResolver {
   }
 
   @UseMiddleware(isAuth)
-  @Query(() => User)
+  @Query(() => String)
   me(@Ctx() context: Context) {
-    return context.user;
+    return context.userID;
   }
 
   @UseMiddleware(isAuth)
   @Query(() => [NxteSelectionOutput])
   async getUserNxtes(@Ctx() context: Context, @Info() info: GraphQLResolveInfo): Promise<NxteSelectionOutput[]> {
-    return this.userService.getUsersNxtes(context.user?.id ?? "", info);
+    return this.userService.getUsersNxtes(context.userID!, info);
   }
 
   @UseMiddleware(isAuth)
@@ -34,13 +34,13 @@ export default class UserResolver {
     @Info() info: GraphQLResolveInfo,
     @Arg("input", { nullable: true }) input?: string
   ): Promise<UserWP> {
-    return this.userService.getUser(input ?? context.user!.id!, info);
+    return this.userService.getUser(input ?? context.userID!, info);
   }
 
   @UseMiddleware(isAuth)
   @Mutation(() => UserWP)
   async updateUser(@Arg("input") input: UpdateUserInputFields, @Ctx() context: Context, @Info() info: GraphQLResolveInfo): Promise<UserWP> {
-    return this.userService.updateUser({ id: context.user!.id!, newValues: input }, info);
+    return this.userService.updateUser({ id: context.userID!, newValues: input }, info);
   }
 
   @Mutation(() => UserWP)
@@ -49,7 +49,7 @@ export default class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context): Promise<boolean> {
+  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context): Promise<Boolean> {
     return this.userService.logIn(input, context);
   }
 

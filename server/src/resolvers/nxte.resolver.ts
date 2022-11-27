@@ -16,24 +16,24 @@ export default class NxteResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => NxteSelectionOutput)
   createNote(@Arg("input") input: NxteCreateInput, @Ctx() context: Context, @Info() info: GraphQLResolveInfo) {
-    return this.nxteService.createNxte(input, context.user?.id!, info);
+    return this.nxteService.createNxte(input, context.userID!, info);
   }
 
   @UseMiddleware(isAuth)
   @Mutation(() => NxteSelectionOutput)
   updateNote(@Arg("input") input: NxteUpdateInput, @Ctx() context: Context, @Info() info: GraphQLResolveInfo) {
-    return this.nxteService.updateNxte(input, context.user?.id!, info);
+    return this.nxteService.updateNxte(input, context.userID!, info);
   }
 
   @UseMiddleware(isAuth)
   @Mutation(() => [Nxte])
   deleteOneNxte(@Arg("input") id: string, @Ctx() context: Context, @Info() info: GraphQLResolveInfo) {
-    return this.nxteService.deleteOneNxte(id, context.user?.id!, info);
+    return this.nxteService.deleteOneNxte(id, context.userID!, info);
   }
 
   @UseMiddleware(isAuth)
   @Mutation(() => NxteDeleteManyOutput)
   deleteManyNxtes(@Arg("input") id: DeleteManyNxteInput, @Ctx() context: Context, @Info() info: GraphQLResolveInfo) {
-    return this.nxteService.deleteManyNxtes(id, context.user?.id!, info);
+    return this.nxteService.deleteManyNxtes(id, context.userID!, info);
   }
 }

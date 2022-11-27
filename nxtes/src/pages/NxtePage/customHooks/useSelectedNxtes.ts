@@ -53,6 +53,8 @@ const useSelectedNxtes = (nxtes: TNxte[]) => {
   };
 
   const areAllFilteredSelected = (filteredIds: string[]) => {
+    if (filteredIds.length === 0) return false;
+
     for (const [key, value] of selected) {
       if (filteredIds.includes(key) && !value) {
         return false;
