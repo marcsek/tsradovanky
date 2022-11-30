@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ErrorCodes } from "../Errors";
 import { getUser, loginUser, logoutUser, registerUser } from "../UserQueries";
 
 export const useLogin = () => {
@@ -31,7 +33,7 @@ export const useLogout = () => {
       }
     },
     onError(err) {
-      console.log(err);
+      toast.error("Couldn't log out.");
     },
   });
 };
@@ -55,7 +57,7 @@ export const useGetUser = () => {
 
   return useQuery(["user"], getUser, {
     onError(err) {
-      if ((err as Error).message === "not authenticated") {
+      if ((err as Error).cause === ErrorCodes.NOT_AUTHENTICATED) {
         queryClient.setQueryData(["user"], null);
       }
     },

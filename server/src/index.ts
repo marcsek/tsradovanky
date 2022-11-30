@@ -76,10 +76,6 @@ const corsOptions: CorsOptions = {
     expressMiddleware(server, { context: async ({ req, res }) => ({ req, res }) })
   );
 
-  // app.listen({ port }, () => {
-  //   console.log(`⚡️[server]: Server is running at https://localhost:3001`);
-  // });
-
   await new Promise<void>(resolve =>
     httpServer.listen({ port }, () => {
       console.log(`⚡️[server]: Server is running at https://localhost:3001`);

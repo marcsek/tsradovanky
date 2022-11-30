@@ -1,8 +1,10 @@
 import { Nxte, PrismaClient } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { GraphQLError } from "graphql";
 import graphqlFields from "graphql-fields";
 import { DeleteManyNxteInput, NxteCreateInput, NxteUpdateInput } from "../resolvers/inputs";
 import { NxteDeleteManyOutput, NxteSelectionOutput } from "../resolvers/outputs";
+import { ErrorCodes } from "../utils/customErrors";
 import { transformFields } from "../utils/transformfields";
 
 const prisma = new PrismaClient();
@@ -15,8 +17,7 @@ export default class NxteService {
     try {
       Nxte = await prisma.nxte.create({ data: { ...input, creatorId: id }, select: { ...selection } });
     } catch (error) {
-      console.log(error);
-      throw new GraphQLError("There was an error while creating Nxte");
+      throw new GraphQLError("There was an error while creating Nxte.", { extensions: { code: ErrorCodes.NXTE_CREATION_FAILED } });
     }
 
     return Nxte;
@@ -53,7 +54,7 @@ export default class NxteService {
         },
       });
     } catch (error) {
-      throw new GraphQLError("Couldnt update this Nxte");
+      throw new GraphQLError("Couldn't update this Nxte", { extensions: { code: ErrorCodes.NXTE_UPDATE_FAILED } });
     }
     updatedNxte = updatedNxte.Nxte.at(-1);
 
@@ -85,7 +86,7 @@ export default class NxteService {
         },
       });
     } catch (error) {
-      throw new GraphQLError("Couldnt delete this Nxte");
+      throw new GraphQLError("Couldnt delete this Nxte", { extensions: { code: ErrorCodes.NXTE_DELETION_FAILED } });
     }
     return deletion.Nxte;
   }
@@ -132,12 +133,12 @@ export default class NxteService {
       }
 
       if (deletionResult.count !== postIDs.length) {
-        throw new Error();
+        throw new GraphQLError("Some Nxtes could not be deleted.");
       }
 
       return { count: deletionResult.count, Nxte: leftPostsResult?.Nxte ?? [], ids: postIDs };
     } catch (error) {
-      throw new GraphQLError("Couldnt delete these Nxtes");
+      throw new GraphQLError("Couldnt delete these Nxtes", { extensions: { code: ErrorCodes.NXTE_DELETION_FAILED } });
     }
   }
 }

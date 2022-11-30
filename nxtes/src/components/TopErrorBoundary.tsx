@@ -1,6 +1,7 @@
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import ErrorModal from "./ErrorModal";
 
 const TopErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -8,14 +9,7 @@ const TopErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children })
       {({ reset }) => (
         <ErrorBoundary
           onReset={reset}
-          FallbackComponent={({ error, resetErrorBoundary }) => {
-            return (
-              <div onClick={resetErrorBoundary}>
-                <p>Error</p>
-                <span>{error.message}</span>
-              </div>
-            );
-          }}
+          FallbackComponent={({ error, resetErrorBoundary }) => <ErrorModal error={error} resetErrorBoundary={resetErrorBoundary} />}
         >
           {children}
         </ErrorBoundary>

@@ -10,6 +10,7 @@ import Context from "../types/context";
 import { createAccessToken } from "../utils/jwt";
 import { transformFields } from "../utils/transformfields";
 import { NxteSelectionOutput } from "../resolvers/outputs";
+import { ErrorCodes } from "../utils/customErrors";
 
 const prisma = new PrismaClient();
 
@@ -25,7 +26,7 @@ export default class UserService {
       console.log(error);
     }
     if (!user) {
-      throw new GraphQLError("User doesnt exist");
+      throw new GraphQLError("User doesn't exist.", { extensions: { code: ErrorCodes.USER_NOT_FOUND } });
     }
 
     return user;
@@ -40,7 +41,7 @@ export default class UserService {
       console.log(error);
     }
     if (!user) {
-      throw new GraphQLError("User doesnt exist");
+      throw new GraphQLError("User doesn't exist.", { extensions: { code: ErrorCodes.USER_NOT_FOUND } });
     }
 
     return user;
@@ -53,10 +54,11 @@ export default class UserService {
     try {
       createdUser = await prisma.user.create({ data: input, select: { ...selection } });
     } catch (error) {
-      throw new GraphQLError("User alredy exists");
+      throw new GraphQLError("User alredy exists.", { extensions: { code: ErrorCodes.USER_ALREDY_EXISTS } });
     }
+
     if (!createdUser) {
-      throw new GraphQLError("User could not be created");
+      throw new GraphQLError("User couldn't be created.", { extensions: { code: ErrorCodes.USER_CREATION_FAILED } });
     }
 
     return createdUser;
@@ -68,7 +70,7 @@ export default class UserService {
     const passwordIsValid = await bcrypt.compare(input.password, user.password);
 
     if (!passwordIsValid) {
-      throw new GraphQLError("Wrong credentials");
+      throw new GraphQLError("Wrong credentials.", { extensions: { code: ErrorCodes.WRONG_CREDENTIALS } });
     }
 
     const accessToken: string = createAccessToken({ userID: user.id }, { expiresIn: "1h" });
@@ -93,7 +95,7 @@ export default class UserService {
 
   async logOut(context: Context): Promise<boolean> {
     if (!context.req.cookies.jit) {
-      return false;
+      throw new GraphQLError("Can't logout user without token.", { extensions: { cause: ErrorCodes.BAD_REQUEST } });
     }
 
     context.res.clearCookie("jit");
@@ -113,7 +115,7 @@ export default class UserService {
         select: { ...selection },
       });
     } catch (error) {
-      throw new GraphQLError(`Could not get user (provided id: ${input})`);
+      throw new GraphQLError(`Couldn't get user (provided id: ${input}).`, { extensions: { code: ErrorCodes.USER_NOT_FOUND } });
     }
 
     if (!user) {
@@ -140,7 +142,7 @@ export default class UserService {
         },
       });
     } catch (error) {
-      throw new GraphQLError(`Could not get users posts (provided id: ${input})`);
+      throw new GraphQLError(`Couldn't get users posts (provided id: ${input}).`, { extensions: { code: ErrorCodes.USER_NOT_FOUND } });
     }
     if (!user) {
       throw new GraphQLError("User doesnt exist");
@@ -163,11 +165,11 @@ export default class UserService {
         },
       });
     } catch (error) {
-      throw new GraphQLError("Couldnt update this User");
+      throw new GraphQLError("Couldn't update this User.", { extensions: { code: ErrorCodes.USER_CREATION_FAILED } });
     }
 
     if (!updatedUser) {
-      throw new GraphQLError("Error getting User");
+      throw new GraphQLError("Error getting User.");
     }
     return updatedUser;
   }

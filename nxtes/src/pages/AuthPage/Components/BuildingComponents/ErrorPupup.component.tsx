@@ -6,7 +6,7 @@ const ErrorPupup: React.FC<{ errorMessage: string }> = ({ errorMessage }) => {
   return (
     <Box
       sx={{
-        backgroundColor: (theme) => (theme.palette.mode === "dark" ? "#ef5350dd" : "#ef5350"),
+        backgroundColor: theme => (theme.palette.mode === "dark" ? "#ef5350dd" : "#ef5350"),
         borderRadius: "0.5rem",
         display: "flex",
         alignItems: "center",

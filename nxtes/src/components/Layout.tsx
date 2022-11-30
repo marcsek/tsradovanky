@@ -5,6 +5,7 @@ import { cssTransition, ToastContainer, ToastContainerProps } from "react-toasti
 import Header from "./Header";
 import "react-toastify/dist/ReactToastify.css";
 import "../toastifyStyles.css";
+import TopErrorBoundary from "./TopErrorBoundary";
 
 const Layout: React.FC = () => {
   const theme = useTheme();
@@ -29,7 +30,10 @@ const Layout: React.FC = () => {
   return (
     <>
       <Header />
-      <Outlet />
+      <TopErrorBoundary>
+        <Outlet />
+      </TopErrorBoundary>
+
       <ToastContainer {...toastifyCfg} transition={slideAnimation} />
     </>
   );
