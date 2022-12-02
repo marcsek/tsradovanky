@@ -14,10 +14,11 @@ import {
 } from "@apollo/server/plugin/landingPage/default";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import http from "http";
-import { resolvers } from "./resolvers";
+import { resolvers } from "./resolvers/index";
 import { PrismaClient } from "@prisma/client";
 import { getComplexity, simpleEstimator, fieldExtensionsEstimator } from "graphql-query-complexity";
 import { json } from "body-parser";
+import { graphqlUploadExpress } from "graphql-upload";
 
 const prisma = new PrismaClient();
 
@@ -66,6 +67,9 @@ const corsOptions: CorsOptions = {
 
   app.use(cookieParser());
   app.use(cors(corsOptions));
+  app.use("/static", express.static("public"));
+
+  app.use(graphqlUploadExpress());
 
   await server.start();
 

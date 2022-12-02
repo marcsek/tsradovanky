@@ -47,6 +47,7 @@ export const getUser = async () => {
         name
         id
         email
+        profileImg
       }
     }
   `);

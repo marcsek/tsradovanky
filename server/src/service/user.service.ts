@@ -153,6 +153,7 @@ export default class UserService {
   async updateUser(input: UpdateUserInput, info: any): Promise<UserWP> {
     let updatedUser: UserWP;
     const selection = transformFields(graphqlFields(info));
+    console.log(input.newValues.profileImg);
 
     try {
       updatedUser = await prisma.user.update({

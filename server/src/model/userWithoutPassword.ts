@@ -27,4 +27,9 @@ export class UserWP {
     nullable: true,
   })
   _count?: UserCount | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  profileImg?: string;
 }

@@ -2,12 +2,15 @@ import { Query, Resolver, Mutation, Arg, Ctx, UseMiddleware, Info } from "type-g
 import { isAuth } from "../middleware/isAuth";
 import { User } from "../model/user.model";
 import { UserService } from "../service";
-import Context from "../types/context";
+import Context, { FileUploadContext } from "../types/context";
 import { CreateUserInput, LoginInput } from "./inputs";
 import { UpdateUserInputFields } from "./inputs/user/UpdateUserInputFields.input";
 import { UserWP } from "../model/userWithoutPassword";
-import { GraphQLResolveInfo } from "graphql";
-import { NxteSelectionOutput, UserLoginOutput } from "./outputs";
+import { GraphQLError, GraphQLResolveInfo } from "graphql";
+import { NxteSelectionOutput } from "./outputs";
+import fs from "fs";
+import { ErrorCodes } from "../utils/customErrors";
+import { saveFile } from "../middleware/saveFile";
 
 @Resolver()
 export default class UserResolver {
@@ -38,8 +41,16 @@ export default class UserResolver {
   }
 
   @UseMiddleware(isAuth)
+  @UseMiddleware(saveFile)
   @Mutation(() => UserWP)
-  async updateUser(@Arg("input") input: UpdateUserInputFields, @Ctx() context: Context, @Info() info: GraphQLResolveInfo): Promise<UserWP> {
+  async updateUser(
+    @Arg("input") input: UpdateUserInputFields,
+    @Ctx() context: FileUploadContext,
+    @Info() info: GraphQLResolveInfo
+  ): Promise<UserWP> {
+    if (context.savedFile) {
+      input.profileImg = context.savedFile;
+    }
     return this.userService.updateUser({ id: context.userID!, newValues: input }, info);
   }
 

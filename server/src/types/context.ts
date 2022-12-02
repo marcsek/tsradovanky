@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { User } from "../model/user.model";
 
-interface Context {
+export default interface Context {
   req: Request;
   res: Response;
   userID?: string;
 }
 
-export default Context;
+export interface FileUploadContext extends Context {
+  savedFile: string;
+}

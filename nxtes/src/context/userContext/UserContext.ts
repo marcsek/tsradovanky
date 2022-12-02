@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import { UserType } from "../../types/user.type";
+import { TUser } from "../../types/user.type";
 
-export const UserContext = createContext<{ user: UserType | null }>({ user: null });
+export const UserContext = createContext<{ user: TUser | null }>({ user: null });
