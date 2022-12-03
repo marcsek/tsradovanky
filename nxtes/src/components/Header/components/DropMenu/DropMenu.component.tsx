@@ -41,8 +41,8 @@ const DropMenu: React.FC = () => {
       </Box>
       <Divider sx={{ mx: "-10px" }} />
       <Stack gap="5px">
-        <DropMenuItem to="/auth/login" title="Home" />
-        <DropMenuItem to="/auth/login" title="Profile" />
+        <DropMenuItem to="/" title="Home" />
+        <DropMenuItem to={`/id/${user?.id}`} title="Profile" />
       </Stack>
 
       <Stack direction="row" alignItems="center" px="8px" justifyContent="space-between">
@@ -58,7 +58,7 @@ const DropMenu: React.FC = () => {
           }
           label={<Typography sx={{ color: theme => theme.palette.text.disabled, fontSize: "0.85rem" }}>THEME</Typography>}
           labelPlacement="start"
-        ></FormControlLabel>
+        />
       </Stack>
 
       <Divider sx={{ mx: "-10px" }} />

@@ -13,6 +13,7 @@ import Layout from "./components/Layout";
 import { MyThemeProvider } from "./context/themeContext";
 import Loader from "./components/Loader";
 import TopErrorBoundary from "./components/TopErrorBoundary";
+import ProfilePage from "./pages/ProfilePage/Profile.page";
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
                     </Route>
                     <Route element={<RequireAuth />}>
                       <Route path="board" element={<NxtePage />} />
+                    </Route>
+                    <Route element={<RequireAuth />}>
+                      <Route path="id/:userID" element={<ProfilePage />} />
                     </Route>
                     <Route path="*" element={<ErrorPage />} />
                   </Route>

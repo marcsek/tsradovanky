@@ -14,7 +14,6 @@ export const isAuth: MiddlewareFn<Context> = async ({ context }, next) => {
 
     context.userID = (payload as any).userID;
   } catch (err) {
-    console.log(err);
     throw new GraphQLError("Not authenticated.", { extensions: { code: ErrorCodes.NOT_AUTHENTICATED } });
   }
 

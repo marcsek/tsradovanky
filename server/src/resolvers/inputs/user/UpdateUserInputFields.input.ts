@@ -21,5 +21,5 @@ export class UpdateUserInputFields {
   @TypeGraphQL.Field(_type => GraphQLUpload, {
     nullable: true,
   })
-  profileImg?: Promise<FileUpload> | string;
+  profileImg?: Promise<FileUpload> | string | null;
 }

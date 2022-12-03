@@ -10,7 +10,7 @@ import { GraphQLError, GraphQLResolveInfo } from "graphql";
 import { NxteSelectionOutput } from "./outputs";
 import fs from "fs";
 import { ErrorCodes } from "../utils/customErrors";
-import { saveFile } from "../middleware/saveFile";
+import { fileUpload } from "../middleware/fileUpload";
 
 @Resolver()
 export default class UserResolver {
@@ -41,7 +41,7 @@ export default class UserResolver {
   }
 
   @UseMiddleware(isAuth)
-  @UseMiddleware(saveFile)
+  @UseMiddleware(fileUpload)
   @Mutation(() => UserWP)
   async updateUser(
     @Arg("input") input: UpdateUserInputFields,

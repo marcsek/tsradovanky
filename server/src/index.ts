@@ -68,8 +68,8 @@ const corsOptions: CorsOptions = {
   app.use(cookieParser());
   app.use(cors(corsOptions));
   app.use("/static", express.static("public"));
-
-  app.use(graphqlUploadExpress());
+  //                                          2,5 Mb
+  app.use(graphqlUploadExpress({ maxFileSize: 2_500_000 }));
 
   await server.start();
 

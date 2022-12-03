@@ -16,12 +16,12 @@ datasource db {
 }
 
 model User {
-  id         String @id @default(uuid())
+  id         String  @id @default(uuid())
   name       String
   password   String
-  email      String @unique
+  email      String  @unique
   Nxte       Nxte[]
-  profileImg String @default("")
+  profileImg String?
 }
 
 model Nxte {

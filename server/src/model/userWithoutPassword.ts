@@ -31,5 +31,5 @@ export class UserWP {
   @TypeGraphQL.Field(_type => String, {
     nullable: true,
   })
-  profileImg?: string;
+  profileImg?: string | null;
 }
