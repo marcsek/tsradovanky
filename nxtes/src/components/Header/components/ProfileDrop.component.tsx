@@ -11,7 +11,7 @@ const ProfileDrop: React.FC = () => {
   const theme = useTheme();
   const [dropOpen, setDropOpen] = useState(false);
   const { user } = useUser();
-
+  //TODO: set drop closed on link click
   return (
     <>
       <Box sx={{ position: "relative", zIndex: 3 }}>

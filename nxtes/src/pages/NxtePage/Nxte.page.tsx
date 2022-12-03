@@ -11,7 +11,7 @@ import NotePopupRoot from "./components/NotePupup/NotePopupRoot.component";
 import { useNxtes } from "../../queries/queryHooks/Nxte";
 import useSelectedNxtes from "./customHooks/useSelectedNxtes";
 /*---------------*/
-
+//FIXME: Too many renders on login
 const NxtePage: React.FC = () => {
   const { data: nxtes } = useNxtes();
   const [filtered, setFilters] = useListFilters(nxtes);

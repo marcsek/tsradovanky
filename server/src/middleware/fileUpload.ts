@@ -10,6 +10,8 @@ const allowedExtensions = ["jpg", "png", "jpeg"];
 
 const prisma = new PrismaClient();
 
+//FIXME: uploading file over size limit throws error but still saves the img
+
 export const fileUpload: MiddlewareFn<FileUploadContext> = async (action, next) => {
   const directoryPath = __dirname + `/../../../public/storage/`;
 

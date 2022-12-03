@@ -11,7 +11,7 @@ const darkTheme = createTheme({
     },
     background: {
       // default: "#171719",
-      paper: "rgb(23,23,23)",
+      paper: "#171717",
     },
     error: {
       main: "#ef5350",
@@ -69,7 +69,7 @@ const lightTheme = createTheme({
     },
     background: {
       default: "#FFFFFF",
-      paper: "white",
+      paper: "#FFFFFF",
     },
     action: {
       disabledBackground: "#F4F6F8",

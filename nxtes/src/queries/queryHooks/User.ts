@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { GraphQLError } from "graphql-request/dist/types";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ErrorCodes } from "../Errors";
-import { getUser, loginUser, logoutUser, registerUser } from "../UserQueries";
+import { getUser, loginUser, logoutUser, registerUser, updateUser } from "../UserQueries";
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
@@ -70,5 +71,28 @@ export const useGetUser = () => {
     suspense: true,
     retry: false,
     refetchInterval: 60000,
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(updateUser, {
+    onSuccess: data => {
+      queryClient.setQueryData(["user"], data);
+      toast.success("Update successful!");
+    },
+
+    onError: error => {
+      let toastText = "Your file could not be uploaded.";
+      const errorCause = (error as Error).cause;
+      if (errorCause === ErrorCodes.FILE_EXTENSION_NOT_SUPPORTED) {
+        toastText = "Your file had unsupported file extension";
+      } else if (errorCause === ErrorCodes.FILE_SIZE_EXCEEDED) {
+        toastText = "Your file exceeded max. file size (2.5 MB)";
+      }
+
+      toast.error(toastText);
+    },
   });
 };

@@ -94,3 +94,21 @@ export const getUserNxtes = async () => {
 
   return handleZodParseSchema<z.infer<typeof NxteArray>>(NxteArray, parseDate(userNxtes as TNxte[]));
 };
+
+export const updateUser = async (input: { profileImg?: any; name?: string; email?: string }) => {
+  const { updateUser: updatedUser } = await graphQLClient.request(
+    gql`
+      mutation updateUser($input: UpdateUserInputFields!) {
+        updateUser(input: $input) {
+          name
+          id
+          email
+          profileImg
+        }
+      }
+    `,
+    { input }
+  );
+
+  return handleZodParseSchema<z.infer<typeof UserSchema>>(UserSchema, updatedUser);
+};
