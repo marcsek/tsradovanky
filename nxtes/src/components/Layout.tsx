@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material";
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { cssTransition, ToastContainer, ToastContainerProps } from "react-toastify";
 import Header from "./Header";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +9,7 @@ import TopErrorBoundary from "./TopErrorBoundary";
 
 const Layout: React.FC = () => {
   const theme = useTheme();
+  const location = useLocation();
 
   const toastifyCfg: ToastContainerProps = {
     theme: theme.palette.mode === "light" ? "light" : "dark",
@@ -29,7 +30,7 @@ const Layout: React.FC = () => {
 
   return (
     <>
-      <Header />
+      {location.pathname.split("/")[1] !== "auth" && <Header />}
       <TopErrorBoundary>
         <Outlet />
       </TopErrorBoundary>

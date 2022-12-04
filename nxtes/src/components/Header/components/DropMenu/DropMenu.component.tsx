@@ -13,7 +13,7 @@ const DropMenu: React.FC = () => {
   const logout = useLogout();
   const { user } = useUser();
   const myTheme = useMyTheme();
-  //TODO: make the whole button clickable in drop menu item
+
   return (
     <Box
       sx={{

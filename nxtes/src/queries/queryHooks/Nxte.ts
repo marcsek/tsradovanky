@@ -31,7 +31,6 @@ export const useCreateNxte = () => {
       }
 
       toast.error("Couldn't create this Nxte");
-      // throw new Error("Nxte created after error wasn't deleted");
     },
 
     onSettled: () => {

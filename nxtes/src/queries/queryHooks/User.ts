@@ -30,7 +30,7 @@ export const useLogout = () => {
     onSuccess(data) {
       if (data) {
         queryClient.setQueryData(["user"], null);
-        queryClient.setQueryData(["nxtes"], null);
+        queryClient.removeQueries(["nxtes"]);
       }
     },
     onError(err) {
@@ -60,11 +60,12 @@ export const useGetUser = () => {
     onError(err) {
       if ((err as Error).cause === ErrorCodes.NOT_AUTHENTICATED) {
         queryClient.setQueryData(["user"], null);
+        queryClient.removeQueries(["nxtes"]);
       }
     },
 
     onSettled() {
-      console.log("User fetch complete");
+      // console.log("User fetch complete");
     },
 
     enabled: !!document.cookie.match(/^(.*;)?\s*is_loggedin\s*=\s*[^;]+(.*)?$/),

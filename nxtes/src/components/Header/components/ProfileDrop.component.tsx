@@ -6,14 +6,15 @@ import { useTheme } from "@mui/material/styles";
 import DropMenu from "./DropMenu/DropMenu.component";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUser } from "../../../context/userContext";
+import DropContext from "./DropContext";
 
 const ProfileDrop: React.FC = () => {
   const theme = useTheme();
   const [dropOpen, setDropOpen] = useState(false);
   const { user } = useUser();
-  //TODO: set drop closed on link click
+
   return (
-    <>
+    <DropContext.Provider value={{ setDropOpen }}>
       <Box sx={{ position: "relative", zIndex: 3 }}>
         <Box sx={{ display: "flex", alignItems: "center" }} onClick={() => setDropOpen(!dropOpen)}>
           <Box className={styles.profileImageCont} sx={{ borderRadius: "50%", overflow: "hidden", height: "25px", width: "25px" }}>
@@ -39,7 +40,7 @@ const ProfileDrop: React.FC = () => {
           sx={{ position: "fixed", top: 0, left: 0, height: "100%", width: "100%", pointerEvents: "all", zIndex: 2 }}
         />
       )}
-    </>
+    </DropContext.Provider>
   );
 };
 

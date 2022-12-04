@@ -11,7 +11,8 @@ import NotePopupRoot from "./components/NotePupup/NotePopupRoot.component";
 import { useNxtes } from "../../queries/queryHooks/Nxte";
 import useSelectedNxtes from "./customHooks/useSelectedNxtes";
 /*---------------*/
-//FIXME: Too many renders on login
+
+//NOTE: When loggin in for second time in a row without a refresh, too many renders occur
 const NxtePage: React.FC = () => {
   const { data: nxtes } = useNxtes();
   const [filtered, setFilters] = useListFilters(nxtes);
@@ -22,6 +23,7 @@ const NxtePage: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log(nxtes);
     console.log("render");
     console.log(filtered);
   });

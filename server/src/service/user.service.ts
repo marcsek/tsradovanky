@@ -85,7 +85,7 @@ export default class UserService {
     });
 
     context.res.cookie("is_loggedin", "yes", {
-      maxAge: 604_800_000,
+      maxAge: 3_600_000,
       httpOnly: false,
       secure: false,
     });
@@ -153,7 +153,6 @@ export default class UserService {
   async updateUser(input: UpdateUserInput, info: any): Promise<UserWP> {
     let updatedUser: UserWP;
     const selection = transformFields(graphqlFields(info));
-    console.log(input.newValues.profileImg);
 
     try {
       updatedUser = await prisma.user.update({

@@ -51,7 +51,7 @@ export const getUser = async () => {
       }
     }
   `);
-  console.log(getUser);
+  // console.log(getUser);
   return handleZodParseSchema<z.infer<typeof UserSchema>>(UserSchema, getUser);
 };
 

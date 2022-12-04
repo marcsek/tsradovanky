@@ -7,5 +7,5 @@ export default interface Context {
 }
 
 export interface FileUploadContext extends Context {
-  savedFile: string;
+  savedFile: string | null;
 }

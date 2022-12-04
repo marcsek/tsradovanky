@@ -4,11 +4,11 @@ import { useParams } from "react-router-dom";
 import { useUser } from "../../context/userContext";
 import FilterTextField from "../../custom-material-styles/FilterTextField";
 import MyLoadingButton from "../../custom-material-styles/LoadingButton";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { updateProfileValidationSchema } from "./schemas";
 import { toFormikValidationSchema } from "../../utils/zodToFormik";
 import { useFormik } from "formik";
 import { useUpdateUser } from "../../queries/queryHooks/User";
+import { ProfilePictureInput } from "./Components/ProfilePictureInput.component";
 
 const ProfilePage: React.FC = () => {
   const { userID } = useParams();
@@ -26,14 +26,9 @@ const ProfilePage: React.FC = () => {
     },
   });
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    console.log(e.target.files[0]);
-    updateUser({ profileImg: e.target.files[0] });
-  };
-
+  //TODO: Abstract some things into components
   return (
-    <Stack sx={{ m: "2rem", gap: "3.25rem" }}>
+    <Stack sx={{ p: "2rem", gap: "3.25rem", maxWidth: "1680px", width: "100%", alignSelf: "center", boxSizing: "border-box" }}>
       <Stack sx={{ alignItems: "flex-start", gap: "0.75rem" }}>
         <Typography variant="h4" sx={{ color: theme => theme.palette.text.primary, fontSize: "2.5rem" }}>
           Your profile
@@ -43,77 +38,15 @@ const ProfilePage: React.FC = () => {
       <Stack
         sx={{
           backgroundColor: theme => theme.palette.background.paper,
+          boxShadow: "rgba(0, 0, 0, 0.2) 0px 8px 50px -10px",
           borderRadius: "0.75rem",
           py: "5rem",
           display: "flex",
           alignItems: "center",
         }}
       >
-        <Stack
-          sx={{ gap: "5rem", alignItems: "center", width: "100%", maxWidth: "1000px" }}
-          component="form"
-          onSubmit={formik.handleSubmit}
-        >
-          <Stack>
-            <Box
-              sx={{
-                width: "140px",
-                height: "140px",
-                p: "0.5rem",
-                borderRadius: "50%",
-                outline: theme => `2px dashed ${theme.palette.text.secondary}`,
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              <img
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                src={user?.profileImg ? `http://localhost:3001/static/storage/${user?.profileImg}` : "/profilepic.png"}
-                alt="profilePicture"
-              ></img>
-              <Stack
-                sx={{
-                  position: "absolute",
-                  backgroundColor: "transparent",
-                  opacity: "0",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                  height: "100%",
-                  inset: "0",
-                  transition: "all 0.2s ease-in-out",
-                  "&:hover": {
-                    opacity: "1",
-                    cursor: "pointer",
-                  },
-                  "&:hover div": {
-                    opacity: "0.5",
-                    cursor: "pointer",
-                  },
-                }}
-              >
-                <AddAPhotoIcon sx={{ color: "white", zIndex: "1" }} />
-                <Typography sx={{ zIndex: "1" }}>Change Photo</Typography>
-                <Box
-                  sx={{
-                    zIndex: "0",
-                    position: "absolute",
-                    backgroundColor: theme => theme.palette.background.paper,
-                    width: "100%",
-                    height: "100%",
-                    opacity: "0",
-                  }}
-                  component="input"
-                  type="file"
-                  onChange={handleFileSelect}
-                />
-              </Stack>
-            </Box>
-            <Typography sx={{ color: theme => theme.palette.text.secondary, fontSize: "0.8rem", mt: "1.5rem" }}>
-              Only *.jpeg, *.jpg, *.gif, *.png
-              <br /> with max file size 2.5 MB
-            </Typography>
-          </Stack>
+        <Stack sx={{ gap: "4rem", alignItems: "center", width: "100%", maxWidth: "650px" }} component="form" onSubmit={formik.handleSubmit}>
+          <ProfilePictureInput />
           <Box sx={{ display: "flex", width: "100%", gap: "1rem", px: "1rem", boxSizing: "border-box" }}>
             <FilterTextField
               name="name"

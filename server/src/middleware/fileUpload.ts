@@ -6,14 +6,13 @@ import { GraphQLError } from "graphql";
 import { ErrorCodes } from "../utils/customErrors";
 import { PrismaClient } from "@prisma/client";
 
-const allowedExtensions = ["jpg", "png", "jpeg"];
+const allowedExtensions = ["jpg", "png", "jpeg", "gif"];
 
 const prisma = new PrismaClient();
 
-//FIXME: uploading file over size limit throws error but still saves the img
-
 export const fileUpload: MiddlewareFn<FileUploadContext> = async (action, next) => {
   const directoryPath = __dirname + `/../../../public/storage/`;
+  action.context.savedFile = null;
 
   if (!action.args.input.profileImg) return next();
   const { filename, createReadStream } = (await action.args.input.profileImg) as FileUpload;
@@ -29,12 +28,19 @@ export const fileUpload: MiddlewareFn<FileUploadContext> = async (action, next) 
   const generatedName = `${fileID}.${fileExtension}`;
 
   await new Promise(async (resolve, reject) => {
+    const writeStream = fs.createWriteStream(directoryPath + generatedName);
+
     const readStream = createReadStream().on("error", error => {
+      writeStream.end(() =>
+        fs.unlink(directoryPath + generatedName, err => {
+          if (err) console.log("Failed to delete file that did not meet requirements");
+        })
+      );
       reject(error);
     });
 
     readStream
-      .pipe(fs.createWriteStream(directoryPath + generatedName))
+      .pipe(writeStream)
       .on("finish", () => resolve(true))
       .on("error", error => reject(error));
   }).catch(error => {

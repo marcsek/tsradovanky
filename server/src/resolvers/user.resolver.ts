@@ -50,6 +50,8 @@ export default class UserResolver {
   ): Promise<UserWP> {
     if (context.savedFile) {
       input.profileImg = context.savedFile;
+    } else {
+      input.profileImg = null;
     }
     return this.userService.updateUser({ id: context.userID!, newValues: input }, info);
   }
@@ -60,7 +62,7 @@ export default class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context): Promise<Boolean> {
+  loginUser(@Arg("input") input: LoginInput, @Ctx() context: Context): Promise<boolean> {
     return this.userService.logIn(input, context);
   }
 
